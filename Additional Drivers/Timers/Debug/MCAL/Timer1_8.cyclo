@@ -1,0 +1,13 @@
+../MCAL/Timer1_8.c:12:6:ERROR_HANDLER	1
+../MCAL/Timer1_8.c:16:6:MCAL_SET_TIMx_GPIO	1
+../MCAL/Timer1_8.c:20:6:TIMER_1_8_start	8
+../MCAL/Timer1_8.c:69:6:TIMER_1_CTC_start	5
+../MCAL/Timer1_8.c:130:6:TIMER_1_ICU_init	3
+../MCAL/Timer1_8.c:165:6:Icu_setEdgeDetectionType	3
+../MCAL/Timer1_8.c:175:10:TIMER_1_getTime	1
+../MCAL/Timer1_8.c:179:6:TIMER_1_Clear	1
+../MCAL/Timer1_8.c:182:6:TIMER_1_Deint	1
+../MCAL/Timer1_8.c:202:6:TIM1_UP_IRQHandler	1
+../MCAL/Timer1_8.c:209:6:TIM1_CC_IRQHandler	1
+../MCAL/Timer1_8.c:214:6:TIM1_BRK_IRQHandler	1
+../MCAL/Timer1_8.c:219:6:TIM1_TRG_COM_IRQHandler	1

@@ -1,0 +1,13 @@
+../MCAL/Timer1_8.c:12:6:ERROR_HANDLER	4	static
+../MCAL/Timer1_8.c:16:6:MCAL_SET_TIMx_GPIO	24	static
+../MCAL/Timer1_8.c:20:6:TIMER_1_8_start	24	static
+../MCAL/Timer1_8.c:69:6:TIMER_1_CTC_start	32	static
+../MCAL/Timer1_8.c:130:6:TIMER_1_ICU_init	16	static
+../MCAL/Timer1_8.c:165:6:Icu_setEdgeDetectionType	16	static
+../MCAL/Timer1_8.c:175:10:TIMER_1_getTime	4	static
+../MCAL/Timer1_8.c:179:6:TIMER_1_Clear	4	static
+../MCAL/Timer1_8.c:182:6:TIMER_1_Deint	4	static
+../MCAL/Timer1_8.c:202:6:TIM1_UP_IRQHandler	8	static
+../MCAL/Timer1_8.c:209:6:TIM1_CC_IRQHandler	8	static
+../MCAL/Timer1_8.c:214:6:TIM1_BRK_IRQHandler	8	static
+../MCAL/Timer1_8.c:219:6:TIM1_TRG_COM_IRQHandler	8	static

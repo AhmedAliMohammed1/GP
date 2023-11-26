@@ -1,0 +1,4428 @@
+
+Timers.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000130  08000000  08000000  00010000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         00001d84  08000130  08000130  00010130  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000044  08001eb4  08001eb4  00011eb4  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .ARM.extab    00000000  08001ef8  08001ef8  00011f00  2**0
+                  CONTENTS
+  4 .ARM          00000000  08001ef8  08001ef8  00011f00  2**0
+                  CONTENTS
+  5 .preinit_array 00000000  08001ef8  08001f00  00011f00  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  08001ef8  08001ef8  00011ef8  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  7 .fini_array   00000004  08001efc  08001efc  00011efc  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  8 .data         00000000  20000000  20000000  00011f00  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          000000f0  20000000  08001f00  00020000  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000600  200000f0  08001f00  000200f0  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000029  00000000  00000000  00011f00  2**0
+                  CONTENTS, READONLY
+ 12 .comment      00000043  00000000  00000000  00011f29  2**0
+                  CONTENTS, READONLY
+ 13 .debug_info   00006884  00000000  00000000  00011f6c  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_abbrev 00000e1a  00000000  00000000  000187f0  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_loc    000012e0  00000000  00000000  0001960a  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_aranges 000002d8  00000000  00000000  0001a8f0  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_ranges 00000260  00000000  00000000  0001abc8  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_macro  000007b3  00000000  00000000  0001ae28  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .debug_line   00003a84  00000000  00000000  0001b5db  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 20 .debug_str    00006e83  00000000  00000000  0001f05f  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 21 .debug_frame  000009b0  00000000  00000000  00025ee4  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+08000130 <__do_global_dtors_aux>:
+ 8000130:	b510      	push	{r4, lr}
+ 8000132:	4c05      	ldr	r4, [pc, #20]	; (8000148 <__do_global_dtors_aux+0x18>)
+ 8000134:	7823      	ldrb	r3, [r4, #0]
+ 8000136:	b933      	cbnz	r3, 8000146 <__do_global_dtors_aux+0x16>
+ 8000138:	4b04      	ldr	r3, [pc, #16]	; (800014c <__do_global_dtors_aux+0x1c>)
+ 800013a:	b113      	cbz	r3, 8000142 <__do_global_dtors_aux+0x12>
+ 800013c:	4804      	ldr	r0, [pc, #16]	; (8000150 <__do_global_dtors_aux+0x20>)
+ 800013e:	f3af 8000 	nop.w
+ 8000142:	2301      	movs	r3, #1
+ 8000144:	7023      	strb	r3, [r4, #0]
+ 8000146:	bd10      	pop	{r4, pc}
+ 8000148:	20000000 	.word	0x20000000
+ 800014c:	00000000 	.word	0x00000000
+ 8000150:	08001e9c 	.word	0x08001e9c
+
+08000154 <frame_dummy>:
+ 8000154:	b508      	push	{r3, lr}
+ 8000156:	4b03      	ldr	r3, [pc, #12]	; (8000164 <frame_dummy+0x10>)
+ 8000158:	b11b      	cbz	r3, 8000162 <frame_dummy+0xe>
+ 800015a:	4903      	ldr	r1, [pc, #12]	; (8000168 <frame_dummy+0x14>)
+ 800015c:	4803      	ldr	r0, [pc, #12]	; (800016c <frame_dummy+0x18>)
+ 800015e:	f3af 8000 	nop.w
+ 8000162:	bd08      	pop	{r3, pc}
+ 8000164:	00000000 	.word	0x00000000
+ 8000168:	20000004 	.word	0x20000004
+ 800016c:	08001e9c 	.word	0x08001e9c
+
+08000170 <EXTI0_IRQHandler>:
+			EXTI_REG->IMR&=~(1<<EXTI->EXTI_PIN.EXI_LINE);
+			NVIC_DISABLE(EXTI->EXTI_PIN.EXI_LINE	);
+		}
+
+	}
+	void EXTI0_IRQHandler(){
+ 8000170:	b580      	push	{r7, lr}
+ 8000172:	af00      	add	r7, sp, #0
+		g_P_CALLBACK_f[0]();
+ 8000174:	4b05      	ldr	r3, [pc, #20]	; (800018c <EXTI0_IRQHandler+0x1c>)
+ 8000176:	681b      	ldr	r3, [r3, #0]
+ 8000178:	4798      	blx	r3
+		EXTI_REG->PR|=(1<<0);
+ 800017a:	4b05      	ldr	r3, [pc, #20]	; (8000190 <EXTI0_IRQHandler+0x20>)
+ 800017c:	695b      	ldr	r3, [r3, #20]
+ 800017e:	4a04      	ldr	r2, [pc, #16]	; (8000190 <EXTI0_IRQHandler+0x20>)
+ 8000180:	f043 0301 	orr.w	r3, r3, #1
+ 8000184:	6153      	str	r3, [r2, #20]
+	}
+ 8000186:	bf00      	nop
+ 8000188:	bd80      	pop	{r7, pc}
+ 800018a:	bf00      	nop
+ 800018c:	2000001c 	.word	0x2000001c
+ 8000190:	40010400 	.word	0x40010400
+
+08000194 <EXTI1_IRQHandler>:
+	void EXTI1_IRQHandler(){
+ 8000194:	b580      	push	{r7, lr}
+ 8000196:	af00      	add	r7, sp, #0
+		g_P_CALLBACK_f[1]();
+ 8000198:	4b05      	ldr	r3, [pc, #20]	; (80001b0 <EXTI1_IRQHandler+0x1c>)
+ 800019a:	685b      	ldr	r3, [r3, #4]
+ 800019c:	4798      	blx	r3
+		EXTI_REG->PR|=(1<<1);
+ 800019e:	4b05      	ldr	r3, [pc, #20]	; (80001b4 <EXTI1_IRQHandler+0x20>)
+ 80001a0:	695b      	ldr	r3, [r3, #20]
+ 80001a2:	4a04      	ldr	r2, [pc, #16]	; (80001b4 <EXTI1_IRQHandler+0x20>)
+ 80001a4:	f043 0302 	orr.w	r3, r3, #2
+ 80001a8:	6153      	str	r3, [r2, #20]
+
+	}
+ 80001aa:	bf00      	nop
+ 80001ac:	bd80      	pop	{r7, pc}
+ 80001ae:	bf00      	nop
+ 80001b0:	2000001c 	.word	0x2000001c
+ 80001b4:	40010400 	.word	0x40010400
+
+080001b8 <EXTI2_IRQHandler>:
+	void EXTI2_IRQHandler(){
+ 80001b8:	b580      	push	{r7, lr}
+ 80001ba:	af00      	add	r7, sp, #0
+		g_P_CALLBACK_f[2]();
+ 80001bc:	4b05      	ldr	r3, [pc, #20]	; (80001d4 <EXTI2_IRQHandler+0x1c>)
+ 80001be:	689b      	ldr	r3, [r3, #8]
+ 80001c0:	4798      	blx	r3
+		EXTI_REG->PR|=(1<<2);
+ 80001c2:	4b05      	ldr	r3, [pc, #20]	; (80001d8 <EXTI2_IRQHandler+0x20>)
+ 80001c4:	695b      	ldr	r3, [r3, #20]
+ 80001c6:	4a04      	ldr	r2, [pc, #16]	; (80001d8 <EXTI2_IRQHandler+0x20>)
+ 80001c8:	f043 0304 	orr.w	r3, r3, #4
+ 80001cc:	6153      	str	r3, [r2, #20]
+
+	}
+ 80001ce:	bf00      	nop
+ 80001d0:	bd80      	pop	{r7, pc}
+ 80001d2:	bf00      	nop
+ 80001d4:	2000001c 	.word	0x2000001c
+ 80001d8:	40010400 	.word	0x40010400
+
+080001dc <EXTI3_IRQHandler>:
+	void EXTI3_IRQHandler(){
+ 80001dc:	b580      	push	{r7, lr}
+ 80001de:	af00      	add	r7, sp, #0
+		g_P_CALLBACK_f[3]();
+ 80001e0:	4b05      	ldr	r3, [pc, #20]	; (80001f8 <EXTI3_IRQHandler+0x1c>)
+ 80001e2:	68db      	ldr	r3, [r3, #12]
+ 80001e4:	4798      	blx	r3
+		EXTI_REG->PR|=(1<<3);
+ 80001e6:	4b05      	ldr	r3, [pc, #20]	; (80001fc <EXTI3_IRQHandler+0x20>)
+ 80001e8:	695b      	ldr	r3, [r3, #20]
+ 80001ea:	4a04      	ldr	r2, [pc, #16]	; (80001fc <EXTI3_IRQHandler+0x20>)
+ 80001ec:	f043 0308 	orr.w	r3, r3, #8
+ 80001f0:	6153      	str	r3, [r2, #20]
+
+	}
+ 80001f2:	bf00      	nop
+ 80001f4:	bd80      	pop	{r7, pc}
+ 80001f6:	bf00      	nop
+ 80001f8:	2000001c 	.word	0x2000001c
+ 80001fc:	40010400 	.word	0x40010400
+
+08000200 <EXTI4_IRQHandler>:
+	void EXTI4_IRQHandler(){
+ 8000200:	b580      	push	{r7, lr}
+ 8000202:	af00      	add	r7, sp, #0
+		g_P_CALLBACK_f[4]();
+ 8000204:	4b05      	ldr	r3, [pc, #20]	; (800021c <EXTI4_IRQHandler+0x1c>)
+ 8000206:	691b      	ldr	r3, [r3, #16]
+ 8000208:	4798      	blx	r3
+		EXTI_REG->PR|=(1<<4);
+ 800020a:	4b05      	ldr	r3, [pc, #20]	; (8000220 <EXTI4_IRQHandler+0x20>)
+ 800020c:	695b      	ldr	r3, [r3, #20]
+ 800020e:	4a04      	ldr	r2, [pc, #16]	; (8000220 <EXTI4_IRQHandler+0x20>)
+ 8000210:	f043 0310 	orr.w	r3, r3, #16
+ 8000214:	6153      	str	r3, [r2, #20]
+
+	}
+ 8000216:	bf00      	nop
+ 8000218:	bd80      	pop	{r7, pc}
+ 800021a:	bf00      	nop
+ 800021c:	2000001c 	.word	0x2000001c
+ 8000220:	40010400 	.word	0x40010400
+
+08000224 <EXTI9_5_IRQHandler>:
+	void EXTI9_5_IRQHandler(){
+ 8000224:	b580      	push	{r7, lr}
+ 8000226:	af00      	add	r7, sp, #0
+		if(EXTI_REG->PR &(1<<5)){EXTI_REG->PR|=(1<<5); 		g_P_CALLBACK_f[5]();}
+ 8000228:	4b26      	ldr	r3, [pc, #152]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 800022a:	695b      	ldr	r3, [r3, #20]
+ 800022c:	f003 0320 	and.w	r3, r3, #32
+ 8000230:	2b00      	cmp	r3, #0
+ 8000232:	d008      	beq.n	8000246 <EXTI9_5_IRQHandler+0x22>
+ 8000234:	4b23      	ldr	r3, [pc, #140]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000236:	695b      	ldr	r3, [r3, #20]
+ 8000238:	4a22      	ldr	r2, [pc, #136]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 800023a:	f043 0320 	orr.w	r3, r3, #32
+ 800023e:	6153      	str	r3, [r2, #20]
+ 8000240:	4b21      	ldr	r3, [pc, #132]	; (80002c8 <EXTI9_5_IRQHandler+0xa4>)
+ 8000242:	695b      	ldr	r3, [r3, #20]
+ 8000244:	4798      	blx	r3
+		if(EXTI_REG->PR &(1<<6)){EXTI_REG->PR|=(1<<6); 		g_P_CALLBACK_f[6]();}
+ 8000246:	4b1f      	ldr	r3, [pc, #124]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000248:	695b      	ldr	r3, [r3, #20]
+ 800024a:	f003 0340 	and.w	r3, r3, #64	; 0x40
+ 800024e:	2b00      	cmp	r3, #0
+ 8000250:	d008      	beq.n	8000264 <EXTI9_5_IRQHandler+0x40>
+ 8000252:	4b1c      	ldr	r3, [pc, #112]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000254:	695b      	ldr	r3, [r3, #20]
+ 8000256:	4a1b      	ldr	r2, [pc, #108]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000258:	f043 0340 	orr.w	r3, r3, #64	; 0x40
+ 800025c:	6153      	str	r3, [r2, #20]
+ 800025e:	4b1a      	ldr	r3, [pc, #104]	; (80002c8 <EXTI9_5_IRQHandler+0xa4>)
+ 8000260:	699b      	ldr	r3, [r3, #24]
+ 8000262:	4798      	blx	r3
+		if(EXTI_REG->PR &(1<<7)){EXTI_REG->PR|=(1<<7); 		g_P_CALLBACK_f[7]();}
+ 8000264:	4b17      	ldr	r3, [pc, #92]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000266:	695b      	ldr	r3, [r3, #20]
+ 8000268:	f003 0380 	and.w	r3, r3, #128	; 0x80
+ 800026c:	2b00      	cmp	r3, #0
+ 800026e:	d008      	beq.n	8000282 <EXTI9_5_IRQHandler+0x5e>
+ 8000270:	4b14      	ldr	r3, [pc, #80]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000272:	695b      	ldr	r3, [r3, #20]
+ 8000274:	4a13      	ldr	r2, [pc, #76]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000276:	f043 0380 	orr.w	r3, r3, #128	; 0x80
+ 800027a:	6153      	str	r3, [r2, #20]
+ 800027c:	4b12      	ldr	r3, [pc, #72]	; (80002c8 <EXTI9_5_IRQHandler+0xa4>)
+ 800027e:	69db      	ldr	r3, [r3, #28]
+ 8000280:	4798      	blx	r3
+		if(EXTI_REG->PR &(1<<8)){EXTI_REG->PR|=(1<<8); 		g_P_CALLBACK_f[8]();}
+ 8000282:	4b10      	ldr	r3, [pc, #64]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000284:	695b      	ldr	r3, [r3, #20]
+ 8000286:	f403 7380 	and.w	r3, r3, #256	; 0x100
+ 800028a:	2b00      	cmp	r3, #0
+ 800028c:	d008      	beq.n	80002a0 <EXTI9_5_IRQHandler+0x7c>
+ 800028e:	4b0d      	ldr	r3, [pc, #52]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000290:	695b      	ldr	r3, [r3, #20]
+ 8000292:	4a0c      	ldr	r2, [pc, #48]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 8000294:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8000298:	6153      	str	r3, [r2, #20]
+ 800029a:	4b0b      	ldr	r3, [pc, #44]	; (80002c8 <EXTI9_5_IRQHandler+0xa4>)
+ 800029c:	6a1b      	ldr	r3, [r3, #32]
+ 800029e:	4798      	blx	r3
+		if(EXTI_REG->PR &(1<<9)){EXTI_REG->PR|=(1<<9); 		g_P_CALLBACK_f[9]();}
+ 80002a0:	4b08      	ldr	r3, [pc, #32]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 80002a2:	695b      	ldr	r3, [r3, #20]
+ 80002a4:	f403 7300 	and.w	r3, r3, #512	; 0x200
+ 80002a8:	2b00      	cmp	r3, #0
+ 80002aa:	d008      	beq.n	80002be <EXTI9_5_IRQHandler+0x9a>
+ 80002ac:	4b05      	ldr	r3, [pc, #20]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 80002ae:	695b      	ldr	r3, [r3, #20]
+ 80002b0:	4a04      	ldr	r2, [pc, #16]	; (80002c4 <EXTI9_5_IRQHandler+0xa0>)
+ 80002b2:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 80002b6:	6153      	str	r3, [r2, #20]
+ 80002b8:	4b03      	ldr	r3, [pc, #12]	; (80002c8 <EXTI9_5_IRQHandler+0xa4>)
+ 80002ba:	6a5b      	ldr	r3, [r3, #36]	; 0x24
+ 80002bc:	4798      	blx	r3
+	}
+ 80002be:	bf00      	nop
+ 80002c0:	bd80      	pop	{r7, pc}
+ 80002c2:	bf00      	nop
+ 80002c4:	40010400 	.word	0x40010400
+ 80002c8:	2000001c 	.word	0x2000001c
+
+080002cc <EXTI15_10_IRQHandler>:
+	void EXTI15_10_IRQHandler(){
+ 80002cc:	b580      	push	{r7, lr}
+ 80002ce:	af00      	add	r7, sp, #0
+		if(EXTI_REG->PR &(1<<10)){EXTI_REG->PR|=(1<<10); 		g_P_CALLBACK_f[10]();}
+ 80002d0:	4b2d      	ldr	r3, [pc, #180]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 80002d2:	695b      	ldr	r3, [r3, #20]
+ 80002d4:	f403 6380 	and.w	r3, r3, #1024	; 0x400
+ 80002d8:	2b00      	cmp	r3, #0
+ 80002da:	d008      	beq.n	80002ee <EXTI15_10_IRQHandler+0x22>
+ 80002dc:	4b2a      	ldr	r3, [pc, #168]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 80002de:	695b      	ldr	r3, [r3, #20]
+ 80002e0:	4a29      	ldr	r2, [pc, #164]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 80002e2:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 80002e6:	6153      	str	r3, [r2, #20]
+ 80002e8:	4b28      	ldr	r3, [pc, #160]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 80002ea:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 80002ec:	4798      	blx	r3
+		if(EXTI_REG->PR &(1<<11)){EXTI_REG->PR|=(1<<11); 		g_P_CALLBACK_f[11]();}
+ 80002ee:	4b26      	ldr	r3, [pc, #152]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 80002f0:	695b      	ldr	r3, [r3, #20]
+ 80002f2:	f403 6300 	and.w	r3, r3, #2048	; 0x800
+ 80002f6:	2b00      	cmp	r3, #0
+ 80002f8:	d008      	beq.n	800030c <EXTI15_10_IRQHandler+0x40>
+ 80002fa:	4b23      	ldr	r3, [pc, #140]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 80002fc:	695b      	ldr	r3, [r3, #20]
+ 80002fe:	4a22      	ldr	r2, [pc, #136]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000300:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 8000304:	6153      	str	r3, [r2, #20]
+ 8000306:	4b21      	ldr	r3, [pc, #132]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 8000308:	6adb      	ldr	r3, [r3, #44]	; 0x2c
+ 800030a:	4798      	blx	r3
+		if(EXTI_REG->PR &(1<<12)){EXTI_REG->PR|=(1<<12); 		g_P_CALLBACK_f[12]();}
+ 800030c:	4b1e      	ldr	r3, [pc, #120]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800030e:	695b      	ldr	r3, [r3, #20]
+ 8000310:	f403 5380 	and.w	r3, r3, #4096	; 0x1000
+ 8000314:	2b00      	cmp	r3, #0
+ 8000316:	d008      	beq.n	800032a <EXTI15_10_IRQHandler+0x5e>
+ 8000318:	4b1b      	ldr	r3, [pc, #108]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800031a:	695b      	ldr	r3, [r3, #20]
+ 800031c:	4a1a      	ldr	r2, [pc, #104]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800031e:	f443 5380 	orr.w	r3, r3, #4096	; 0x1000
+ 8000322:	6153      	str	r3, [r2, #20]
+ 8000324:	4b19      	ldr	r3, [pc, #100]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 8000326:	6b1b      	ldr	r3, [r3, #48]	; 0x30
+ 8000328:	4798      	blx	r3
+		if(EXTI_REG->PR &(1<<13)){EXTI_REG->PR|=(1<<13); 		g_P_CALLBACK_f[13]();}
+ 800032a:	4b17      	ldr	r3, [pc, #92]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800032c:	695b      	ldr	r3, [r3, #20]
+ 800032e:	f403 5300 	and.w	r3, r3, #8192	; 0x2000
+ 8000332:	2b00      	cmp	r3, #0
+ 8000334:	d008      	beq.n	8000348 <EXTI15_10_IRQHandler+0x7c>
+ 8000336:	4b14      	ldr	r3, [pc, #80]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000338:	695b      	ldr	r3, [r3, #20]
+ 800033a:	4a13      	ldr	r2, [pc, #76]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800033c:	f443 5300 	orr.w	r3, r3, #8192	; 0x2000
+ 8000340:	6153      	str	r3, [r2, #20]
+ 8000342:	4b12      	ldr	r3, [pc, #72]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 8000344:	6b5b      	ldr	r3, [r3, #52]	; 0x34
+ 8000346:	4798      	blx	r3
+		if(EXTI_REG->PR &(1<<14)){EXTI_REG->PR|=(1<<14); 		g_P_CALLBACK_f[14]();}
+ 8000348:	4b0f      	ldr	r3, [pc, #60]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800034a:	695b      	ldr	r3, [r3, #20]
+ 800034c:	f403 4380 	and.w	r3, r3, #16384	; 0x4000
+ 8000350:	2b00      	cmp	r3, #0
+ 8000352:	d008      	beq.n	8000366 <EXTI15_10_IRQHandler+0x9a>
+ 8000354:	4b0c      	ldr	r3, [pc, #48]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000356:	695b      	ldr	r3, [r3, #20]
+ 8000358:	4a0b      	ldr	r2, [pc, #44]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 800035a:	f443 4380 	orr.w	r3, r3, #16384	; 0x4000
+ 800035e:	6153      	str	r3, [r2, #20]
+ 8000360:	4b0a      	ldr	r3, [pc, #40]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 8000362:	6b9b      	ldr	r3, [r3, #56]	; 0x38
+ 8000364:	4798      	blx	r3
+		if(EXTI_REG->PR &(1<<15)){EXTI_REG->PR|=(1<<15); 		g_P_CALLBACK_f[15]();}
+ 8000366:	4b08      	ldr	r3, [pc, #32]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000368:	695b      	ldr	r3, [r3, #20]
+ 800036a:	f403 4300 	and.w	r3, r3, #32768	; 0x8000
+ 800036e:	2b00      	cmp	r3, #0
+ 8000370:	d008      	beq.n	8000384 <EXTI15_10_IRQHandler+0xb8>
+ 8000372:	4b05      	ldr	r3, [pc, #20]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000374:	695b      	ldr	r3, [r3, #20]
+ 8000376:	4a04      	ldr	r2, [pc, #16]	; (8000388 <EXTI15_10_IRQHandler+0xbc>)
+ 8000378:	f443 4300 	orr.w	r3, r3, #32768	; 0x8000
+ 800037c:	6153      	str	r3, [r2, #20]
+ 800037e:	4b03      	ldr	r3, [pc, #12]	; (800038c <EXTI15_10_IRQHandler+0xc0>)
+ 8000380:	6bdb      	ldr	r3, [r3, #60]	; 0x3c
+ 8000382:	4798      	blx	r3
+
+	}
+ 8000384:	bf00      	nop
+ 8000386:	bd80      	pop	{r7, pc}
+ 8000388:	40010400 	.word	0x40010400
+ 800038c:	2000001c 	.word	0x2000001c
+
+08000390 <Get_PIN_Positon>:
+ *      Author: Ahmed
+ */
+
+
+#include "GPIO_Driver.h"
+usint16_t Get_PIN_Positon(usint16_t pin){
+ 8000390:	b480      	push	{r7}
+ 8000392:	b085      	sub	sp, #20
+ 8000394:	af00      	add	r7, sp, #0
+ 8000396:	4603      	mov	r3, r0
+ 8000398:	80fb      	strh	r3, [r7, #6]
+	usint16_t positon = (pin<8) ? (4*pin) :((pin-8)*4)   ;
+ 800039a:	88fb      	ldrh	r3, [r7, #6]
+ 800039c:	2b07      	cmp	r3, #7
+ 800039e:	d803      	bhi.n	80003a8 <Get_PIN_Positon+0x18>
+ 80003a0:	88fb      	ldrh	r3, [r7, #6]
+ 80003a2:	009b      	lsls	r3, r3, #2
+ 80003a4:	b29b      	uxth	r3, r3
+ 80003a6:	e004      	b.n	80003b2 <Get_PIN_Positon+0x22>
+ 80003a8:	88fb      	ldrh	r3, [r7, #6]
+ 80003aa:	3b08      	subs	r3, #8
+ 80003ac:	b29b      	uxth	r3, r3
+ 80003ae:	009b      	lsls	r3, r3, #2
+ 80003b0:	b29b      	uxth	r3, r3
+ 80003b2:	81fb      	strh	r3, [r7, #14]
+return positon;
+ 80003b4:	89fb      	ldrh	r3, [r7, #14]
+}
+ 80003b6:	4618      	mov	r0, r3
+ 80003b8:	3714      	adds	r7, #20
+ 80003ba:	46bd      	mov	sp, r7
+ 80003bc:	bc80      	pop	{r7}
+ 80003be:	4770      	bx	lr
+
+080003c0 <MCAL_GPIO_init>:
+void MCAL_GPIO_init(GPIOx_REG* GPIOx,PIN_config* PINx){
+ 80003c0:	b590      	push	{r4, r7, lr}
+ 80003c2:	b085      	sub	sp, #20
+ 80003c4:	af00      	add	r7, sp, #0
+ 80003c6:	6078      	str	r0, [r7, #4]
+ 80003c8:	6039      	str	r1, [r7, #0]
+	if(GPIOx ==GPIOA) RCC->APB2ENR |=(1<<2);
+ 80003ca:	687b      	ldr	r3, [r7, #4]
+ 80003cc:	4a6b      	ldr	r2, [pc, #428]	; (800057c <MCAL_GPIO_init+0x1bc>)
+ 80003ce:	4293      	cmp	r3, r2
+ 80003d0:	d106      	bne.n	80003e0 <MCAL_GPIO_init+0x20>
+ 80003d2:	4b6b      	ldr	r3, [pc, #428]	; (8000580 <MCAL_GPIO_init+0x1c0>)
+ 80003d4:	699b      	ldr	r3, [r3, #24]
+ 80003d6:	4a6a      	ldr	r2, [pc, #424]	; (8000580 <MCAL_GPIO_init+0x1c0>)
+ 80003d8:	f043 0304 	orr.w	r3, r3, #4
+ 80003dc:	6193      	str	r3, [r2, #24]
+ 80003de:	e02a      	b.n	8000436 <MCAL_GPIO_init+0x76>
+	else if(GPIOx ==GPIOB)RCC->APB2ENR |=(1<<3);
+ 80003e0:	687b      	ldr	r3, [r7, #4]
+ 80003e2:	4a68      	ldr	r2, [pc, #416]	; (8000584 <MCAL_GPIO_init+0x1c4>)
+ 80003e4:	4293      	cmp	r3, r2
+ 80003e6:	d106      	bne.n	80003f6 <MCAL_GPIO_init+0x36>
+ 80003e8:	4b65      	ldr	r3, [pc, #404]	; (8000580 <MCAL_GPIO_init+0x1c0>)
+ 80003ea:	699b      	ldr	r3, [r3, #24]
+ 80003ec:	4a64      	ldr	r2, [pc, #400]	; (8000580 <MCAL_GPIO_init+0x1c0>)
+ 80003ee:	f043 0308 	orr.w	r3, r3, #8
+ 80003f2:	6193      	str	r3, [r2, #24]
+ 80003f4:	e01f      	b.n	8000436 <MCAL_GPIO_init+0x76>
+		else if(GPIOx ==GPIOC)RCC->APB2ENR |=(1<<4);
+ 80003f6:	687b      	ldr	r3, [r7, #4]
+ 80003f8:	4a63      	ldr	r2, [pc, #396]	; (8000588 <MCAL_GPIO_init+0x1c8>)
+ 80003fa:	4293      	cmp	r3, r2
+ 80003fc:	d106      	bne.n	800040c <MCAL_GPIO_init+0x4c>
+ 80003fe:	4b60      	ldr	r3, [pc, #384]	; (8000580 <MCAL_GPIO_init+0x1c0>)
+ 8000400:	699b      	ldr	r3, [r3, #24]
+ 8000402:	4a5f      	ldr	r2, [pc, #380]	; (8000580 <MCAL_GPIO_init+0x1c0>)
+ 8000404:	f043 0310 	orr.w	r3, r3, #16
+ 8000408:	6193      	str	r3, [r2, #24]
+ 800040a:	e014      	b.n	8000436 <MCAL_GPIO_init+0x76>
+		else if(GPIOx ==GPIOD)RCC->APB2ENR |=(1<<5);
+ 800040c:	687b      	ldr	r3, [r7, #4]
+ 800040e:	4a5f      	ldr	r2, [pc, #380]	; (800058c <MCAL_GPIO_init+0x1cc>)
+ 8000410:	4293      	cmp	r3, r2
+ 8000412:	d106      	bne.n	8000422 <MCAL_GPIO_init+0x62>
+ 8000414:	4b5a      	ldr	r3, [pc, #360]	; (8000580 <MCAL_GPIO_init+0x1c0>)
+ 8000416:	699b      	ldr	r3, [r3, #24]
+ 8000418:	4a59      	ldr	r2, [pc, #356]	; (8000580 <MCAL_GPIO_init+0x1c0>)
+ 800041a:	f043 0320 	orr.w	r3, r3, #32
+ 800041e:	6193      	str	r3, [r2, #24]
+ 8000420:	e009      	b.n	8000436 <MCAL_GPIO_init+0x76>
+		else if(GPIOx ==GPIOE)RCC->APB2ENR |=(1<<6);
+ 8000422:	687b      	ldr	r3, [r7, #4]
+ 8000424:	4a5a      	ldr	r2, [pc, #360]	; (8000590 <MCAL_GPIO_init+0x1d0>)
+ 8000426:	4293      	cmp	r3, r2
+ 8000428:	d105      	bne.n	8000436 <MCAL_GPIO_init+0x76>
+ 800042a:	4b55      	ldr	r3, [pc, #340]	; (8000580 <MCAL_GPIO_init+0x1c0>)
+ 800042c:	699b      	ldr	r3, [r3, #24]
+ 800042e:	4a54      	ldr	r2, [pc, #336]	; (8000580 <MCAL_GPIO_init+0x1c0>)
+ 8000430:	f043 0340 	orr.w	r3, r3, #64	; 0x40
+ 8000434:	6193      	str	r3, [r2, #24]
+
+	vusint32_t *CONFIG=(PINx->PIN_number < 8) ? &GPIOx->CRL : &GPIOx->CRH ;
+ 8000436:	683b      	ldr	r3, [r7, #0]
+ 8000438:	881b      	ldrh	r3, [r3, #0]
+ 800043a:	b29b      	uxth	r3, r3
+ 800043c:	2b07      	cmp	r3, #7
+ 800043e:	d801      	bhi.n	8000444 <MCAL_GPIO_init+0x84>
+ 8000440:	687b      	ldr	r3, [r7, #4]
+ 8000442:	e001      	b.n	8000448 <MCAL_GPIO_init+0x88>
+ 8000444:	687b      	ldr	r3, [r7, #4]
+ 8000446:	3304      	adds	r3, #4
+ 8000448:	60fb      	str	r3, [r7, #12]
+	*(CONFIG) &=~(0xF <<Get_PIN_Positon(PINx->PIN_number));
+ 800044a:	683b      	ldr	r3, [r7, #0]
+ 800044c:	881b      	ldrh	r3, [r3, #0]
+ 800044e:	b29b      	uxth	r3, r3
+ 8000450:	4618      	mov	r0, r3
+ 8000452:	f7ff ff9d 	bl	8000390 <Get_PIN_Positon>
+ 8000456:	4603      	mov	r3, r0
+ 8000458:	461a      	mov	r2, r3
+ 800045a:	230f      	movs	r3, #15
+ 800045c:	4093      	lsls	r3, r2
+ 800045e:	43da      	mvns	r2, r3
+ 8000460:	68fb      	ldr	r3, [r7, #12]
+ 8000462:	681b      	ldr	r3, [r3, #0]
+ 8000464:	401a      	ands	r2, r3
+ 8000466:	68fb      	ldr	r3, [r7, #12]
+ 8000468:	601a      	str	r2, [r3, #0]
+	// CNF0[1:0] MODE0[1:0] CLEAR
+
+	if(PINx->MODE == Analog ||PINx->MODE == INPUT_FI ||PINx->MODE == INPUT_PU ||PINx->MODE == INPUT_PD ){
+ 800046a:	683b      	ldr	r3, [r7, #0]
+ 800046c:	789b      	ldrb	r3, [r3, #2]
+ 800046e:	b2db      	uxtb	r3, r3
+ 8000470:	2b00      	cmp	r3, #0
+ 8000472:	d00e      	beq.n	8000492 <MCAL_GPIO_init+0xd2>
+ 8000474:	683b      	ldr	r3, [r7, #0]
+ 8000476:	789b      	ldrb	r3, [r3, #2]
+ 8000478:	b2db      	uxtb	r3, r3
+ 800047a:	2b01      	cmp	r3, #1
+ 800047c:	d009      	beq.n	8000492 <MCAL_GPIO_init+0xd2>
+ 800047e:	683b      	ldr	r3, [r7, #0]
+ 8000480:	789b      	ldrb	r3, [r3, #2]
+ 8000482:	b2db      	uxtb	r3, r3
+ 8000484:	2b02      	cmp	r3, #2
+ 8000486:	d004      	beq.n	8000492 <MCAL_GPIO_init+0xd2>
+ 8000488:	683b      	ldr	r3, [r7, #0]
+ 800048a:	789b      	ldrb	r3, [r3, #2]
+ 800048c:	b2db      	uxtb	r3, r3
+ 800048e:	2b03      	cmp	r3, #3
+ 8000490:	d156      	bne.n	8000540 <MCAL_GPIO_init+0x180>
+		if(PINx->MODE == INPUT_PD){
+ 8000492:	683b      	ldr	r3, [r7, #0]
+ 8000494:	789b      	ldrb	r3, [r3, #2]
+ 8000496:	b2db      	uxtb	r3, r3
+ 8000498:	2b03      	cmp	r3, #3
+ 800049a:	d11c      	bne.n	80004d6 <MCAL_GPIO_init+0x116>
+			*(CONFIG) |=((INPUT_PU << 2 ) << Get_PIN_Positon(PINx->PIN_number) );
+ 800049c:	683b      	ldr	r3, [r7, #0]
+ 800049e:	881b      	ldrh	r3, [r3, #0]
+ 80004a0:	b29b      	uxth	r3, r3
+ 80004a2:	4618      	mov	r0, r3
+ 80004a4:	f7ff ff74 	bl	8000390 <Get_PIN_Positon>
+ 80004a8:	4603      	mov	r3, r0
+ 80004aa:	461a      	mov	r2, r3
+ 80004ac:	2308      	movs	r3, #8
+ 80004ae:	fa03 f202 	lsl.w	r2, r3, r2
+ 80004b2:	68fb      	ldr	r3, [r7, #12]
+ 80004b4:	681b      	ldr	r3, [r3, #0]
+ 80004b6:	431a      	orrs	r2, r3
+ 80004b8:	68fb      	ldr	r3, [r7, #12]
+ 80004ba:	601a      	str	r2, [r3, #0]
+			GPIOx->ODR &=~(1<< PINx->PIN_number);;
+ 80004bc:	683b      	ldr	r3, [r7, #0]
+ 80004be:	881b      	ldrh	r3, [r3, #0]
+ 80004c0:	b29b      	uxth	r3, r3
+ 80004c2:	461a      	mov	r2, r3
+ 80004c4:	2301      	movs	r3, #1
+ 80004c6:	4093      	lsls	r3, r2
+ 80004c8:	43da      	mvns	r2, r3
+ 80004ca:	687b      	ldr	r3, [r7, #4]
+ 80004cc:	68db      	ldr	r3, [r3, #12]
+ 80004ce:	401a      	ands	r2, r3
+ 80004d0:	687b      	ldr	r3, [r7, #4]
+ 80004d2:	60da      	str	r2, [r3, #12]
+		if(PINx->MODE == INPUT_PD){
+ 80004d4:	e04d      	b.n	8000572 <MCAL_GPIO_init+0x1b2>
+		}
+
+		else if(PINx->MODE == INPUT_PU){
+ 80004d6:	683b      	ldr	r3, [r7, #0]
+ 80004d8:	789b      	ldrb	r3, [r3, #2]
+ 80004da:	b2db      	uxtb	r3, r3
+ 80004dc:	2b02      	cmp	r3, #2
+ 80004de:	d11c      	bne.n	800051a <MCAL_GPIO_init+0x15a>
+			*(CONFIG) |=((INPUT_PU << 2  ) << Get_PIN_Positon(PINx->PIN_number) );
+ 80004e0:	683b      	ldr	r3, [r7, #0]
+ 80004e2:	881b      	ldrh	r3, [r3, #0]
+ 80004e4:	b29b      	uxth	r3, r3
+ 80004e6:	4618      	mov	r0, r3
+ 80004e8:	f7ff ff52 	bl	8000390 <Get_PIN_Positon>
+ 80004ec:	4603      	mov	r3, r0
+ 80004ee:	461a      	mov	r2, r3
+ 80004f0:	2308      	movs	r3, #8
+ 80004f2:	fa03 f202 	lsl.w	r2, r3, r2
+ 80004f6:	68fb      	ldr	r3, [r7, #12]
+ 80004f8:	681b      	ldr	r3, [r3, #0]
+ 80004fa:	431a      	orrs	r2, r3
+ 80004fc:	68fb      	ldr	r3, [r7, #12]
+ 80004fe:	601a      	str	r2, [r3, #0]
+			GPIOx->ODR |=(1<< PINx->PIN_number);;
+ 8000500:	683b      	ldr	r3, [r7, #0]
+ 8000502:	881b      	ldrh	r3, [r3, #0]
+ 8000504:	b29b      	uxth	r3, r3
+ 8000506:	461a      	mov	r2, r3
+ 8000508:	2301      	movs	r3, #1
+ 800050a:	fa03 f202 	lsl.w	r2, r3, r2
+ 800050e:	687b      	ldr	r3, [r7, #4]
+ 8000510:	68db      	ldr	r3, [r3, #12]
+ 8000512:	431a      	orrs	r2, r3
+ 8000514:	687b      	ldr	r3, [r7, #4]
+ 8000516:	60da      	str	r2, [r3, #12]
+		if(PINx->MODE == INPUT_PD){
+ 8000518:	e02b      	b.n	8000572 <MCAL_GPIO_init+0x1b2>
+
+		}else{
+			*(CONFIG) |=((PINx->MODE << 2  ) << Get_PIN_Positon(PINx->PIN_number) );
+ 800051a:	683b      	ldr	r3, [r7, #0]
+ 800051c:	789b      	ldrb	r3, [r3, #2]
+ 800051e:	b2db      	uxtb	r3, r3
+ 8000520:	009c      	lsls	r4, r3, #2
+ 8000522:	683b      	ldr	r3, [r7, #0]
+ 8000524:	881b      	ldrh	r3, [r3, #0]
+ 8000526:	b29b      	uxth	r3, r3
+ 8000528:	4618      	mov	r0, r3
+ 800052a:	f7ff ff31 	bl	8000390 <Get_PIN_Positon>
+ 800052e:	4603      	mov	r3, r0
+ 8000530:	fa04 f203 	lsl.w	r2, r4, r3
+ 8000534:	68fb      	ldr	r3, [r7, #12]
+ 8000536:	681b      	ldr	r3, [r3, #0]
+ 8000538:	431a      	orrs	r2, r3
+ 800053a:	68fb      	ldr	r3, [r7, #12]
+ 800053c:	601a      	str	r2, [r3, #0]
+		if(PINx->MODE == INPUT_PD){
+ 800053e:	e018      	b.n	8000572 <MCAL_GPIO_init+0x1b2>
+
+		}
+
+	}else{
+		*(CONFIG) |=((((PINx->MODE -4 ) <<2) | PINx->SPEED ) << Get_PIN_Positon(PINx->PIN_number) );
+ 8000540:	683b      	ldr	r3, [r7, #0]
+ 8000542:	789b      	ldrb	r3, [r3, #2]
+ 8000544:	b2db      	uxtb	r3, r3
+ 8000546:	3b04      	subs	r3, #4
+ 8000548:	009b      	lsls	r3, r3, #2
+ 800054a:	683a      	ldr	r2, [r7, #0]
+ 800054c:	78d2      	ldrb	r2, [r2, #3]
+ 800054e:	b2d2      	uxtb	r2, r2
+ 8000550:	ea43 0402 	orr.w	r4, r3, r2
+ 8000554:	683b      	ldr	r3, [r7, #0]
+ 8000556:	881b      	ldrh	r3, [r3, #0]
+ 8000558:	b29b      	uxth	r3, r3
+ 800055a:	4618      	mov	r0, r3
+ 800055c:	f7ff ff18 	bl	8000390 <Get_PIN_Positon>
+ 8000560:	4603      	mov	r3, r0
+ 8000562:	fa04 f203 	lsl.w	r2, r4, r3
+ 8000566:	68fb      	ldr	r3, [r7, #12]
+ 8000568:	681b      	ldr	r3, [r3, #0]
+ 800056a:	431a      	orrs	r2, r3
+ 800056c:	68fb      	ldr	r3, [r7, #12]
+ 800056e:	601a      	str	r2, [r3, #0]
+
+	}
+
+}
+ 8000570:	bf00      	nop
+ 8000572:	bf00      	nop
+ 8000574:	3714      	adds	r7, #20
+ 8000576:	46bd      	mov	sp, r7
+ 8000578:	bd90      	pop	{r4, r7, pc}
+ 800057a:	bf00      	nop
+ 800057c:	40010800 	.word	0x40010800
+ 8000580:	40021000 	.word	0x40021000
+ 8000584:	40010c00 	.word	0x40010c00
+ 8000588:	40011000 	.word	0x40011000
+ 800058c:	40011400 	.word	0x40011400
+ 8000590:	40011800 	.word	0x40011800
+
+08000594 <MCAL_write_PIN>:
+
+	}
+
+
+}
+void MCAL_write_PIN(GPIOx_REG* GPIOx,vusint16_t PIN_Number,vusint8_t value){
+ 8000594:	b480      	push	{r7}
+ 8000596:	b083      	sub	sp, #12
+ 8000598:	af00      	add	r7, sp, #0
+ 800059a:	6078      	str	r0, [r7, #4]
+ 800059c:	460b      	mov	r3, r1
+ 800059e:	807b      	strh	r3, [r7, #2]
+ 80005a0:	4613      	mov	r3, r2
+ 80005a2:	707b      	strb	r3, [r7, #1]
+	if(value == LOGIC_HIGH){
+ 80005a4:	787b      	ldrb	r3, [r7, #1]
+ 80005a6:	b2db      	uxtb	r3, r3
+ 80005a8:	2b01      	cmp	r3, #1
+ 80005aa:	d10b      	bne.n	80005c4 <MCAL_write_PIN+0x30>
+		GPIOx->ODR |=(1<<PIN_Number);
+ 80005ac:	887b      	ldrh	r3, [r7, #2]
+ 80005ae:	b29b      	uxth	r3, r3
+ 80005b0:	461a      	mov	r2, r3
+ 80005b2:	2301      	movs	r3, #1
+ 80005b4:	fa03 f202 	lsl.w	r2, r3, r2
+ 80005b8:	687b      	ldr	r3, [r7, #4]
+ 80005ba:	68db      	ldr	r3, [r3, #12]
+ 80005bc:	431a      	orrs	r2, r3
+ 80005be:	687b      	ldr	r3, [r7, #4]
+ 80005c0:	60da      	str	r2, [r3, #12]
+
+	}
+
+
+
+}
+ 80005c2:	e00a      	b.n	80005da <MCAL_write_PIN+0x46>
+		GPIOx->ODR &=~(1<<PIN_Number);
+ 80005c4:	887b      	ldrh	r3, [r7, #2]
+ 80005c6:	b29b      	uxth	r3, r3
+ 80005c8:	461a      	mov	r2, r3
+ 80005ca:	2301      	movs	r3, #1
+ 80005cc:	4093      	lsls	r3, r2
+ 80005ce:	43da      	mvns	r2, r3
+ 80005d0:	687b      	ldr	r3, [r7, #4]
+ 80005d2:	68db      	ldr	r3, [r3, #12]
+ 80005d4:	401a      	ands	r2, r3
+ 80005d6:	687b      	ldr	r3, [r7, #4]
+ 80005d8:	60da      	str	r2, [r3, #12]
+}
+ 80005da:	bf00      	nop
+ 80005dc:	370c      	adds	r7, #12
+ 80005de:	46bd      	mov	sp, r7
+ 80005e0:	bc80      	pop	{r7}
+ 80005e2:	4770      	bx	lr
+
+080005e4 <GP_ERROR_HANDLER>:
+ * @param [in] - void
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
+void GP_ERROR_HANDLER(){
+ 80005e4:	b480      	push	{r7}
+ 80005e6:	af00      	add	r7, sp, #0
+	while(1);
+ 80005e8:	e7fe      	b.n	80005e8 <GP_ERROR_HANDLER+0x4>
+	...
+
+080005ec <MCAL_SET_GP_TIMx_GPIO>:
+ * @param [in] - TIM[1 OR 2 OR 3] and the sitting
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
+void MCAL_SET_GP_TIMx_GPIO(GP_TIMx_REG* TIMx,GP_TIMER_Mode MODE,uint8_t CHx){
+ 80005ec:	b580      	push	{r7, lr}
+ 80005ee:	b09c      	sub	sp, #112	; 0x70
+ 80005f0:	af00      	add	r7, sp, #0
+ 80005f2:	6078      	str	r0, [r7, #4]
+ 80005f4:	460b      	mov	r3, r1
+ 80005f6:	70fb      	strb	r3, [r7, #3]
+ 80005f8:	4613      	mov	r3, r2
+ 80005fa:	70bb      	strb	r3, [r7, #2]
+	PIN_config pin;
+	if(TIMx ==TIM2){
+ 80005fc:	687b      	ldr	r3, [r7, #4]
+ 80005fe:	f1b3 4f80 	cmp.w	r3, #1073741824	; 0x40000000
+ 8000602:	f040 8089 	bne.w	8000718 <MCAL_SET_GP_TIMx_GPIO+0x12c>
+		switch (MODE) {
+ 8000606:	78fb      	ldrb	r3, [r7, #3]
+ 8000608:	2b02      	cmp	r3, #2
+ 800060a:	d043      	beq.n	8000694 <MCAL_SET_GP_TIMx_GPIO+0xa8>
+ 800060c:	2b02      	cmp	r3, #2
+ 800060e:	f300 81bb 	bgt.w	8000988 <MCAL_SET_GP_TIMx_GPIO+0x39c>
+ 8000612:	2b00      	cmp	r3, #0
+ 8000614:	f000 81ba 	beq.w	800098c <MCAL_SET_GP_TIMx_GPIO+0x3a0>
+ 8000618:	2b01      	cmp	r3, #1
+ 800061a:	d000      	beq.n	800061e <MCAL_SET_GP_TIMx_GPIO+0x32>
+				default:
+					ERROR_HANDLER();
+				}
+				break;
+				default:
+					break;
+ 800061c:	e1b4      	b.n	8000988 <MCAL_SET_GP_TIMx_GPIO+0x39c>
+			switch(CHx){
+ 800061e:	78bb      	ldrb	r3, [r7, #2]
+ 8000620:	3b01      	subs	r3, #1
+ 8000622:	2b03      	cmp	r3, #3
+ 8000624:	d832      	bhi.n	800068c <MCAL_SET_GP_TIMx_GPIO+0xa0>
+ 8000626:	a201      	add	r2, pc, #4	; (adr r2, 800062c <MCAL_SET_GP_TIMx_GPIO+0x40>)
+ 8000628:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 800062c:	0800063d 	.word	0x0800063d
+ 8000630:	08000651 	.word	0x08000651
+ 8000634:	08000665 	.word	0x08000665
+ 8000638:	08000679 	.word	0x08000679
+				pin=(PIN_config){PIN_0,OUTPUT_AF_PP,SPEED_10};
+ 800063c:	4bb0      	ldr	r3, [pc, #704]	; (8000900 <MCAL_SET_GP_TIMx_GPIO+0x314>)
+ 800063e:	681b      	ldr	r3, [r3, #0]
+ 8000640:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOA, &pin);
+ 8000642:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 8000646:	4619      	mov	r1, r3
+ 8000648:	48ae      	ldr	r0, [pc, #696]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 800064a:	f7ff feb9 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 800064e:	e020      	b.n	8000692 <MCAL_SET_GP_TIMx_GPIO+0xa6>
+				pin=(PIN_config){PIN_1,OUTPUT_AF_PP,SPEED_10};
+ 8000650:	4bad      	ldr	r3, [pc, #692]	; (8000908 <MCAL_SET_GP_TIMx_GPIO+0x31c>)
+ 8000652:	681b      	ldr	r3, [r3, #0]
+ 8000654:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOA, &pin);
+ 8000656:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 800065a:	4619      	mov	r1, r3
+ 800065c:	48a9      	ldr	r0, [pc, #676]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 800065e:	f7ff feaf 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 8000662:	e016      	b.n	8000692 <MCAL_SET_GP_TIMx_GPIO+0xa6>
+				pin=(PIN_config){PIN_2,OUTPUT_AF_PP,SPEED_10};
+ 8000664:	4ba9      	ldr	r3, [pc, #676]	; (800090c <MCAL_SET_GP_TIMx_GPIO+0x320>)
+ 8000666:	681b      	ldr	r3, [r3, #0]
+ 8000668:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOA, &pin);
+ 800066a:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 800066e:	4619      	mov	r1, r3
+ 8000670:	48a4      	ldr	r0, [pc, #656]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 8000672:	f7ff fea5 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 8000676:	e00c      	b.n	8000692 <MCAL_SET_GP_TIMx_GPIO+0xa6>
+				pin=(PIN_config){PIN_3,OUTPUT_AF_PP,SPEED_10};
+ 8000678:	4ba5      	ldr	r3, [pc, #660]	; (8000910 <MCAL_SET_GP_TIMx_GPIO+0x324>)
+ 800067a:	681b      	ldr	r3, [r3, #0]
+ 800067c:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOA, &pin);
+ 800067e:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 8000682:	4619      	mov	r1, r3
+ 8000684:	489f      	ldr	r0, [pc, #636]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 8000686:	f7ff fe9b 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 800068a:	e002      	b.n	8000692 <MCAL_SET_GP_TIMx_GPIO+0xa6>
+				ERROR_HANDLER();
+ 800068c:	f001 faad 	bl	8001bea <ERROR_HANDLER>
+			break;
+ 8000690:	e185      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+ 8000692:	e184      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+				switch(CHx){
+ 8000694:	78bb      	ldrb	r3, [r7, #2]
+ 8000696:	3b01      	subs	r3, #1
+ 8000698:	2b03      	cmp	r3, #3
+ 800069a:	d839      	bhi.n	8000710 <MCAL_SET_GP_TIMx_GPIO+0x124>
+ 800069c:	a201      	add	r2, pc, #4	; (adr r2, 80006a4 <MCAL_SET_GP_TIMx_GPIO+0xb8>)
+ 800069e:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 80006a2:	bf00      	nop
+ 80006a4:	080006b5 	.word	0x080006b5
+ 80006a8:	080006d5 	.word	0x080006d5
+ 80006ac:	080006e9 	.word	0x080006e9
+ 80006b0:	080006fd 	.word	0x080006fd
+					pin=(PIN_config){PIN_0,INPUT_FI,0};
+ 80006b4:	2300      	movs	r3, #0
+ 80006b6:	f8a7 306c 	strh.w	r3, [r7, #108]	; 0x6c
+ 80006ba:	2301      	movs	r3, #1
+ 80006bc:	f887 306e 	strb.w	r3, [r7, #110]	; 0x6e
+ 80006c0:	2300      	movs	r3, #0
+ 80006c2:	f887 306f 	strb.w	r3, [r7, #111]	; 0x6f
+					MCAL_GPIO_init(GPIOA, &pin);
+ 80006c6:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 80006ca:	4619      	mov	r1, r3
+ 80006cc:	488d      	ldr	r0, [pc, #564]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 80006ce:	f7ff fe77 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 80006d2:	e020      	b.n	8000716 <MCAL_SET_GP_TIMx_GPIO+0x12a>
+					pin=(PIN_config){PIN_1,INPUT_FI,0};
+ 80006d4:	4b8f      	ldr	r3, [pc, #572]	; (8000914 <MCAL_SET_GP_TIMx_GPIO+0x328>)
+ 80006d6:	681b      	ldr	r3, [r3, #0]
+ 80006d8:	66fb      	str	r3, [r7, #108]	; 0x6c
+					MCAL_GPIO_init(GPIOA, &pin);
+ 80006da:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 80006de:	4619      	mov	r1, r3
+ 80006e0:	4888      	ldr	r0, [pc, #544]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 80006e2:	f7ff fe6d 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 80006e6:	e016      	b.n	8000716 <MCAL_SET_GP_TIMx_GPIO+0x12a>
+					pin=(PIN_config){PIN_2,INPUT_FI,0};
+ 80006e8:	4b8b      	ldr	r3, [pc, #556]	; (8000918 <MCAL_SET_GP_TIMx_GPIO+0x32c>)
+ 80006ea:	681b      	ldr	r3, [r3, #0]
+ 80006ec:	66fb      	str	r3, [r7, #108]	; 0x6c
+					MCAL_GPIO_init(GPIOA, &pin);
+ 80006ee:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 80006f2:	4619      	mov	r1, r3
+ 80006f4:	4883      	ldr	r0, [pc, #524]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 80006f6:	f7ff fe63 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 80006fa:	e00c      	b.n	8000716 <MCAL_SET_GP_TIMx_GPIO+0x12a>
+					pin=(PIN_config){PIN_3,INPUT_FI,0};
+ 80006fc:	4b87      	ldr	r3, [pc, #540]	; (800091c <MCAL_SET_GP_TIMx_GPIO+0x330>)
+ 80006fe:	681b      	ldr	r3, [r3, #0]
+ 8000700:	66fb      	str	r3, [r7, #108]	; 0x6c
+					MCAL_GPIO_init(GPIOA, &pin);
+ 8000702:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 8000706:	4619      	mov	r1, r3
+ 8000708:	487e      	ldr	r0, [pc, #504]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 800070a:	f7ff fe59 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 800070e:	e002      	b.n	8000716 <MCAL_SET_GP_TIMx_GPIO+0x12a>
+					ERROR_HANDLER();
+ 8000710:	f001 fa6b 	bl	8001bea <ERROR_HANDLER>
+				break;
+ 8000714:	e143      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+ 8000716:	e142      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+		}
+
+	}else if(TIMx ==TIM3){
+ 8000718:	687b      	ldr	r3, [r7, #4]
+ 800071a:	4a81      	ldr	r2, [pc, #516]	; (8000920 <MCAL_SET_GP_TIMx_GPIO+0x334>)
+ 800071c:	4293      	cmp	r3, r2
+ 800071e:	f040 8089 	bne.w	8000834 <MCAL_SET_GP_TIMx_GPIO+0x248>
+		switch (MODE) {
+ 8000722:	78fb      	ldrb	r3, [r7, #3]
+ 8000724:	2b02      	cmp	r3, #2
+ 8000726:	d043      	beq.n	80007b0 <MCAL_SET_GP_TIMx_GPIO+0x1c4>
+ 8000728:	2b02      	cmp	r3, #2
+ 800072a:	f300 8131 	bgt.w	8000990 <MCAL_SET_GP_TIMx_GPIO+0x3a4>
+ 800072e:	2b00      	cmp	r3, #0
+ 8000730:	f000 8130 	beq.w	8000994 <MCAL_SET_GP_TIMx_GPIO+0x3a8>
+ 8000734:	2b01      	cmp	r3, #1
+ 8000736:	d000      	beq.n	800073a <MCAL_SET_GP_TIMx_GPIO+0x14e>
+				default:
+					ERROR_HANDLER();
+				}
+				break;
+				default:
+					break;
+ 8000738:	e12a      	b.n	8000990 <MCAL_SET_GP_TIMx_GPIO+0x3a4>
+			switch(CHx){
+ 800073a:	78bb      	ldrb	r3, [r7, #2]
+ 800073c:	3b01      	subs	r3, #1
+ 800073e:	2b03      	cmp	r3, #3
+ 8000740:	d832      	bhi.n	80007a8 <MCAL_SET_GP_TIMx_GPIO+0x1bc>
+ 8000742:	a201      	add	r2, pc, #4	; (adr r2, 8000748 <MCAL_SET_GP_TIMx_GPIO+0x15c>)
+ 8000744:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8000748:	08000759 	.word	0x08000759
+ 800074c:	0800076d 	.word	0x0800076d
+ 8000750:	08000781 	.word	0x08000781
+ 8000754:	08000795 	.word	0x08000795
+				pin=(PIN_config){PIN_6,OUTPUT_AF_PP,SPEED_10};
+ 8000758:	4b72      	ldr	r3, [pc, #456]	; (8000924 <MCAL_SET_GP_TIMx_GPIO+0x338>)
+ 800075a:	681b      	ldr	r3, [r3, #0]
+ 800075c:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOA, &pin);
+ 800075e:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 8000762:	4619      	mov	r1, r3
+ 8000764:	4867      	ldr	r0, [pc, #412]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 8000766:	f7ff fe2b 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 800076a:	e020      	b.n	80007ae <MCAL_SET_GP_TIMx_GPIO+0x1c2>
+				pin=(PIN_config){PIN_7,OUTPUT_AF_PP,SPEED_10};
+ 800076c:	4b6e      	ldr	r3, [pc, #440]	; (8000928 <MCAL_SET_GP_TIMx_GPIO+0x33c>)
+ 800076e:	681b      	ldr	r3, [r3, #0]
+ 8000770:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOA, &pin);
+ 8000772:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 8000776:	4619      	mov	r1, r3
+ 8000778:	4862      	ldr	r0, [pc, #392]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 800077a:	f7ff fe21 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 800077e:	e016      	b.n	80007ae <MCAL_SET_GP_TIMx_GPIO+0x1c2>
+				pin=(PIN_config){PIN_0,OUTPUT_AF_PP,SPEED_10};
+ 8000780:	4b5f      	ldr	r3, [pc, #380]	; (8000900 <MCAL_SET_GP_TIMx_GPIO+0x314>)
+ 8000782:	681b      	ldr	r3, [r3, #0]
+ 8000784:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOB, &pin);
+ 8000786:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 800078a:	4619      	mov	r1, r3
+ 800078c:	4867      	ldr	r0, [pc, #412]	; (800092c <MCAL_SET_GP_TIMx_GPIO+0x340>)
+ 800078e:	f7ff fe17 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 8000792:	e00c      	b.n	80007ae <MCAL_SET_GP_TIMx_GPIO+0x1c2>
+				pin=(PIN_config){PIN_1,OUTPUT_AF_PP,SPEED_10};
+ 8000794:	4b5c      	ldr	r3, [pc, #368]	; (8000908 <MCAL_SET_GP_TIMx_GPIO+0x31c>)
+ 8000796:	681b      	ldr	r3, [r3, #0]
+ 8000798:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOB, &pin);
+ 800079a:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 800079e:	4619      	mov	r1, r3
+ 80007a0:	4862      	ldr	r0, [pc, #392]	; (800092c <MCAL_SET_GP_TIMx_GPIO+0x340>)
+ 80007a2:	f7ff fe0d 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 80007a6:	e002      	b.n	80007ae <MCAL_SET_GP_TIMx_GPIO+0x1c2>
+				ERROR_HANDLER();
+ 80007a8:	f001 fa1f 	bl	8001bea <ERROR_HANDLER>
+			break;
+ 80007ac:	e0f7      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+ 80007ae:	e0f6      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+				switch(CHx){
+ 80007b0:	78bb      	ldrb	r3, [r7, #2]
+ 80007b2:	3b01      	subs	r3, #1
+ 80007b4:	2b03      	cmp	r3, #3
+ 80007b6:	d839      	bhi.n	800082c <MCAL_SET_GP_TIMx_GPIO+0x240>
+ 80007b8:	a201      	add	r2, pc, #4	; (adr r2, 80007c0 <MCAL_SET_GP_TIMx_GPIO+0x1d4>)
+ 80007ba:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 80007be:	bf00      	nop
+ 80007c0:	080007d1 	.word	0x080007d1
+ 80007c4:	080007e5 	.word	0x080007e5
+ 80007c8:	080007f9 	.word	0x080007f9
+ 80007cc:	08000819 	.word	0x08000819
+					pin=(PIN_config){PIN_6,INPUT_FI,0};
+ 80007d0:	4b57      	ldr	r3, [pc, #348]	; (8000930 <MCAL_SET_GP_TIMx_GPIO+0x344>)
+ 80007d2:	681b      	ldr	r3, [r3, #0]
+ 80007d4:	66fb      	str	r3, [r7, #108]	; 0x6c
+					MCAL_GPIO_init(GPIOA, &pin);
+ 80007d6:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 80007da:	4619      	mov	r1, r3
+ 80007dc:	4849      	ldr	r0, [pc, #292]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 80007de:	f7ff fdef 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 80007e2:	e026      	b.n	8000832 <MCAL_SET_GP_TIMx_GPIO+0x246>
+					pin=(PIN_config){PIN_7,INPUT_FI,0};
+ 80007e4:	4b53      	ldr	r3, [pc, #332]	; (8000934 <MCAL_SET_GP_TIMx_GPIO+0x348>)
+ 80007e6:	681b      	ldr	r3, [r3, #0]
+ 80007e8:	66fb      	str	r3, [r7, #108]	; 0x6c
+					MCAL_GPIO_init(GPIOA, &pin);
+ 80007ea:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 80007ee:	4619      	mov	r1, r3
+ 80007f0:	4844      	ldr	r0, [pc, #272]	; (8000904 <MCAL_SET_GP_TIMx_GPIO+0x318>)
+ 80007f2:	f7ff fde5 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 80007f6:	e01c      	b.n	8000832 <MCAL_SET_GP_TIMx_GPIO+0x246>
+					pin=(PIN_config){PIN_0,INPUT_FI,0};
+ 80007f8:	2300      	movs	r3, #0
+ 80007fa:	f8a7 306c 	strh.w	r3, [r7, #108]	; 0x6c
+ 80007fe:	2301      	movs	r3, #1
+ 8000800:	f887 306e 	strb.w	r3, [r7, #110]	; 0x6e
+ 8000804:	2300      	movs	r3, #0
+ 8000806:	f887 306f 	strb.w	r3, [r7, #111]	; 0x6f
+					MCAL_GPIO_init(GPIOB, &pin);
+ 800080a:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 800080e:	4619      	mov	r1, r3
+ 8000810:	4846      	ldr	r0, [pc, #280]	; (800092c <MCAL_SET_GP_TIMx_GPIO+0x340>)
+ 8000812:	f7ff fdd5 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 8000816:	e00c      	b.n	8000832 <MCAL_SET_GP_TIMx_GPIO+0x246>
+					pin=(PIN_config){PIN_1,INPUT_FI,0};
+ 8000818:	4b3e      	ldr	r3, [pc, #248]	; (8000914 <MCAL_SET_GP_TIMx_GPIO+0x328>)
+ 800081a:	681b      	ldr	r3, [r3, #0]
+ 800081c:	66fb      	str	r3, [r7, #108]	; 0x6c
+					MCAL_GPIO_init(GPIOB, &pin);
+ 800081e:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 8000822:	4619      	mov	r1, r3
+ 8000824:	4841      	ldr	r0, [pc, #260]	; (800092c <MCAL_SET_GP_TIMx_GPIO+0x340>)
+ 8000826:	f7ff fdcb 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 800082a:	e002      	b.n	8000832 <MCAL_SET_GP_TIMx_GPIO+0x246>
+					ERROR_HANDLER();
+ 800082c:	f001 f9dd 	bl	8001bea <ERROR_HANDLER>
+				break;
+ 8000830:	e0b5      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+ 8000832:	e0b4      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+		}
+
+
+
+	}else if(TIMx ==TIM4){
+ 8000834:	687b      	ldr	r3, [r7, #4]
+ 8000836:	4a40      	ldr	r2, [pc, #256]	; (8000938 <MCAL_SET_GP_TIMx_GPIO+0x34c>)
+ 8000838:	4293      	cmp	r3, r2
+ 800083a:	f040 80b0 	bne.w	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+		switch (MODE) {
+ 800083e:	78fb      	ldrb	r3, [r7, #3]
+ 8000840:	2b02      	cmp	r3, #2
+ 8000842:	d043      	beq.n	80008cc <MCAL_SET_GP_TIMx_GPIO+0x2e0>
+ 8000844:	2b02      	cmp	r3, #2
+ 8000846:	f300 80a7 	bgt.w	8000998 <MCAL_SET_GP_TIMx_GPIO+0x3ac>
+ 800084a:	2b00      	cmp	r3, #0
+ 800084c:	f000 80a6 	beq.w	800099c <MCAL_SET_GP_TIMx_GPIO+0x3b0>
+ 8000850:	2b01      	cmp	r3, #1
+ 8000852:	d000      	beq.n	8000856 <MCAL_SET_GP_TIMx_GPIO+0x26a>
+				default:
+					ERROR_HANDLER();
+				}
+				break;
+				default:
+					break;
+ 8000854:	e0a0      	b.n	8000998 <MCAL_SET_GP_TIMx_GPIO+0x3ac>
+			switch(CHx){
+ 8000856:	78bb      	ldrb	r3, [r7, #2]
+ 8000858:	3b01      	subs	r3, #1
+ 800085a:	2b03      	cmp	r3, #3
+ 800085c:	d832      	bhi.n	80008c4 <MCAL_SET_GP_TIMx_GPIO+0x2d8>
+ 800085e:	a201      	add	r2, pc, #4	; (adr r2, 8000864 <MCAL_SET_GP_TIMx_GPIO+0x278>)
+ 8000860:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8000864:	08000875 	.word	0x08000875
+ 8000868:	08000889 	.word	0x08000889
+ 800086c:	0800089d 	.word	0x0800089d
+ 8000870:	080008b1 	.word	0x080008b1
+				pin=(PIN_config){PIN_6,OUTPUT_AF_PP,SPEED_10};
+ 8000874:	4b2b      	ldr	r3, [pc, #172]	; (8000924 <MCAL_SET_GP_TIMx_GPIO+0x338>)
+ 8000876:	681b      	ldr	r3, [r3, #0]
+ 8000878:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOB, &pin);
+ 800087a:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 800087e:	4619      	mov	r1, r3
+ 8000880:	482a      	ldr	r0, [pc, #168]	; (800092c <MCAL_SET_GP_TIMx_GPIO+0x340>)
+ 8000882:	f7ff fd9d 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 8000886:	e020      	b.n	80008ca <MCAL_SET_GP_TIMx_GPIO+0x2de>
+				pin=(PIN_config){PIN_7,OUTPUT_AF_PP,SPEED_10};
+ 8000888:	4b27      	ldr	r3, [pc, #156]	; (8000928 <MCAL_SET_GP_TIMx_GPIO+0x33c>)
+ 800088a:	681b      	ldr	r3, [r3, #0]
+ 800088c:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOB, &pin);
+ 800088e:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 8000892:	4619      	mov	r1, r3
+ 8000894:	4825      	ldr	r0, [pc, #148]	; (800092c <MCAL_SET_GP_TIMx_GPIO+0x340>)
+ 8000896:	f7ff fd93 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 800089a:	e016      	b.n	80008ca <MCAL_SET_GP_TIMx_GPIO+0x2de>
+				pin=(PIN_config){PIN_8,OUTPUT_AF_PP,SPEED_10};
+ 800089c:	4b27      	ldr	r3, [pc, #156]	; (800093c <MCAL_SET_GP_TIMx_GPIO+0x350>)
+ 800089e:	681b      	ldr	r3, [r3, #0]
+ 80008a0:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOB, &pin);
+ 80008a2:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 80008a6:	4619      	mov	r1, r3
+ 80008a8:	4820      	ldr	r0, [pc, #128]	; (800092c <MCAL_SET_GP_TIMx_GPIO+0x340>)
+ 80008aa:	f7ff fd89 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 80008ae:	e00c      	b.n	80008ca <MCAL_SET_GP_TIMx_GPIO+0x2de>
+				pin=(PIN_config){PIN_9,OUTPUT_AF_PP,SPEED_10};
+ 80008b0:	4b23      	ldr	r3, [pc, #140]	; (8000940 <MCAL_SET_GP_TIMx_GPIO+0x354>)
+ 80008b2:	681b      	ldr	r3, [r3, #0]
+ 80008b4:	66fb      	str	r3, [r7, #108]	; 0x6c
+				MCAL_GPIO_init(GPIOB, &pin);
+ 80008b6:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 80008ba:	4619      	mov	r1, r3
+ 80008bc:	481b      	ldr	r0, [pc, #108]	; (800092c <MCAL_SET_GP_TIMx_GPIO+0x340>)
+ 80008be:	f7ff fd7f 	bl	80003c0 <MCAL_GPIO_init>
+				break;
+ 80008c2:	e002      	b.n	80008ca <MCAL_SET_GP_TIMx_GPIO+0x2de>
+				ERROR_HANDLER();
+ 80008c4:	f001 f991 	bl	8001bea <ERROR_HANDLER>
+			break;
+ 80008c8:	e069      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+ 80008ca:	e068      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+				switch(CHx){
+ 80008cc:	78bb      	ldrb	r3, [r7, #2]
+ 80008ce:	3b01      	subs	r3, #1
+ 80008d0:	2b03      	cmp	r3, #3
+ 80008d2:	d855      	bhi.n	8000980 <MCAL_SET_GP_TIMx_GPIO+0x394>
+ 80008d4:	a201      	add	r2, pc, #4	; (adr r2, 80008dc <MCAL_SET_GP_TIMx_GPIO+0x2f0>)
+ 80008d6:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 80008da:	bf00      	nop
+ 80008dc:	080008ed 	.word	0x080008ed
+ 80008e0:	08000945 	.word	0x08000945
+ 80008e4:	08000959 	.word	0x08000959
+ 80008e8:	0800096d 	.word	0x0800096d
+					pin=(PIN_config){PIN_6,INPUT_FI,0};
+ 80008ec:	4b10      	ldr	r3, [pc, #64]	; (8000930 <MCAL_SET_GP_TIMx_GPIO+0x344>)
+ 80008ee:	681b      	ldr	r3, [r3, #0]
+ 80008f0:	66fb      	str	r3, [r7, #108]	; 0x6c
+					MCAL_GPIO_init(GPIOB, &pin);
+ 80008f2:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 80008f6:	4619      	mov	r1, r3
+ 80008f8:	480c      	ldr	r0, [pc, #48]	; (800092c <MCAL_SET_GP_TIMx_GPIO+0x340>)
+ 80008fa:	f7ff fd61 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 80008fe:	e042      	b.n	8000986 <MCAL_SET_GP_TIMx_GPIO+0x39a>
+ 8000900:	08001eb4 	.word	0x08001eb4
+ 8000904:	40010800 	.word	0x40010800
+ 8000908:	08001eb8 	.word	0x08001eb8
+ 800090c:	08001ebc 	.word	0x08001ebc
+ 8000910:	08001ec0 	.word	0x08001ec0
+ 8000914:	08001ec4 	.word	0x08001ec4
+ 8000918:	08001ec8 	.word	0x08001ec8
+ 800091c:	08001ecc 	.word	0x08001ecc
+ 8000920:	40000400 	.word	0x40000400
+ 8000924:	08001ed0 	.word	0x08001ed0
+ 8000928:	08001ed4 	.word	0x08001ed4
+ 800092c:	40010c00 	.word	0x40010c00
+ 8000930:	08001ed8 	.word	0x08001ed8
+ 8000934:	08001edc 	.word	0x08001edc
+ 8000938:	40000800 	.word	0x40000800
+ 800093c:	08001ee0 	.word	0x08001ee0
+ 8000940:	08001ee4 	.word	0x08001ee4
+					pin=(PIN_config){PIN_7,INPUT_FI,0};
+ 8000944:	4b18      	ldr	r3, [pc, #96]	; (80009a8 <MCAL_SET_GP_TIMx_GPIO+0x3bc>)
+ 8000946:	681b      	ldr	r3, [r3, #0]
+ 8000948:	66fb      	str	r3, [r7, #108]	; 0x6c
+					MCAL_GPIO_init(GPIOB, &pin);
+ 800094a:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 800094e:	4619      	mov	r1, r3
+ 8000950:	4816      	ldr	r0, [pc, #88]	; (80009ac <MCAL_SET_GP_TIMx_GPIO+0x3c0>)
+ 8000952:	f7ff fd35 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 8000956:	e016      	b.n	8000986 <MCAL_SET_GP_TIMx_GPIO+0x39a>
+					pin=(PIN_config){PIN_8,INPUT_FI,0};
+ 8000958:	4b15      	ldr	r3, [pc, #84]	; (80009b0 <MCAL_SET_GP_TIMx_GPIO+0x3c4>)
+ 800095a:	681b      	ldr	r3, [r3, #0]
+ 800095c:	66fb      	str	r3, [r7, #108]	; 0x6c
+					MCAL_GPIO_init(GPIOB, &pin);
+ 800095e:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 8000962:	4619      	mov	r1, r3
+ 8000964:	4811      	ldr	r0, [pc, #68]	; (80009ac <MCAL_SET_GP_TIMx_GPIO+0x3c0>)
+ 8000966:	f7ff fd2b 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 800096a:	e00c      	b.n	8000986 <MCAL_SET_GP_TIMx_GPIO+0x39a>
+					pin=(PIN_config){PIN_9,INPUT_FI,0};
+ 800096c:	4b11      	ldr	r3, [pc, #68]	; (80009b4 <MCAL_SET_GP_TIMx_GPIO+0x3c8>)
+ 800096e:	681b      	ldr	r3, [r3, #0]
+ 8000970:	66fb      	str	r3, [r7, #108]	; 0x6c
+					MCAL_GPIO_init(GPIOB, &pin);
+ 8000972:	f107 036c 	add.w	r3, r7, #108	; 0x6c
+ 8000976:	4619      	mov	r1, r3
+ 8000978:	480c      	ldr	r0, [pc, #48]	; (80009ac <MCAL_SET_GP_TIMx_GPIO+0x3c0>)
+ 800097a:	f7ff fd21 	bl	80003c0 <MCAL_GPIO_init>
+					break;
+ 800097e:	e002      	b.n	8000986 <MCAL_SET_GP_TIMx_GPIO+0x39a>
+					ERROR_HANDLER();
+ 8000980:	f001 f933 	bl	8001bea <ERROR_HANDLER>
+				break;
+ 8000984:	e00b      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+ 8000986:	e00a      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+					break;
+ 8000988:	bf00      	nop
+ 800098a:	e008      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+			break;
+ 800098c:	bf00      	nop
+ 800098e:	e006      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+					break;
+ 8000990:	bf00      	nop
+ 8000992:	e004      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+			break;
+ 8000994:	bf00      	nop
+ 8000996:	e002      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+					break;
+ 8000998:	bf00      	nop
+ 800099a:	e000      	b.n	800099e <MCAL_SET_GP_TIMx_GPIO+0x3b2>
+			break;
+ 800099c:	bf00      	nop
+		//////////
+
+
+
+	}
+}
+ 800099e:	bf00      	nop
+ 80009a0:	3770      	adds	r7, #112	; 0x70
+ 80009a2:	46bd      	mov	sp, r7
+ 80009a4:	bd80      	pop	{r7, pc}
+ 80009a6:	bf00      	nop
+ 80009a8:	08001edc 	.word	0x08001edc
+ 80009ac:	40010c00 	.word	0x40010c00
+ 80009b0:	08001ee8 	.word	0x08001ee8
+ 80009b4:	08001eec 	.word	0x08001eec
+
+080009b8 <GP_TIMx_start>:
+ * @param [in] - TIM[1 OR 2 OR 3] and the sitting
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
+void GP_TIMx_start(GP_TIMx_REG* TIMx,GP_TIMERx_config* Sitting,GP_TIMERx_NORMAL_config* NORMAL_SITTING){
+ 80009b8:	b590      	push	{r4, r7, lr}
+ 80009ba:	b085      	sub	sp, #20
+ 80009bc:	af00      	add	r7, sp, #0
+ 80009be:	60f8      	str	r0, [r7, #12]
+ 80009c0:	60b9      	str	r1, [r7, #8]
+ 80009c2:	607a      	str	r2, [r7, #4]
+
+	if(Sitting->mode==NORMAL){
+ 80009c4:	68bb      	ldr	r3, [r7, #8]
+ 80009c6:	7a5b      	ldrb	r3, [r3, #9]
+ 80009c8:	2b00      	cmp	r3, #0
+ 80009ca:	f040 80c0 	bne.w	8000b4e <GP_TIMx_start+0x196>
+		g_GP_TIMX=TIMx;
+ 80009ce:	4a63      	ldr	r2, [pc, #396]	; (8000b5c <GP_TIMx_start+0x1a4>)
+ 80009d0:	68fb      	ldr	r3, [r7, #12]
+ 80009d2:	6013      	str	r3, [r2, #0]
+		if(TIMx== TIM2){RCC->APB1ENR|=(1<<0);			g_GP_Sitting[0]=(* Sitting);	}
+ 80009d4:	68fb      	ldr	r3, [r7, #12]
+ 80009d6:	f1b3 4f80 	cmp.w	r3, #1073741824	; 0x40000000
+ 80009da:	d10c      	bne.n	80009f6 <GP_TIMx_start+0x3e>
+ 80009dc:	4b60      	ldr	r3, [pc, #384]	; (8000b60 <GP_TIMx_start+0x1a8>)
+ 80009de:	69db      	ldr	r3, [r3, #28]
+ 80009e0:	4a5f      	ldr	r2, [pc, #380]	; (8000b60 <GP_TIMx_start+0x1a8>)
+ 80009e2:	f043 0301 	orr.w	r3, r3, #1
+ 80009e6:	61d3      	str	r3, [r2, #28]
+ 80009e8:	4a5e      	ldr	r2, [pc, #376]	; (8000b64 <GP_TIMx_start+0x1ac>)
+ 80009ea:	68bb      	ldr	r3, [r7, #8]
+ 80009ec:	4614      	mov	r4, r2
+ 80009ee:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 80009f0:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
+ 80009f4:	e024      	b.n	8000a40 <GP_TIMx_start+0x88>
+		else if(TIMx== TIM3) {RCC->APB1ENR|=(1<<1);	g_GP_Sitting[1]=(* Sitting);	}
+ 80009f6:	68fb      	ldr	r3, [r7, #12]
+ 80009f8:	4a5b      	ldr	r2, [pc, #364]	; (8000b68 <GP_TIMx_start+0x1b0>)
+ 80009fa:	4293      	cmp	r3, r2
+ 80009fc:	d10e      	bne.n	8000a1c <GP_TIMx_start+0x64>
+ 80009fe:	4b58      	ldr	r3, [pc, #352]	; (8000b60 <GP_TIMx_start+0x1a8>)
+ 8000a00:	69db      	ldr	r3, [r3, #28]
+ 8000a02:	4a57      	ldr	r2, [pc, #348]	; (8000b60 <GP_TIMx_start+0x1a8>)
+ 8000a04:	f043 0302 	orr.w	r3, r3, #2
+ 8000a08:	61d3      	str	r3, [r2, #28]
+ 8000a0a:	4b56      	ldr	r3, [pc, #344]	; (8000b64 <GP_TIMx_start+0x1ac>)
+ 8000a0c:	68ba      	ldr	r2, [r7, #8]
+ 8000a0e:	f103 0410 	add.w	r4, r3, #16
+ 8000a12:	4613      	mov	r3, r2
+ 8000a14:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 8000a16:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
+ 8000a1a:	e011      	b.n	8000a40 <GP_TIMx_start+0x88>
+		else if(TIMx== TIM4) {RCC->APB1ENR|=(1<<2);		g_GP_Sitting[2]=(* Sitting);}
+ 8000a1c:	68fb      	ldr	r3, [r7, #12]
+ 8000a1e:	4a53      	ldr	r2, [pc, #332]	; (8000b6c <GP_TIMx_start+0x1b4>)
+ 8000a20:	4293      	cmp	r3, r2
+ 8000a22:	d10d      	bne.n	8000a40 <GP_TIMx_start+0x88>
+ 8000a24:	4b4e      	ldr	r3, [pc, #312]	; (8000b60 <GP_TIMx_start+0x1a8>)
+ 8000a26:	69db      	ldr	r3, [r3, #28]
+ 8000a28:	4a4d      	ldr	r2, [pc, #308]	; (8000b60 <GP_TIMx_start+0x1a8>)
+ 8000a2a:	f043 0304 	orr.w	r3, r3, #4
+ 8000a2e:	61d3      	str	r3, [r2, #28]
+ 8000a30:	4b4c      	ldr	r3, [pc, #304]	; (8000b64 <GP_TIMx_start+0x1ac>)
+ 8000a32:	68ba      	ldr	r2, [r7, #8]
+ 8000a34:	f103 0420 	add.w	r4, r3, #32
+ 8000a38:	4613      	mov	r3, r2
+ 8000a3a:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 8000a3c:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
+		GP_TIMx_Deint(TIMx);
+ 8000a40:	68f8      	ldr	r0, [r7, #12]
+ 8000a42:	f000 fe97 	bl	8001774 <GP_TIMx_Deint>
+
+		// 2.select the pre vale
+		TIMx->PSC=Sitting->TIME_PSC;
+ 8000a46:	68bb      	ldr	r3, [r7, #8]
+ 8000a48:	881b      	ldrh	r3, [r3, #0]
+ 8000a4a:	461a      	mov	r2, r3
+ 8000a4c:	68fb      	ldr	r3, [r7, #12]
+ 8000a4e:	629a      	str	r2, [r3, #40]	; 0x28
+
+		TIMx->ARR=Sitting->TIME_ARR;
+ 8000a50:	68bb      	ldr	r3, [r7, #8]
+ 8000a52:	885b      	ldrh	r3, [r3, #2]
+ 8000a54:	461a      	mov	r2, r3
+ 8000a56:	68fb      	ldr	r3, [r7, #12]
+ 8000a58:	62da      	str	r2, [r3, #44]	; 0x2c
+
+		TIMx->RCR=Sitting->TIME_RCR;
+ 8000a5a:	68bb      	ldr	r3, [r7, #8]
+ 8000a5c:	889b      	ldrh	r3, [r3, #4]
+ 8000a5e:	461a      	mov	r2, r3
+ 8000a60:	68fb      	ldr	r3, [r7, #12]
+ 8000a62:	631a      	str	r2, [r3, #48]	; 0x30
+
+		if(Sitting->TIME_RCR)
+ 8000a64:	68bb      	ldr	r3, [r7, #8]
+ 8000a66:	889b      	ldrh	r3, [r3, #4]
+ 8000a68:	2b00      	cmp	r3, #0
+ 8000a6a:	d004      	beq.n	8000a76 <GP_TIMx_start+0xbe>
+			TIMx->CR1.BIT_NAME.ARPE=1;
+ 8000a6c:	68fa      	ldr	r2, [r7, #12]
+ 8000a6e:	6813      	ldr	r3, [r2, #0]
+ 8000a70:	f043 0380 	orr.w	r3, r3, #128	; 0x80
+ 8000a74:	6013      	str	r3, [r2, #0]
+
+		//1.Select the mode CMS[1:0]
+		switch(NORMAL_SITTING->NORMAL_MODE){
+ 8000a76:	687b      	ldr	r3, [r7, #4]
+ 8000a78:	781b      	ldrb	r3, [r3, #0]
+ 8000a7a:	2b02      	cmp	r3, #2
+ 8000a7c:	d01c      	beq.n	8000ab8 <GP_TIMx_start+0x100>
+ 8000a7e:	2b02      	cmp	r3, #2
+ 8000a80:	dc20      	bgt.n	8000ac4 <GP_TIMx_start+0x10c>
+ 8000a82:	2b00      	cmp	r3, #0
+ 8000a84:	d002      	beq.n	8000a8c <GP_TIMx_start+0xd4>
+ 8000a86:	2b01      	cmp	r3, #1
+ 8000a88:	d00b      	beq.n	8000aa2 <GP_TIMx_start+0xea>
+ 8000a8a:	e01b      	b.n	8000ac4 <GP_TIMx_start+0x10c>
+		case Up:
+			TIMx->CR1.BIT_NAME.CMS=0b00; //00: Edge-aligned mode. The counter counts up or down depending on the direction bit (DIR).
+ 8000a8c:	68fa      	ldr	r2, [r7, #12]
+ 8000a8e:	6813      	ldr	r3, [r2, #0]
+ 8000a90:	f36f 1346 	bfc	r3, #5, #2
+ 8000a94:	6013      	str	r3, [r2, #0]
+			TIMx->CR1.BIT_NAME.DIR=0; //0: Counter used as upcounter
+ 8000a96:	68fa      	ldr	r2, [r7, #12]
+ 8000a98:	6813      	ldr	r3, [r2, #0]
+ 8000a9a:	f36f 1304 	bfc	r3, #4, #1
+ 8000a9e:	6013      	str	r3, [r2, #0]
+			break;
+ 8000aa0:	e013      	b.n	8000aca <GP_TIMx_start+0x112>
+		case DOWN:
+			TIMx->CR1.BIT_NAME.CMS=0b00; //00: Edge-aligned mode. The counter counts up or down depending on the direction bit (DIR).
+ 8000aa2:	68fa      	ldr	r2, [r7, #12]
+ 8000aa4:	6813      	ldr	r3, [r2, #0]
+ 8000aa6:	f36f 1346 	bfc	r3, #5, #2
+ 8000aaa:	6013      	str	r3, [r2, #0]
+			TIMx->CR1.BIT_NAME.DIR=1; //1: Counter used as downcounter
+ 8000aac:	68fa      	ldr	r2, [r7, #12]
+ 8000aae:	6813      	ldr	r3, [r2, #0]
+ 8000ab0:	f043 0310 	orr.w	r3, r3, #16
+ 8000ab4:	6013      	str	r3, [r2, #0]
+			break;
+ 8000ab6:	e008      	b.n	8000aca <GP_TIMx_start+0x112>
+		case Up_Down:
+			TIMx->CR1.BIT_NAME.CMS=0b11;
+ 8000ab8:	68fa      	ldr	r2, [r7, #12]
+ 8000aba:	6813      	ldr	r3, [r2, #0]
+ 8000abc:	f043 0360 	orr.w	r3, r3, #96	; 0x60
+ 8000ac0:	6013      	str	r3, [r2, #0]
+			/*11: Center-aligned mode 3. The counter counts up and down alternatively. Output compare
+		interrupt flags of channels configured in output (CCxS=00 in TIMx_CCMRx register) are set
+		both when the counter is counting up or down*/
+			break;
+ 8000ac2:	e002      	b.n	8000aca <GP_TIMx_start+0x112>
+		default:
+			GP_ERROR_HANDLER();
+ 8000ac4:	f7ff fd8e 	bl	80005e4 <GP_ERROR_HANDLER>
+			break;
+ 8000ac8:	bf00      	nop
+		}
+		MCAL_SET_GP_TIMx_GPIO(TIMx,NORMAL,0);
+ 8000aca:	2200      	movs	r2, #0
+ 8000acc:	2100      	movs	r1, #0
+ 8000ace:	68f8      	ldr	r0, [r7, #12]
+ 8000ad0:	f7ff fd8c 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+		TIMx->CR1.BIT_NAME.CEN=1;
+ 8000ad4:	68fa      	ldr	r2, [r7, #12]
+ 8000ad6:	6813      	ldr	r3, [r2, #0]
+ 8000ad8:	f043 0301 	orr.w	r3, r3, #1
+ 8000adc:	6013      	str	r3, [r2, #0]
+
+		if(Sitting->INT_EN_DIS==INT_EN){
+ 8000ade:	68bb      	ldr	r3, [r7, #8]
+ 8000ae0:	7a1b      	ldrb	r3, [r3, #8]
+ 8000ae2:	2b00      	cmp	r3, #0
+ 8000ae4:	d125      	bne.n	8000b32 <GP_TIMx_start+0x17a>
+			TIMx->DIER.BIT_NAME.UIE=1;
+ 8000ae6:	68fa      	ldr	r2, [r7, #12]
+ 8000ae8:	68d3      	ldr	r3, [r2, #12]
+ 8000aea:	f043 0301 	orr.w	r3, r3, #1
+ 8000aee:	60d3      	str	r3, [r2, #12]
+			if(TIMx== TIM2) 	NVIC_ISER0|=(1<<28);
+ 8000af0:	68fb      	ldr	r3, [r7, #12]
+ 8000af2:	f1b3 4f80 	cmp.w	r3, #1073741824	; 0x40000000
+ 8000af6:	d106      	bne.n	8000b06 <GP_TIMx_start+0x14e>
+ 8000af8:	4b1d      	ldr	r3, [pc, #116]	; (8000b70 <GP_TIMx_start+0x1b8>)
+ 8000afa:	681b      	ldr	r3, [r3, #0]
+ 8000afc:	4a1c      	ldr	r2, [pc, #112]	; (8000b70 <GP_TIMx_start+0x1b8>)
+ 8000afe:	f043 5380 	orr.w	r3, r3, #268435456	; 0x10000000
+ 8000b02:	6013      	str	r3, [r2, #0]
+			TIMx->SR.BIT_NAME.UIF=0;
+		}
+	}else{
+		GP_ERROR_HANDLER();
+	}
+}
+ 8000b04:	e025      	b.n	8000b52 <GP_TIMx_start+0x19a>
+			else if(TIMx== TIM3) NVIC_ISER0|=(1<<29);
+ 8000b06:	68fb      	ldr	r3, [r7, #12]
+ 8000b08:	4a17      	ldr	r2, [pc, #92]	; (8000b68 <GP_TIMx_start+0x1b0>)
+ 8000b0a:	4293      	cmp	r3, r2
+ 8000b0c:	d106      	bne.n	8000b1c <GP_TIMx_start+0x164>
+ 8000b0e:	4b18      	ldr	r3, [pc, #96]	; (8000b70 <GP_TIMx_start+0x1b8>)
+ 8000b10:	681b      	ldr	r3, [r3, #0]
+ 8000b12:	4a17      	ldr	r2, [pc, #92]	; (8000b70 <GP_TIMx_start+0x1b8>)
+ 8000b14:	f043 5300 	orr.w	r3, r3, #536870912	; 0x20000000
+ 8000b18:	6013      	str	r3, [r2, #0]
+}
+ 8000b1a:	e01a      	b.n	8000b52 <GP_TIMx_start+0x19a>
+			else if(TIMx== TIM4) NVIC_ISER0|=(1<<30);
+ 8000b1c:	68fb      	ldr	r3, [r7, #12]
+ 8000b1e:	4a13      	ldr	r2, [pc, #76]	; (8000b6c <GP_TIMx_start+0x1b4>)
+ 8000b20:	4293      	cmp	r3, r2
+ 8000b22:	d116      	bne.n	8000b52 <GP_TIMx_start+0x19a>
+ 8000b24:	4b12      	ldr	r3, [pc, #72]	; (8000b70 <GP_TIMx_start+0x1b8>)
+ 8000b26:	681b      	ldr	r3, [r3, #0]
+ 8000b28:	4a11      	ldr	r2, [pc, #68]	; (8000b70 <GP_TIMx_start+0x1b8>)
+ 8000b2a:	f043 4380 	orr.w	r3, r3, #1073741824	; 0x40000000
+ 8000b2e:	6013      	str	r3, [r2, #0]
+}
+ 8000b30:	e00f      	b.n	8000b52 <GP_TIMx_start+0x19a>
+			while(!TIMx->SR.BIT_NAME.UIF);
+ 8000b32:	bf00      	nop
+ 8000b34:	68fb      	ldr	r3, [r7, #12]
+ 8000b36:	691b      	ldr	r3, [r3, #16]
+ 8000b38:	f3c3 0300 	ubfx	r3, r3, #0, #1
+ 8000b3c:	b2db      	uxtb	r3, r3
+ 8000b3e:	2b00      	cmp	r3, #0
+ 8000b40:	d0f8      	beq.n	8000b34 <GP_TIMx_start+0x17c>
+			TIMx->SR.BIT_NAME.UIF=0;
+ 8000b42:	68fa      	ldr	r2, [r7, #12]
+ 8000b44:	6913      	ldr	r3, [r2, #16]
+ 8000b46:	f36f 0300 	bfc	r3, #0, #1
+ 8000b4a:	6113      	str	r3, [r2, #16]
+}
+ 8000b4c:	e001      	b.n	8000b52 <GP_TIMx_start+0x19a>
+		GP_ERROR_HANDLER();
+ 8000b4e:	f7ff fd49 	bl	80005e4 <GP_ERROR_HANDLER>
+}
+ 8000b52:	bf00      	nop
+ 8000b54:	3714      	adds	r7, #20
+ 8000b56:	46bd      	mov	sp, r7
+ 8000b58:	bd90      	pop	{r4, r7, pc}
+ 8000b5a:	bf00      	nop
+ 8000b5c:	20000088 	.word	0x20000088
+ 8000b60:	40021000 	.word	0x40021000
+ 8000b64:	20000058 	.word	0x20000058
+ 8000b68:	40000400 	.word	0x40000400
+ 8000b6c:	40000800 	.word	0x40000800
+ 8000b70:	e000e100 	.word	0xe000e100
+
+08000b74 <GP_TIMx__CTC_start>:
+ * @param [in] - TIM[1 OR 2 OR 3] and the sitting of global timer and PWM Or CTC sitting
+ * @param [out] - WAVE
+ * @retval -
+ * Note-
+ */
+void GP_TIMx__CTC_start(GP_TIMx_REG* TIMx,GP_TIMERx_config* Sitting,GP_TIMERx_CTC_config* CTC_Sitting){
+ 8000b74:	b590      	push	{r4, r7, lr}
+ 8000b76:	b085      	sub	sp, #20
+ 8000b78:	af00      	add	r7, sp, #0
+ 8000b7a:	60f8      	str	r0, [r7, #12]
+ 8000b7c:	60b9      	str	r1, [r7, #8]
+ 8000b7e:	607a      	str	r2, [r7, #4]
+
+	if(Sitting->mode==PWM ||Sitting->mode==CTC ){
+ 8000b80:	68bb      	ldr	r3, [r7, #8]
+ 8000b82:	7a5b      	ldrb	r3, [r3, #9]
+ 8000b84:	2b01      	cmp	r3, #1
+ 8000b86:	d004      	beq.n	8000b92 <GP_TIMx__CTC_start+0x1e>
+ 8000b88:	68bb      	ldr	r3, [r7, #8]
+ 8000b8a:	7a5b      	ldrb	r3, [r3, #9]
+ 8000b8c:	2b01      	cmp	r3, #1
+ 8000b8e:	f040 85e2 	bne.w	8001756 <GP_TIMx__CTC_start+0xbe2>
+		g_GP_TIMX=TIMx;
+ 8000b92:	4a9e      	ldr	r2, [pc, #632]	; (8000e0c <GP_TIMx__CTC_start+0x298>)
+ 8000b94:	68fb      	ldr	r3, [r7, #12]
+ 8000b96:	6013      	str	r3, [r2, #0]
+		if(TIMx== TIM2){RCC->APB1ENR|=(1<<0);			g_GP_Sitting[0]=(* Sitting);	}
+ 8000b98:	68fb      	ldr	r3, [r7, #12]
+ 8000b9a:	f1b3 4f80 	cmp.w	r3, #1073741824	; 0x40000000
+ 8000b9e:	d10c      	bne.n	8000bba <GP_TIMx__CTC_start+0x46>
+ 8000ba0:	4b9b      	ldr	r3, [pc, #620]	; (8000e10 <GP_TIMx__CTC_start+0x29c>)
+ 8000ba2:	69db      	ldr	r3, [r3, #28]
+ 8000ba4:	4a9a      	ldr	r2, [pc, #616]	; (8000e10 <GP_TIMx__CTC_start+0x29c>)
+ 8000ba6:	f043 0301 	orr.w	r3, r3, #1
+ 8000baa:	61d3      	str	r3, [r2, #28]
+ 8000bac:	4a99      	ldr	r2, [pc, #612]	; (8000e14 <GP_TIMx__CTC_start+0x2a0>)
+ 8000bae:	68bb      	ldr	r3, [r7, #8]
+ 8000bb0:	4614      	mov	r4, r2
+ 8000bb2:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 8000bb4:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
+ 8000bb8:	e024      	b.n	8000c04 <GP_TIMx__CTC_start+0x90>
+		else if(TIMx== TIM3) {RCC->APB1ENR|=(1<<1);	g_GP_Sitting[1]=(* Sitting);	}
+ 8000bba:	68fb      	ldr	r3, [r7, #12]
+ 8000bbc:	4a96      	ldr	r2, [pc, #600]	; (8000e18 <GP_TIMx__CTC_start+0x2a4>)
+ 8000bbe:	4293      	cmp	r3, r2
+ 8000bc0:	d10e      	bne.n	8000be0 <GP_TIMx__CTC_start+0x6c>
+ 8000bc2:	4b93      	ldr	r3, [pc, #588]	; (8000e10 <GP_TIMx__CTC_start+0x29c>)
+ 8000bc4:	69db      	ldr	r3, [r3, #28]
+ 8000bc6:	4a92      	ldr	r2, [pc, #584]	; (8000e10 <GP_TIMx__CTC_start+0x29c>)
+ 8000bc8:	f043 0302 	orr.w	r3, r3, #2
+ 8000bcc:	61d3      	str	r3, [r2, #28]
+ 8000bce:	4b91      	ldr	r3, [pc, #580]	; (8000e14 <GP_TIMx__CTC_start+0x2a0>)
+ 8000bd0:	68ba      	ldr	r2, [r7, #8]
+ 8000bd2:	f103 0410 	add.w	r4, r3, #16
+ 8000bd6:	4613      	mov	r3, r2
+ 8000bd8:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 8000bda:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
+ 8000bde:	e011      	b.n	8000c04 <GP_TIMx__CTC_start+0x90>
+		else if(TIMx== TIM4) {RCC->APB1ENR|=(1<<2);		g_GP_Sitting[2]=(* Sitting);}
+ 8000be0:	68fb      	ldr	r3, [r7, #12]
+ 8000be2:	4a8e      	ldr	r2, [pc, #568]	; (8000e1c <GP_TIMx__CTC_start+0x2a8>)
+ 8000be4:	4293      	cmp	r3, r2
+ 8000be6:	d10d      	bne.n	8000c04 <GP_TIMx__CTC_start+0x90>
+ 8000be8:	4b89      	ldr	r3, [pc, #548]	; (8000e10 <GP_TIMx__CTC_start+0x29c>)
+ 8000bea:	69db      	ldr	r3, [r3, #28]
+ 8000bec:	4a88      	ldr	r2, [pc, #544]	; (8000e10 <GP_TIMx__CTC_start+0x29c>)
+ 8000bee:	f043 0304 	orr.w	r3, r3, #4
+ 8000bf2:	61d3      	str	r3, [r2, #28]
+ 8000bf4:	4b87      	ldr	r3, [pc, #540]	; (8000e14 <GP_TIMx__CTC_start+0x2a0>)
+ 8000bf6:	68ba      	ldr	r2, [r7, #8]
+ 8000bf8:	f103 0420 	add.w	r4, r3, #32
+ 8000bfc:	4613      	mov	r3, r2
+ 8000bfe:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 8000c00:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
+		GP_TIMx_Deint(TIMx);
+ 8000c04:	68f8      	ldr	r0, [r7, #12]
+ 8000c06:	f000 fdb5 	bl	8001774 <GP_TIMx_Deint>
+		// 2.select the pre vale
+		TIMx->PSC=Sitting->TIME_PSC;
+ 8000c0a:	68bb      	ldr	r3, [r7, #8]
+ 8000c0c:	881b      	ldrh	r3, [r3, #0]
+ 8000c0e:	461a      	mov	r2, r3
+ 8000c10:	68fb      	ldr	r3, [r7, #12]
+ 8000c12:	629a      	str	r2, [r3, #40]	; 0x28
+
+		TIMx->ARR=Sitting->TIME_ARR;
+ 8000c14:	68bb      	ldr	r3, [r7, #8]
+ 8000c16:	885b      	ldrh	r3, [r3, #2]
+ 8000c18:	461a      	mov	r2, r3
+ 8000c1a:	68fb      	ldr	r3, [r7, #12]
+ 8000c1c:	62da      	str	r2, [r3, #44]	; 0x2c
+
+		TIMx->RCR=Sitting->TIME_RCR;
+ 8000c1e:	68bb      	ldr	r3, [r7, #8]
+ 8000c20:	889b      	ldrh	r3, [r3, #4]
+ 8000c22:	461a      	mov	r2, r3
+ 8000c24:	68fb      	ldr	r3, [r7, #12]
+ 8000c26:	631a      	str	r2, [r3, #48]	; 0x30
+
+		if(Sitting->TIME_RCR)
+ 8000c28:	68bb      	ldr	r3, [r7, #8]
+ 8000c2a:	889b      	ldrh	r3, [r3, #4]
+ 8000c2c:	2b00      	cmp	r3, #0
+ 8000c2e:	d004      	beq.n	8000c3a <GP_TIMx__CTC_start+0xc6>
+			TIMx->CR1.BIT_NAME.ARPE=1;
+ 8000c30:	68fa      	ldr	r2, [r7, #12]
+ 8000c32:	6813      	ldr	r3, [r2, #0]
+ 8000c34:	f043 0380 	orr.w	r3, r3, #128	; 0x80
+ 8000c38:	6013      	str	r3, [r2, #0]
+– Write OCxM = 011 to toggle OCx output pin when CNT matches CCRx
+– Write OCxPE = 0 to disable preload register
+– Write CCxP = 0 to select active high polarity
+– Write CCxE = 1 to enable the output
+5. Enable the counter by setting the CEN bit in the TIMx_CR1 register.*/
+		switch(CTC_Sitting->CTC_MODE){
+ 8000c3a:	687b      	ldr	r3, [r7, #4]
+ 8000c3c:	785b      	ldrb	r3, [r3, #1]
+ 8000c3e:	2b07      	cmp	r3, #7
+ 8000c40:	f200 84d8 	bhi.w	80015f4 <GP_TIMx__CTC_start+0xa80>
+ 8000c44:	a201      	add	r2, pc, #4	; (adr r2, 8000c4c <GP_TIMx__CTC_start+0xd8>)
+ 8000c46:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8000c4a:	bf00      	nop
+ 8000c4c:	08000c6d 	.word	0x08000c6d
+ 8000c50:	08000cef 	.word	0x08000cef
+ 8000c54:	08000ecf 	.word	0x08000ecf
+ 8000c58:	08001099 	.word	0x08001099
+ 8000c5c:	080015f5 	.word	0x080015f5
+ 8000c60:	080015f5 	.word	0x080015f5
+ 8000c64:	08001265 	.word	0x08001265
+ 8000c68:	08001431 	.word	0x08001431
+		// IN CASE I NEED TO SWITCH TO FROZEN
+		case Frozen:
+			switch(CTC_Sitting->CHx_num){
+ 8000c6c:	687b      	ldr	r3, [r7, #4]
+ 8000c6e:	781b      	ldrb	r3, [r3, #0]
+ 8000c70:	3b01      	subs	r3, #1
+ 8000c72:	2b03      	cmp	r3, #3
+ 8000c74:	d836      	bhi.n	8000ce4 <GP_TIMx__CTC_start+0x170>
+ 8000c76:	a201      	add	r2, pc, #4	; (adr r2, 8000c7c <GP_TIMx__CTC_start+0x108>)
+ 8000c78:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8000c7c:	08000c8d 	.word	0x08000c8d
+ 8000c80:	08000ca3 	.word	0x08000ca3
+ 8000c84:	08000cb9 	.word	0x08000cb9
+ 8000c88:	08000ccf 	.word	0x08000ccf
+			case 1:
+				TIMx->CCMR1.Compare_BIT_NAME.OC1M=Frozen;
+ 8000c8c:	68fa      	ldr	r2, [r7, #12]
+ 8000c8e:	6993      	ldr	r3, [r2, #24]
+ 8000c90:	f36f 1306 	bfc	r3, #4, #3
+ 8000c94:	6193      	str	r3, [r2, #24]
+				MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,1);
+ 8000c96:	2201      	movs	r2, #1
+ 8000c98:	2101      	movs	r1, #1
+ 8000c9a:	68f8      	ldr	r0, [r7, #12]
+ 8000c9c:	f7ff fca6 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+				break;
+ 8000ca0:	e023      	b.n	8000cea <GP_TIMx__CTC_start+0x176>
+			case 2:
+				TIMx->CCMR1.Compare_BIT_NAME.OC2M=Frozen;
+ 8000ca2:	68fa      	ldr	r2, [r7, #12]
+ 8000ca4:	6993      	ldr	r3, [r2, #24]
+ 8000ca6:	f36f 330e 	bfc	r3, #12, #3
+ 8000caa:	6193      	str	r3, [r2, #24]
+				MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,2);
+ 8000cac:	2202      	movs	r2, #2
+ 8000cae:	2101      	movs	r1, #1
+ 8000cb0:	68f8      	ldr	r0, [r7, #12]
+ 8000cb2:	f7ff fc9b 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+				break;
+ 8000cb6:	e018      	b.n	8000cea <GP_TIMx__CTC_start+0x176>
+			case 3:
+				TIMx->CCMR2.Compare_BIT_NAME.OC3M=Frozen;
+ 8000cb8:	68fa      	ldr	r2, [r7, #12]
+ 8000cba:	69d3      	ldr	r3, [r2, #28]
+ 8000cbc:	f36f 1306 	bfc	r3, #4, #3
+ 8000cc0:	61d3      	str	r3, [r2, #28]
+				MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,3);
+ 8000cc2:	2203      	movs	r2, #3
+ 8000cc4:	2101      	movs	r1, #1
+ 8000cc6:	68f8      	ldr	r0, [r7, #12]
+ 8000cc8:	f7ff fc90 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+				break;
+ 8000ccc:	e00d      	b.n	8000cea <GP_TIMx__CTC_start+0x176>
+			case 4:
+				TIMx->CCMR2.Compare_BIT_NAME.OC4M=Frozen;
+ 8000cce:	68fa      	ldr	r2, [r7, #12]
+ 8000cd0:	69d3      	ldr	r3, [r2, #28]
+ 8000cd2:	f36f 330e 	bfc	r3, #12, #3
+ 8000cd6:	61d3      	str	r3, [r2, #28]
+				MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,4);
+ 8000cd8:	2204      	movs	r2, #4
+ 8000cda:	2101      	movs	r1, #1
+ 8000cdc:	68f8      	ldr	r0, [r7, #12]
+ 8000cde:	f7ff fc85 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+				break;
+ 8000ce2:	e002      	b.n	8000cea <GP_TIMx__CTC_start+0x176>
+			default:
+				GP_ERROR_HANDLER();
+ 8000ce4:	f7ff fc7e 	bl	80005e4 <GP_ERROR_HANDLER>
+				break;
+ 8000ce8:	bf00      	nop
+
+			}
+			break;
+ 8000cea:	f000 bc86 	b.w	80015fa <GP_TIMx__CTC_start+0xa86>
+
+			case active:
+				switch(CTC_Sitting->CHx_num){
+ 8000cee:	687b      	ldr	r3, [r7, #4]
+ 8000cf0:	781b      	ldrb	r3, [r3, #0]
+ 8000cf2:	3b01      	subs	r3, #1
+ 8000cf4:	2b03      	cmp	r3, #3
+ 8000cf6:	f200 80e6 	bhi.w	8000ec6 <GP_TIMx__CTC_start+0x352>
+ 8000cfa:	a201      	add	r2, pc, #4	; (adr r2, 8000d00 <GP_TIMx__CTC_start+0x18c>)
+ 8000cfc:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8000d00:	08000d11 	.word	0x08000d11
+ 8000d04:	08000d79 	.word	0x08000d79
+ 8000d08:	08000de1 	.word	0x08000de1
+ 8000d0c:	08000e5f 	.word	0x08000e5f
+				case 1:
+					TIMx->CCR1=Sitting->TIME_CCR;
+ 8000d10:	68bb      	ldr	r3, [r7, #8]
+ 8000d12:	88db      	ldrh	r3, [r3, #6]
+ 8000d14:	461a      	mov	r2, r3
+ 8000d16:	68fb      	ldr	r3, [r7, #12]
+ 8000d18:	635a      	str	r2, [r3, #52]	; 0x34
+					TIMx->CCMR1.Compare_BIT_NAME.OC1M=active;
+ 8000d1a:	68fa      	ldr	r2, [r7, #12]
+ 8000d1c:	6993      	ldr	r3, [r2, #24]
+ 8000d1e:	2101      	movs	r1, #1
+ 8000d20:	f361 1306 	bfi	r3, r1, #4, #3
+ 8000d24:	6193      	str	r3, [r2, #24]
+					//if the preload > 0 so enable the OC1PE
+					if(Sitting->TIME_RCR){
+ 8000d26:	68bb      	ldr	r3, [r7, #8]
+ 8000d28:	889b      	ldrh	r3, [r3, #4]
+ 8000d2a:	2b00      	cmp	r3, #0
+ 8000d2c:	d005      	beq.n	8000d3a <GP_TIMx__CTC_start+0x1c6>
+						TIMx->CCMR1.Compare_BIT_NAME.OC1PE=1;
+ 8000d2e:	68fa      	ldr	r2, [r7, #12]
+ 8000d30:	6993      	ldr	r3, [r2, #24]
+ 8000d32:	f043 0308 	orr.w	r3, r3, #8
+ 8000d36:	6193      	str	r3, [r2, #24]
+ 8000d38:	e004      	b.n	8000d44 <GP_TIMx__CTC_start+0x1d0>
+					}else{
+						TIMx->CCMR1.Compare_BIT_NAME.OC1PE=0;
+ 8000d3a:	68fa      	ldr	r2, [r7, #12]
+ 8000d3c:	6993      	ldr	r3, [r2, #24]
+ 8000d3e:	f36f 03c3 	bfc	r3, #3, #1
+ 8000d42:	6193      	str	r3, [r2, #24]
+					}
+					TIMx->CCER.BIT_NAME.CC1P=CTC_Sitting->CTC_POL;
+ 8000d44:	687b      	ldr	r3, [r7, #4]
+ 8000d46:	789b      	ldrb	r3, [r3, #2]
+ 8000d48:	f003 0301 	and.w	r3, r3, #1
+ 8000d4c:	b2d9      	uxtb	r1, r3
+ 8000d4e:	68fa      	ldr	r2, [r7, #12]
+ 8000d50:	6a13      	ldr	r3, [r2, #32]
+ 8000d52:	f361 0341 	bfi	r3, r1, #1, #1
+ 8000d56:	6213      	str	r3, [r2, #32]
+					//			CC1S	  00: CC1 channel is configured as output
+					TIMx->CCMR1.Compare_BIT_NAME.CC1S=0;
+ 8000d58:	68fa      	ldr	r2, [r7, #12]
+ 8000d5a:	6993      	ldr	r3, [r2, #24]
+ 8000d5c:	f36f 0301 	bfc	r3, #0, #2
+ 8000d60:	6193      	str	r3, [r2, #24]
+					//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+					TIMx->CCER.BIT_NAME.CC1E=1;
+ 8000d62:	68fa      	ldr	r2, [r7, #12]
+ 8000d64:	6a13      	ldr	r3, [r2, #32]
+ 8000d66:	f043 0301 	orr.w	r3, r3, #1
+ 8000d6a:	6213      	str	r3, [r2, #32]
+					MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,1);
+ 8000d6c:	2201      	movs	r2, #1
+ 8000d6e:	2101      	movs	r1, #1
+ 8000d70:	68f8      	ldr	r0, [r7, #12]
+ 8000d72:	f7ff fc3b 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+					break;
+ 8000d76:	e0a9      	b.n	8000ecc <GP_TIMx__CTC_start+0x358>
+				case 2:
+					TIMx->CCR2=Sitting->TIME_CCR;
+ 8000d78:	68bb      	ldr	r3, [r7, #8]
+ 8000d7a:	88db      	ldrh	r3, [r3, #6]
+ 8000d7c:	461a      	mov	r2, r3
+ 8000d7e:	68fb      	ldr	r3, [r7, #12]
+ 8000d80:	639a      	str	r2, [r3, #56]	; 0x38
+					TIMx->CCMR1.Compare_BIT_NAME.OC2M=active;
+ 8000d82:	68fa      	ldr	r2, [r7, #12]
+ 8000d84:	6993      	ldr	r3, [r2, #24]
+ 8000d86:	2101      	movs	r1, #1
+ 8000d88:	f361 330e 	bfi	r3, r1, #12, #3
+ 8000d8c:	6193      	str	r3, [r2, #24]
+					//if the preload > 0 so enable the OC1PE
+					if(Sitting->TIME_RCR){
+ 8000d8e:	68bb      	ldr	r3, [r7, #8]
+ 8000d90:	889b      	ldrh	r3, [r3, #4]
+ 8000d92:	2b00      	cmp	r3, #0
+ 8000d94:	d005      	beq.n	8000da2 <GP_TIMx__CTC_start+0x22e>
+						TIMx->CCMR1.Compare_BIT_NAME.OC2PE=1;
+ 8000d96:	68fa      	ldr	r2, [r7, #12]
+ 8000d98:	6993      	ldr	r3, [r2, #24]
+ 8000d9a:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 8000d9e:	6193      	str	r3, [r2, #24]
+ 8000da0:	e004      	b.n	8000dac <GP_TIMx__CTC_start+0x238>
+					}else{
+						TIMx->CCMR1.Compare_BIT_NAME.OC2PE=0;
+ 8000da2:	68fa      	ldr	r2, [r7, #12]
+ 8000da4:	6993      	ldr	r3, [r2, #24]
+ 8000da6:	f36f 23cb 	bfc	r3, #11, #1
+ 8000daa:	6193      	str	r3, [r2, #24]
+					}
+					TIMx->CCER.BIT_NAME.CC2P=CTC_Sitting->CTC_POL;
+ 8000dac:	687b      	ldr	r3, [r7, #4]
+ 8000dae:	789b      	ldrb	r3, [r3, #2]
+ 8000db0:	f003 0301 	and.w	r3, r3, #1
+ 8000db4:	b2d9      	uxtb	r1, r3
+ 8000db6:	68fa      	ldr	r2, [r7, #12]
+ 8000db8:	6a13      	ldr	r3, [r2, #32]
+ 8000dba:	f361 1345 	bfi	r3, r1, #5, #1
+ 8000dbe:	6213      	str	r3, [r2, #32]
+					//			CC1S	  00: CC1 channel is configured as output
+					TIMx->CCMR1.Compare_BIT_NAME.CC2S=0;
+ 8000dc0:	68fa      	ldr	r2, [r7, #12]
+ 8000dc2:	6993      	ldr	r3, [r2, #24]
+ 8000dc4:	f36f 2309 	bfc	r3, #8, #2
+ 8000dc8:	6193      	str	r3, [r2, #24]
+					//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+					TIMx->CCER.BIT_NAME.CC2E=1;
+ 8000dca:	68fa      	ldr	r2, [r7, #12]
+ 8000dcc:	6a13      	ldr	r3, [r2, #32]
+ 8000dce:	f043 0310 	orr.w	r3, r3, #16
+ 8000dd2:	6213      	str	r3, [r2, #32]
+					MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,2);
+ 8000dd4:	2202      	movs	r2, #2
+ 8000dd6:	2101      	movs	r1, #1
+ 8000dd8:	68f8      	ldr	r0, [r7, #12]
+ 8000dda:	f7ff fc07 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+					break;
+ 8000dde:	e075      	b.n	8000ecc <GP_TIMx__CTC_start+0x358>
+				case 3:
+					TIMx->CCR3=Sitting->TIME_CCR;
+ 8000de0:	68bb      	ldr	r3, [r7, #8]
+ 8000de2:	88db      	ldrh	r3, [r3, #6]
+ 8000de4:	461a      	mov	r2, r3
+ 8000de6:	68fb      	ldr	r3, [r7, #12]
+ 8000de8:	63da      	str	r2, [r3, #60]	; 0x3c
+					TIMx->CCMR2.Compare_BIT_NAME.OC3M=active;
+ 8000dea:	68fa      	ldr	r2, [r7, #12]
+ 8000dec:	69d3      	ldr	r3, [r2, #28]
+ 8000dee:	2101      	movs	r1, #1
+ 8000df0:	f361 1306 	bfi	r3, r1, #4, #3
+ 8000df4:	61d3      	str	r3, [r2, #28]
+					//if the preload > 0 so enable the OC1PE
+					if(Sitting->TIME_RCR){
+ 8000df6:	68bb      	ldr	r3, [r7, #8]
+ 8000df8:	889b      	ldrh	r3, [r3, #4]
+ 8000dfa:	2b00      	cmp	r3, #0
+ 8000dfc:	d010      	beq.n	8000e20 <GP_TIMx__CTC_start+0x2ac>
+						TIMx->CCMR2.Compare_BIT_NAME.OC3PE=1;
+ 8000dfe:	68fa      	ldr	r2, [r7, #12]
+ 8000e00:	69d3      	ldr	r3, [r2, #28]
+ 8000e02:	f043 0308 	orr.w	r3, r3, #8
+ 8000e06:	61d3      	str	r3, [r2, #28]
+ 8000e08:	e00f      	b.n	8000e2a <GP_TIMx__CTC_start+0x2b6>
+ 8000e0a:	bf00      	nop
+ 8000e0c:	20000088 	.word	0x20000088
+ 8000e10:	40021000 	.word	0x40021000
+ 8000e14:	20000058 	.word	0x20000058
+ 8000e18:	40000400 	.word	0x40000400
+ 8000e1c:	40000800 	.word	0x40000800
+					}else{
+						TIMx->CCMR2.Compare_BIT_NAME.OC3PE=0;
+ 8000e20:	68fa      	ldr	r2, [r7, #12]
+ 8000e22:	69d3      	ldr	r3, [r2, #28]
+ 8000e24:	f36f 03c3 	bfc	r3, #3, #1
+ 8000e28:	61d3      	str	r3, [r2, #28]
+					}
+					TIMx->CCER.BIT_NAME.CC3P=CTC_Sitting->CTC_POL;
+ 8000e2a:	687b      	ldr	r3, [r7, #4]
+ 8000e2c:	789b      	ldrb	r3, [r3, #2]
+ 8000e2e:	f003 0301 	and.w	r3, r3, #1
+ 8000e32:	b2d9      	uxtb	r1, r3
+ 8000e34:	68fa      	ldr	r2, [r7, #12]
+ 8000e36:	6a13      	ldr	r3, [r2, #32]
+ 8000e38:	f361 2349 	bfi	r3, r1, #9, #1
+ 8000e3c:	6213      	str	r3, [r2, #32]
+					//			CC1S	  00: CC1 channel is configured as output
+					TIMx->CCMR2.Compare_BIT_NAME.CC3S=0;
+ 8000e3e:	68fa      	ldr	r2, [r7, #12]
+ 8000e40:	69d3      	ldr	r3, [r2, #28]
+ 8000e42:	f36f 0301 	bfc	r3, #0, #2
+ 8000e46:	61d3      	str	r3, [r2, #28]
+					//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+					TIMx->CCER.BIT_NAME.CC3E=1;
+ 8000e48:	68fa      	ldr	r2, [r7, #12]
+ 8000e4a:	6a13      	ldr	r3, [r2, #32]
+ 8000e4c:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8000e50:	6213      	str	r3, [r2, #32]
+					MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,3);
+ 8000e52:	2203      	movs	r2, #3
+ 8000e54:	2101      	movs	r1, #1
+ 8000e56:	68f8      	ldr	r0, [r7, #12]
+ 8000e58:	f7ff fbc8 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+					break;
+ 8000e5c:	e036      	b.n	8000ecc <GP_TIMx__CTC_start+0x358>
+				case 4:
+					TIMx->CCR4=Sitting->TIME_CCR;
+ 8000e5e:	68bb      	ldr	r3, [r7, #8]
+ 8000e60:	88db      	ldrh	r3, [r3, #6]
+ 8000e62:	461a      	mov	r2, r3
+ 8000e64:	68fb      	ldr	r3, [r7, #12]
+ 8000e66:	641a      	str	r2, [r3, #64]	; 0x40
+					TIMx->CCMR2.Compare_BIT_NAME.OC4M=active;
+ 8000e68:	68fa      	ldr	r2, [r7, #12]
+ 8000e6a:	69d3      	ldr	r3, [r2, #28]
+ 8000e6c:	2101      	movs	r1, #1
+ 8000e6e:	f361 330e 	bfi	r3, r1, #12, #3
+ 8000e72:	61d3      	str	r3, [r2, #28]
+					//if the preload > 0 so enable the OC1PE
+					if(Sitting->TIME_RCR){
+ 8000e74:	68bb      	ldr	r3, [r7, #8]
+ 8000e76:	889b      	ldrh	r3, [r3, #4]
+ 8000e78:	2b00      	cmp	r3, #0
+ 8000e7a:	d005      	beq.n	8000e88 <GP_TIMx__CTC_start+0x314>
+						TIMx->CCMR2.Compare_BIT_NAME.OC4PE=1;
+ 8000e7c:	68fa      	ldr	r2, [r7, #12]
+ 8000e7e:	69d3      	ldr	r3, [r2, #28]
+ 8000e80:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 8000e84:	61d3      	str	r3, [r2, #28]
+ 8000e86:	e004      	b.n	8000e92 <GP_TIMx__CTC_start+0x31e>
+					}else{
+						TIMx->CCMR2.Compare_BIT_NAME.OC4PE=0;
+ 8000e88:	68fa      	ldr	r2, [r7, #12]
+ 8000e8a:	69d3      	ldr	r3, [r2, #28]
+ 8000e8c:	f36f 23cb 	bfc	r3, #11, #1
+ 8000e90:	61d3      	str	r3, [r2, #28]
+					}
+					TIMx->CCER.BIT_NAME.CC4P=CTC_Sitting->CTC_POL;
+ 8000e92:	687b      	ldr	r3, [r7, #4]
+ 8000e94:	789b      	ldrb	r3, [r3, #2]
+ 8000e96:	f003 0301 	and.w	r3, r3, #1
+ 8000e9a:	b2d9      	uxtb	r1, r3
+ 8000e9c:	68fa      	ldr	r2, [r7, #12]
+ 8000e9e:	6a13      	ldr	r3, [r2, #32]
+ 8000ea0:	f361 334d 	bfi	r3, r1, #13, #1
+ 8000ea4:	6213      	str	r3, [r2, #32]
+					//			CC1S	  00: CC1 channel is configured as output
+					TIMx->CCMR2.Compare_BIT_NAME.CC4S=0;
+ 8000ea6:	68fa      	ldr	r2, [r7, #12]
+ 8000ea8:	69d3      	ldr	r3, [r2, #28]
+ 8000eaa:	f36f 2309 	bfc	r3, #8, #2
+ 8000eae:	61d3      	str	r3, [r2, #28]
+					//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+					TIMx->CCER.BIT_NAME.CC4E=1;
+ 8000eb0:	68fa      	ldr	r2, [r7, #12]
+ 8000eb2:	6a13      	ldr	r3, [r2, #32]
+ 8000eb4:	f443 5380 	orr.w	r3, r3, #4096	; 0x1000
+ 8000eb8:	6213      	str	r3, [r2, #32]
+					MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,4);
+ 8000eba:	2204      	movs	r2, #4
+ 8000ebc:	2101      	movs	r1, #1
+ 8000ebe:	68f8      	ldr	r0, [r7, #12]
+ 8000ec0:	f7ff fb94 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+					break;
+ 8000ec4:	e002      	b.n	8000ecc <GP_TIMx__CTC_start+0x358>
+				default:
+					GP_ERROR_HANDLER();
+ 8000ec6:	f7ff fb8d 	bl	80005e4 <GP_ERROR_HANDLER>
+					break;
+ 8000eca:	bf00      	nop
+
+				}
+				break;
+ 8000ecc:	e395      	b.n	80015fa <GP_TIMx__CTC_start+0xa86>
+
+
+
+
+				case inactive:
+					switch(CTC_Sitting->CHx_num){
+ 8000ece:	687b      	ldr	r3, [r7, #4]
+ 8000ed0:	781b      	ldrb	r3, [r3, #0]
+ 8000ed2:	3b01      	subs	r3, #1
+ 8000ed4:	2b03      	cmp	r3, #3
+ 8000ed6:	f200 80db 	bhi.w	8001090 <GP_TIMx__CTC_start+0x51c>
+ 8000eda:	a201      	add	r2, pc, #4	; (adr r2, 8000ee0 <GP_TIMx__CTC_start+0x36c>)
+ 8000edc:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8000ee0:	08000ef1 	.word	0x08000ef1
+ 8000ee4:	08000f59 	.word	0x08000f59
+ 8000ee8:	08000fc1 	.word	0x08000fc1
+ 8000eec:	08001029 	.word	0x08001029
+					case 1:
+						TIMx->CCR1=Sitting->TIME_CCR;
+ 8000ef0:	68bb      	ldr	r3, [r7, #8]
+ 8000ef2:	88db      	ldrh	r3, [r3, #6]
+ 8000ef4:	461a      	mov	r2, r3
+ 8000ef6:	68fb      	ldr	r3, [r7, #12]
+ 8000ef8:	635a      	str	r2, [r3, #52]	; 0x34
+						TIMx->CCMR1.Compare_BIT_NAME.OC1M=inactive;
+ 8000efa:	68fa      	ldr	r2, [r7, #12]
+ 8000efc:	6993      	ldr	r3, [r2, #24]
+ 8000efe:	2102      	movs	r1, #2
+ 8000f00:	f361 1306 	bfi	r3, r1, #4, #3
+ 8000f04:	6193      	str	r3, [r2, #24]
+						//if the preload > 0 so enable the OC1PE
+						if(Sitting->TIME_RCR){
+ 8000f06:	68bb      	ldr	r3, [r7, #8]
+ 8000f08:	889b      	ldrh	r3, [r3, #4]
+ 8000f0a:	2b00      	cmp	r3, #0
+ 8000f0c:	d005      	beq.n	8000f1a <GP_TIMx__CTC_start+0x3a6>
+							TIMx->CCMR1.Compare_BIT_NAME.OC1PE=1;
+ 8000f0e:	68fa      	ldr	r2, [r7, #12]
+ 8000f10:	6993      	ldr	r3, [r2, #24]
+ 8000f12:	f043 0308 	orr.w	r3, r3, #8
+ 8000f16:	6193      	str	r3, [r2, #24]
+ 8000f18:	e004      	b.n	8000f24 <GP_TIMx__CTC_start+0x3b0>
+						}else{
+							TIMx->CCMR1.Compare_BIT_NAME.OC1PE=0;
+ 8000f1a:	68fa      	ldr	r2, [r7, #12]
+ 8000f1c:	6993      	ldr	r3, [r2, #24]
+ 8000f1e:	f36f 03c3 	bfc	r3, #3, #1
+ 8000f22:	6193      	str	r3, [r2, #24]
+						}
+						TIMx->CCER.BIT_NAME.CC1P=CTC_Sitting->CTC_POL;
+ 8000f24:	687b      	ldr	r3, [r7, #4]
+ 8000f26:	789b      	ldrb	r3, [r3, #2]
+ 8000f28:	f003 0301 	and.w	r3, r3, #1
+ 8000f2c:	b2d9      	uxtb	r1, r3
+ 8000f2e:	68fa      	ldr	r2, [r7, #12]
+ 8000f30:	6a13      	ldr	r3, [r2, #32]
+ 8000f32:	f361 0341 	bfi	r3, r1, #1, #1
+ 8000f36:	6213      	str	r3, [r2, #32]
+						//			CC1S	  00: CC1 channel is configured as output
+						TIMx->CCMR1.Compare_BIT_NAME.CC1S=0;
+ 8000f38:	68fa      	ldr	r2, [r7, #12]
+ 8000f3a:	6993      	ldr	r3, [r2, #24]
+ 8000f3c:	f36f 0301 	bfc	r3, #0, #2
+ 8000f40:	6193      	str	r3, [r2, #24]
+						//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+						TIMx->CCER.BIT_NAME.CC1E=1;
+ 8000f42:	68fa      	ldr	r2, [r7, #12]
+ 8000f44:	6a13      	ldr	r3, [r2, #32]
+ 8000f46:	f043 0301 	orr.w	r3, r3, #1
+ 8000f4a:	6213      	str	r3, [r2, #32]
+						MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,1);
+ 8000f4c:	2201      	movs	r2, #1
+ 8000f4e:	2101      	movs	r1, #1
+ 8000f50:	68f8      	ldr	r0, [r7, #12]
+ 8000f52:	f7ff fb4b 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+						break;
+ 8000f56:	e09e      	b.n	8001096 <GP_TIMx__CTC_start+0x522>
+					case 2:
+						TIMx->CCR2=Sitting->TIME_CCR;
+ 8000f58:	68bb      	ldr	r3, [r7, #8]
+ 8000f5a:	88db      	ldrh	r3, [r3, #6]
+ 8000f5c:	461a      	mov	r2, r3
+ 8000f5e:	68fb      	ldr	r3, [r7, #12]
+ 8000f60:	639a      	str	r2, [r3, #56]	; 0x38
+						TIMx->CCMR1.Compare_BIT_NAME.OC2M=inactive;
+ 8000f62:	68fa      	ldr	r2, [r7, #12]
+ 8000f64:	6993      	ldr	r3, [r2, #24]
+ 8000f66:	2102      	movs	r1, #2
+ 8000f68:	f361 330e 	bfi	r3, r1, #12, #3
+ 8000f6c:	6193      	str	r3, [r2, #24]
+						//if the preload > 0 so enable the OC1PE
+						if(Sitting->TIME_RCR){
+ 8000f6e:	68bb      	ldr	r3, [r7, #8]
+ 8000f70:	889b      	ldrh	r3, [r3, #4]
+ 8000f72:	2b00      	cmp	r3, #0
+ 8000f74:	d005      	beq.n	8000f82 <GP_TIMx__CTC_start+0x40e>
+							TIMx->CCMR1.Compare_BIT_NAME.OC2PE=1;
+ 8000f76:	68fa      	ldr	r2, [r7, #12]
+ 8000f78:	6993      	ldr	r3, [r2, #24]
+ 8000f7a:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 8000f7e:	6193      	str	r3, [r2, #24]
+ 8000f80:	e004      	b.n	8000f8c <GP_TIMx__CTC_start+0x418>
+						}else{
+							TIMx->CCMR1.Compare_BIT_NAME.OC2PE=0;
+ 8000f82:	68fa      	ldr	r2, [r7, #12]
+ 8000f84:	6993      	ldr	r3, [r2, #24]
+ 8000f86:	f36f 23cb 	bfc	r3, #11, #1
+ 8000f8a:	6193      	str	r3, [r2, #24]
+						}
+						TIMx->CCER.BIT_NAME.CC2P=CTC_Sitting->CTC_POL;
+ 8000f8c:	687b      	ldr	r3, [r7, #4]
+ 8000f8e:	789b      	ldrb	r3, [r3, #2]
+ 8000f90:	f003 0301 	and.w	r3, r3, #1
+ 8000f94:	b2d9      	uxtb	r1, r3
+ 8000f96:	68fa      	ldr	r2, [r7, #12]
+ 8000f98:	6a13      	ldr	r3, [r2, #32]
+ 8000f9a:	f361 1345 	bfi	r3, r1, #5, #1
+ 8000f9e:	6213      	str	r3, [r2, #32]
+						//			CC1S	  00: CC1 channel is configured as output
+						TIMx->CCMR1.Compare_BIT_NAME.CC2S=0;
+ 8000fa0:	68fa      	ldr	r2, [r7, #12]
+ 8000fa2:	6993      	ldr	r3, [r2, #24]
+ 8000fa4:	f36f 2309 	bfc	r3, #8, #2
+ 8000fa8:	6193      	str	r3, [r2, #24]
+						//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+						TIMx->CCER.BIT_NAME.CC2E=1;
+ 8000faa:	68fa      	ldr	r2, [r7, #12]
+ 8000fac:	6a13      	ldr	r3, [r2, #32]
+ 8000fae:	f043 0310 	orr.w	r3, r3, #16
+ 8000fb2:	6213      	str	r3, [r2, #32]
+						MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,2);
+ 8000fb4:	2202      	movs	r2, #2
+ 8000fb6:	2101      	movs	r1, #1
+ 8000fb8:	68f8      	ldr	r0, [r7, #12]
+ 8000fba:	f7ff fb17 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+						break;
+ 8000fbe:	e06a      	b.n	8001096 <GP_TIMx__CTC_start+0x522>
+					case 3:
+						TIMx->CCR3=Sitting->TIME_CCR;
+ 8000fc0:	68bb      	ldr	r3, [r7, #8]
+ 8000fc2:	88db      	ldrh	r3, [r3, #6]
+ 8000fc4:	461a      	mov	r2, r3
+ 8000fc6:	68fb      	ldr	r3, [r7, #12]
+ 8000fc8:	63da      	str	r2, [r3, #60]	; 0x3c
+						TIMx->CCMR2.Compare_BIT_NAME.OC3M=inactive;
+ 8000fca:	68fa      	ldr	r2, [r7, #12]
+ 8000fcc:	69d3      	ldr	r3, [r2, #28]
+ 8000fce:	2102      	movs	r1, #2
+ 8000fd0:	f361 1306 	bfi	r3, r1, #4, #3
+ 8000fd4:	61d3      	str	r3, [r2, #28]
+						//if the preload > 0 so enable the OC1PE
+						if(Sitting->TIME_RCR){
+ 8000fd6:	68bb      	ldr	r3, [r7, #8]
+ 8000fd8:	889b      	ldrh	r3, [r3, #4]
+ 8000fda:	2b00      	cmp	r3, #0
+ 8000fdc:	d005      	beq.n	8000fea <GP_TIMx__CTC_start+0x476>
+							TIMx->CCMR2.Compare_BIT_NAME.OC3PE=1;
+ 8000fde:	68fa      	ldr	r2, [r7, #12]
+ 8000fe0:	69d3      	ldr	r3, [r2, #28]
+ 8000fe2:	f043 0308 	orr.w	r3, r3, #8
+ 8000fe6:	61d3      	str	r3, [r2, #28]
+ 8000fe8:	e004      	b.n	8000ff4 <GP_TIMx__CTC_start+0x480>
+						}else{
+							TIMx->CCMR2.Compare_BIT_NAME.OC3PE=0;
+ 8000fea:	68fa      	ldr	r2, [r7, #12]
+ 8000fec:	69d3      	ldr	r3, [r2, #28]
+ 8000fee:	f36f 03c3 	bfc	r3, #3, #1
+ 8000ff2:	61d3      	str	r3, [r2, #28]
+						}
+						TIMx->CCER.BIT_NAME.CC3P=CTC_Sitting->CTC_POL;
+ 8000ff4:	687b      	ldr	r3, [r7, #4]
+ 8000ff6:	789b      	ldrb	r3, [r3, #2]
+ 8000ff8:	f003 0301 	and.w	r3, r3, #1
+ 8000ffc:	b2d9      	uxtb	r1, r3
+ 8000ffe:	68fa      	ldr	r2, [r7, #12]
+ 8001000:	6a13      	ldr	r3, [r2, #32]
+ 8001002:	f361 2349 	bfi	r3, r1, #9, #1
+ 8001006:	6213      	str	r3, [r2, #32]
+						//			CC1S	  00: CC1 channel is configured as output
+						TIMx->CCMR2.Compare_BIT_NAME.CC3S=0;
+ 8001008:	68fa      	ldr	r2, [r7, #12]
+ 800100a:	69d3      	ldr	r3, [r2, #28]
+ 800100c:	f36f 0301 	bfc	r3, #0, #2
+ 8001010:	61d3      	str	r3, [r2, #28]
+						//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+						TIMx->CCER.BIT_NAME.CC3E=1;
+ 8001012:	68fa      	ldr	r2, [r7, #12]
+ 8001014:	6a13      	ldr	r3, [r2, #32]
+ 8001016:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 800101a:	6213      	str	r3, [r2, #32]
+						MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,3);
+ 800101c:	2203      	movs	r2, #3
+ 800101e:	2101      	movs	r1, #1
+ 8001020:	68f8      	ldr	r0, [r7, #12]
+ 8001022:	f7ff fae3 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+						break;
+ 8001026:	e036      	b.n	8001096 <GP_TIMx__CTC_start+0x522>
+					case 4:
+						TIMx->CCR4=Sitting->TIME_CCR;
+ 8001028:	68bb      	ldr	r3, [r7, #8]
+ 800102a:	88db      	ldrh	r3, [r3, #6]
+ 800102c:	461a      	mov	r2, r3
+ 800102e:	68fb      	ldr	r3, [r7, #12]
+ 8001030:	641a      	str	r2, [r3, #64]	; 0x40
+						TIMx->CCMR2.Compare_BIT_NAME.OC4M=inactive;
+ 8001032:	68fa      	ldr	r2, [r7, #12]
+ 8001034:	69d3      	ldr	r3, [r2, #28]
+ 8001036:	2102      	movs	r1, #2
+ 8001038:	f361 330e 	bfi	r3, r1, #12, #3
+ 800103c:	61d3      	str	r3, [r2, #28]
+						//if the preload > 0 so enable the OC1PE
+						if(Sitting->TIME_RCR){
+ 800103e:	68bb      	ldr	r3, [r7, #8]
+ 8001040:	889b      	ldrh	r3, [r3, #4]
+ 8001042:	2b00      	cmp	r3, #0
+ 8001044:	d005      	beq.n	8001052 <GP_TIMx__CTC_start+0x4de>
+							TIMx->CCMR2.Compare_BIT_NAME.OC4PE=1;
+ 8001046:	68fa      	ldr	r2, [r7, #12]
+ 8001048:	69d3      	ldr	r3, [r2, #28]
+ 800104a:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 800104e:	61d3      	str	r3, [r2, #28]
+ 8001050:	e004      	b.n	800105c <GP_TIMx__CTC_start+0x4e8>
+						}else{
+							TIMx->CCMR2.Compare_BIT_NAME.OC4PE=0;
+ 8001052:	68fa      	ldr	r2, [r7, #12]
+ 8001054:	69d3      	ldr	r3, [r2, #28]
+ 8001056:	f36f 23cb 	bfc	r3, #11, #1
+ 800105a:	61d3      	str	r3, [r2, #28]
+						}
+						TIMx->CCER.BIT_NAME.CC4P=CTC_Sitting->CTC_POL;
+ 800105c:	687b      	ldr	r3, [r7, #4]
+ 800105e:	789b      	ldrb	r3, [r3, #2]
+ 8001060:	f003 0301 	and.w	r3, r3, #1
+ 8001064:	b2d9      	uxtb	r1, r3
+ 8001066:	68fa      	ldr	r2, [r7, #12]
+ 8001068:	6a13      	ldr	r3, [r2, #32]
+ 800106a:	f361 334d 	bfi	r3, r1, #13, #1
+ 800106e:	6213      	str	r3, [r2, #32]
+						//			CC1S	  00: CC1 channel is configured as output
+						TIMx->CCMR2.Compare_BIT_NAME.CC4S=0;
+ 8001070:	68fa      	ldr	r2, [r7, #12]
+ 8001072:	69d3      	ldr	r3, [r2, #28]
+ 8001074:	f36f 2309 	bfc	r3, #8, #2
+ 8001078:	61d3      	str	r3, [r2, #28]
+						//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+						TIMx->CCER.BIT_NAME.CC4E=1;
+ 800107a:	68fa      	ldr	r2, [r7, #12]
+ 800107c:	6a13      	ldr	r3, [r2, #32]
+ 800107e:	f443 5380 	orr.w	r3, r3, #4096	; 0x1000
+ 8001082:	6213      	str	r3, [r2, #32]
+						MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,4);
+ 8001084:	2204      	movs	r2, #4
+ 8001086:	2101      	movs	r1, #1
+ 8001088:	68f8      	ldr	r0, [r7, #12]
+ 800108a:	f7ff faaf 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+						break;
+ 800108e:	e002      	b.n	8001096 <GP_TIMx__CTC_start+0x522>
+					default:
+						GP_ERROR_HANDLER();
+ 8001090:	f7ff faa8 	bl	80005e4 <GP_ERROR_HANDLER>
+						break;
+ 8001094:	bf00      	nop
+
+					}
+					break;
+ 8001096:	e2b0      	b.n	80015fa <GP_TIMx__CTC_start+0xa86>
+					case Toggle:
+						switch(CTC_Sitting->CHx_num){
+ 8001098:	687b      	ldr	r3, [r7, #4]
+ 800109a:	781b      	ldrb	r3, [r3, #0]
+ 800109c:	3b01      	subs	r3, #1
+ 800109e:	2b03      	cmp	r3, #3
+ 80010a0:	f200 80dc 	bhi.w	800125c <GP_TIMx__CTC_start+0x6e8>
+ 80010a4:	a201      	add	r2, pc, #4	; (adr r2, 80010ac <GP_TIMx__CTC_start+0x538>)
+ 80010a6:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 80010aa:	bf00      	nop
+ 80010ac:	080010bd 	.word	0x080010bd
+ 80010b0:	08001125 	.word	0x08001125
+ 80010b4:	0800118d 	.word	0x0800118d
+ 80010b8:	080011f5 	.word	0x080011f5
+						case 1:
+							TIMx->CCR1=Sitting->TIME_CCR;
+ 80010bc:	68bb      	ldr	r3, [r7, #8]
+ 80010be:	88db      	ldrh	r3, [r3, #6]
+ 80010c0:	461a      	mov	r2, r3
+ 80010c2:	68fb      	ldr	r3, [r7, #12]
+ 80010c4:	635a      	str	r2, [r3, #52]	; 0x34
+							TIMx->CCMR1.Compare_BIT_NAME.OC1M=Toggle;
+ 80010c6:	68fa      	ldr	r2, [r7, #12]
+ 80010c8:	6993      	ldr	r3, [r2, #24]
+ 80010ca:	2103      	movs	r1, #3
+ 80010cc:	f361 1306 	bfi	r3, r1, #4, #3
+ 80010d0:	6193      	str	r3, [r2, #24]
+							//if the preload > 0 so enable the OC1PE
+							if(Sitting->TIME_RCR){
+ 80010d2:	68bb      	ldr	r3, [r7, #8]
+ 80010d4:	889b      	ldrh	r3, [r3, #4]
+ 80010d6:	2b00      	cmp	r3, #0
+ 80010d8:	d005      	beq.n	80010e6 <GP_TIMx__CTC_start+0x572>
+								TIMx->CCMR1.Compare_BIT_NAME.OC1PE=1;
+ 80010da:	68fa      	ldr	r2, [r7, #12]
+ 80010dc:	6993      	ldr	r3, [r2, #24]
+ 80010de:	f043 0308 	orr.w	r3, r3, #8
+ 80010e2:	6193      	str	r3, [r2, #24]
+ 80010e4:	e004      	b.n	80010f0 <GP_TIMx__CTC_start+0x57c>
+							}else{
+								TIMx->CCMR1.Compare_BIT_NAME.OC1PE=0;
+ 80010e6:	68fa      	ldr	r2, [r7, #12]
+ 80010e8:	6993      	ldr	r3, [r2, #24]
+ 80010ea:	f36f 03c3 	bfc	r3, #3, #1
+ 80010ee:	6193      	str	r3, [r2, #24]
+							}
+							TIMx->CCER.BIT_NAME.CC1P=CTC_Sitting->CTC_POL;
+ 80010f0:	687b      	ldr	r3, [r7, #4]
+ 80010f2:	789b      	ldrb	r3, [r3, #2]
+ 80010f4:	f003 0301 	and.w	r3, r3, #1
+ 80010f8:	b2d9      	uxtb	r1, r3
+ 80010fa:	68fa      	ldr	r2, [r7, #12]
+ 80010fc:	6a13      	ldr	r3, [r2, #32]
+ 80010fe:	f361 0341 	bfi	r3, r1, #1, #1
+ 8001102:	6213      	str	r3, [r2, #32]
+							//			CC1S	  00: CC1 channel is configured as output
+							TIMx->CCMR1.Compare_BIT_NAME.CC1S=0;
+ 8001104:	68fa      	ldr	r2, [r7, #12]
+ 8001106:	6993      	ldr	r3, [r2, #24]
+ 8001108:	f36f 0301 	bfc	r3, #0, #2
+ 800110c:	6193      	str	r3, [r2, #24]
+							//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+							TIMx->CCER.BIT_NAME.CC1E=1;
+ 800110e:	68fa      	ldr	r2, [r7, #12]
+ 8001110:	6a13      	ldr	r3, [r2, #32]
+ 8001112:	f043 0301 	orr.w	r3, r3, #1
+ 8001116:	6213      	str	r3, [r2, #32]
+							MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,1);
+ 8001118:	2201      	movs	r2, #1
+ 800111a:	2101      	movs	r1, #1
+ 800111c:	68f8      	ldr	r0, [r7, #12]
+ 800111e:	f7ff fa65 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+							break;
+ 8001122:	e09e      	b.n	8001262 <GP_TIMx__CTC_start+0x6ee>
+						case 2:
+							TIMx->CCR2=Sitting->TIME_CCR;
+ 8001124:	68bb      	ldr	r3, [r7, #8]
+ 8001126:	88db      	ldrh	r3, [r3, #6]
+ 8001128:	461a      	mov	r2, r3
+ 800112a:	68fb      	ldr	r3, [r7, #12]
+ 800112c:	639a      	str	r2, [r3, #56]	; 0x38
+							TIMx->CCMR1.Compare_BIT_NAME.OC2M=Toggle;
+ 800112e:	68fa      	ldr	r2, [r7, #12]
+ 8001130:	6993      	ldr	r3, [r2, #24]
+ 8001132:	2103      	movs	r1, #3
+ 8001134:	f361 330e 	bfi	r3, r1, #12, #3
+ 8001138:	6193      	str	r3, [r2, #24]
+							//if the preload > 0 so enable the OC1PE
+							if(Sitting->TIME_RCR){
+ 800113a:	68bb      	ldr	r3, [r7, #8]
+ 800113c:	889b      	ldrh	r3, [r3, #4]
+ 800113e:	2b00      	cmp	r3, #0
+ 8001140:	d005      	beq.n	800114e <GP_TIMx__CTC_start+0x5da>
+								TIMx->CCMR1.Compare_BIT_NAME.OC2PE=1;
+ 8001142:	68fa      	ldr	r2, [r7, #12]
+ 8001144:	6993      	ldr	r3, [r2, #24]
+ 8001146:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 800114a:	6193      	str	r3, [r2, #24]
+ 800114c:	e004      	b.n	8001158 <GP_TIMx__CTC_start+0x5e4>
+							}else{
+								TIMx->CCMR1.Compare_BIT_NAME.OC2PE=0;
+ 800114e:	68fa      	ldr	r2, [r7, #12]
+ 8001150:	6993      	ldr	r3, [r2, #24]
+ 8001152:	f36f 23cb 	bfc	r3, #11, #1
+ 8001156:	6193      	str	r3, [r2, #24]
+							}
+							TIMx->CCER.BIT_NAME.CC2P=CTC_Sitting->CTC_POL;
+ 8001158:	687b      	ldr	r3, [r7, #4]
+ 800115a:	789b      	ldrb	r3, [r3, #2]
+ 800115c:	f003 0301 	and.w	r3, r3, #1
+ 8001160:	b2d9      	uxtb	r1, r3
+ 8001162:	68fa      	ldr	r2, [r7, #12]
+ 8001164:	6a13      	ldr	r3, [r2, #32]
+ 8001166:	f361 1345 	bfi	r3, r1, #5, #1
+ 800116a:	6213      	str	r3, [r2, #32]
+							//			CC1S	  00: CC1 channel is configured as output
+							TIMx->CCMR1.Compare_BIT_NAME.CC2S=0;
+ 800116c:	68fa      	ldr	r2, [r7, #12]
+ 800116e:	6993      	ldr	r3, [r2, #24]
+ 8001170:	f36f 2309 	bfc	r3, #8, #2
+ 8001174:	6193      	str	r3, [r2, #24]
+							//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+							TIMx->CCER.BIT_NAME.CC2E=1;
+ 8001176:	68fa      	ldr	r2, [r7, #12]
+ 8001178:	6a13      	ldr	r3, [r2, #32]
+ 800117a:	f043 0310 	orr.w	r3, r3, #16
+ 800117e:	6213      	str	r3, [r2, #32]
+							MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,2);
+ 8001180:	2202      	movs	r2, #2
+ 8001182:	2101      	movs	r1, #1
+ 8001184:	68f8      	ldr	r0, [r7, #12]
+ 8001186:	f7ff fa31 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+							break;
+ 800118a:	e06a      	b.n	8001262 <GP_TIMx__CTC_start+0x6ee>
+						case 3:
+							TIMx->CCR3=Sitting->TIME_CCR;
+ 800118c:	68bb      	ldr	r3, [r7, #8]
+ 800118e:	88db      	ldrh	r3, [r3, #6]
+ 8001190:	461a      	mov	r2, r3
+ 8001192:	68fb      	ldr	r3, [r7, #12]
+ 8001194:	63da      	str	r2, [r3, #60]	; 0x3c
+							TIMx->CCMR2.Compare_BIT_NAME.OC3M=Toggle;
+ 8001196:	68fa      	ldr	r2, [r7, #12]
+ 8001198:	69d3      	ldr	r3, [r2, #28]
+ 800119a:	2103      	movs	r1, #3
+ 800119c:	f361 1306 	bfi	r3, r1, #4, #3
+ 80011a0:	61d3      	str	r3, [r2, #28]
+							//if the preload > 0 so enable the OC1PE
+							if(Sitting->TIME_RCR){
+ 80011a2:	68bb      	ldr	r3, [r7, #8]
+ 80011a4:	889b      	ldrh	r3, [r3, #4]
+ 80011a6:	2b00      	cmp	r3, #0
+ 80011a8:	d005      	beq.n	80011b6 <GP_TIMx__CTC_start+0x642>
+								TIMx->CCMR2.Compare_BIT_NAME.OC3PE=1;
+ 80011aa:	68fa      	ldr	r2, [r7, #12]
+ 80011ac:	69d3      	ldr	r3, [r2, #28]
+ 80011ae:	f043 0308 	orr.w	r3, r3, #8
+ 80011b2:	61d3      	str	r3, [r2, #28]
+ 80011b4:	e004      	b.n	80011c0 <GP_TIMx__CTC_start+0x64c>
+							}else{
+								TIMx->CCMR2.Compare_BIT_NAME.OC3PE=0;
+ 80011b6:	68fa      	ldr	r2, [r7, #12]
+ 80011b8:	69d3      	ldr	r3, [r2, #28]
+ 80011ba:	f36f 03c3 	bfc	r3, #3, #1
+ 80011be:	61d3      	str	r3, [r2, #28]
+							}
+							TIMx->CCER.BIT_NAME.CC3P=CTC_Sitting->CTC_POL;
+ 80011c0:	687b      	ldr	r3, [r7, #4]
+ 80011c2:	789b      	ldrb	r3, [r3, #2]
+ 80011c4:	f003 0301 	and.w	r3, r3, #1
+ 80011c8:	b2d9      	uxtb	r1, r3
+ 80011ca:	68fa      	ldr	r2, [r7, #12]
+ 80011cc:	6a13      	ldr	r3, [r2, #32]
+ 80011ce:	f361 2349 	bfi	r3, r1, #9, #1
+ 80011d2:	6213      	str	r3, [r2, #32]
+							//			CC1S	  00: CC1 channel is configured as output
+							TIMx->CCMR2.Compare_BIT_NAME.CC3S=0;
+ 80011d4:	68fa      	ldr	r2, [r7, #12]
+ 80011d6:	69d3      	ldr	r3, [r2, #28]
+ 80011d8:	f36f 0301 	bfc	r3, #0, #2
+ 80011dc:	61d3      	str	r3, [r2, #28]
+							//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+							TIMx->CCER.BIT_NAME.CC3E=1;
+ 80011de:	68fa      	ldr	r2, [r7, #12]
+ 80011e0:	6a13      	ldr	r3, [r2, #32]
+ 80011e2:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 80011e6:	6213      	str	r3, [r2, #32]
+							MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,3);
+ 80011e8:	2203      	movs	r2, #3
+ 80011ea:	2101      	movs	r1, #1
+ 80011ec:	68f8      	ldr	r0, [r7, #12]
+ 80011ee:	f7ff f9fd 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+							break;
+ 80011f2:	e036      	b.n	8001262 <GP_TIMx__CTC_start+0x6ee>
+						case 4:
+							TIMx->CCR4=Sitting->TIME_CCR;
+ 80011f4:	68bb      	ldr	r3, [r7, #8]
+ 80011f6:	88db      	ldrh	r3, [r3, #6]
+ 80011f8:	461a      	mov	r2, r3
+ 80011fa:	68fb      	ldr	r3, [r7, #12]
+ 80011fc:	641a      	str	r2, [r3, #64]	; 0x40
+							TIMx->CCMR2.Compare_BIT_NAME.OC4M=Toggle;
+ 80011fe:	68fa      	ldr	r2, [r7, #12]
+ 8001200:	69d3      	ldr	r3, [r2, #28]
+ 8001202:	2103      	movs	r1, #3
+ 8001204:	f361 330e 	bfi	r3, r1, #12, #3
+ 8001208:	61d3      	str	r3, [r2, #28]
+							//if the preload > 0 so enable the OC1PE
+							if(Sitting->TIME_RCR){
+ 800120a:	68bb      	ldr	r3, [r7, #8]
+ 800120c:	889b      	ldrh	r3, [r3, #4]
+ 800120e:	2b00      	cmp	r3, #0
+ 8001210:	d005      	beq.n	800121e <GP_TIMx__CTC_start+0x6aa>
+								TIMx->CCMR2.Compare_BIT_NAME.OC4PE=1;
+ 8001212:	68fa      	ldr	r2, [r7, #12]
+ 8001214:	69d3      	ldr	r3, [r2, #28]
+ 8001216:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 800121a:	61d3      	str	r3, [r2, #28]
+ 800121c:	e004      	b.n	8001228 <GP_TIMx__CTC_start+0x6b4>
+							}else{
+								TIMx->CCMR2.Compare_BIT_NAME.OC4PE=0;
+ 800121e:	68fa      	ldr	r2, [r7, #12]
+ 8001220:	69d3      	ldr	r3, [r2, #28]
+ 8001222:	f36f 23cb 	bfc	r3, #11, #1
+ 8001226:	61d3      	str	r3, [r2, #28]
+							}
+							TIMx->CCER.BIT_NAME.CC4P=CTC_Sitting->CTC_POL;
+ 8001228:	687b      	ldr	r3, [r7, #4]
+ 800122a:	789b      	ldrb	r3, [r3, #2]
+ 800122c:	f003 0301 	and.w	r3, r3, #1
+ 8001230:	b2d9      	uxtb	r1, r3
+ 8001232:	68fa      	ldr	r2, [r7, #12]
+ 8001234:	6a13      	ldr	r3, [r2, #32]
+ 8001236:	f361 334d 	bfi	r3, r1, #13, #1
+ 800123a:	6213      	str	r3, [r2, #32]
+							//			CC1S	  00: CC1 channel is configured as output
+							TIMx->CCMR2.Compare_BIT_NAME.CC4S=0;
+ 800123c:	68fa      	ldr	r2, [r7, #12]
+ 800123e:	69d3      	ldr	r3, [r2, #28]
+ 8001240:	f36f 2309 	bfc	r3, #8, #2
+ 8001244:	61d3      	str	r3, [r2, #28]
+							//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+							TIMx->CCER.BIT_NAME.CC4E=1;
+ 8001246:	68fa      	ldr	r2, [r7, #12]
+ 8001248:	6a13      	ldr	r3, [r2, #32]
+ 800124a:	f443 5380 	orr.w	r3, r3, #4096	; 0x1000
+ 800124e:	6213      	str	r3, [r2, #32]
+							MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,4);
+ 8001250:	2204      	movs	r2, #4
+ 8001252:	2101      	movs	r1, #1
+ 8001254:	68f8      	ldr	r0, [r7, #12]
+ 8001256:	f7ff f9c9 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+							break;
+ 800125a:	e002      	b.n	8001262 <GP_TIMx__CTC_start+0x6ee>
+						default:
+							GP_ERROR_HANDLER();
+ 800125c:	f7ff f9c2 	bl	80005e4 <GP_ERROR_HANDLER>
+							break;
+ 8001260:	bf00      	nop
+
+						}
+						break;
+ 8001262:	e1ca      	b.n	80015fa <GP_TIMx__CTC_start+0xa86>
+						case PWM_AH:
+							switch(CTC_Sitting->CHx_num){
+ 8001264:	687b      	ldr	r3, [r7, #4]
+ 8001266:	781b      	ldrb	r3, [r3, #0]
+ 8001268:	3b01      	subs	r3, #1
+ 800126a:	2b03      	cmp	r3, #3
+ 800126c:	f200 80dc 	bhi.w	8001428 <GP_TIMx__CTC_start+0x8b4>
+ 8001270:	a201      	add	r2, pc, #4	; (adr r2, 8001278 <GP_TIMx__CTC_start+0x704>)
+ 8001272:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8001276:	bf00      	nop
+ 8001278:	08001289 	.word	0x08001289
+ 800127c:	080012f1 	.word	0x080012f1
+ 8001280:	08001359 	.word	0x08001359
+ 8001284:	080013c1 	.word	0x080013c1
+							case 1:
+								TIMx->CCR1=Sitting->TIME_CCR;
+ 8001288:	68bb      	ldr	r3, [r7, #8]
+ 800128a:	88db      	ldrh	r3, [r3, #6]
+ 800128c:	461a      	mov	r2, r3
+ 800128e:	68fb      	ldr	r3, [r7, #12]
+ 8001290:	635a      	str	r2, [r3, #52]	; 0x34
+								TIMx->CCMR1.Compare_BIT_NAME.OC1M=PWM_AH;
+ 8001292:	68fa      	ldr	r2, [r7, #12]
+ 8001294:	6993      	ldr	r3, [r2, #24]
+ 8001296:	2106      	movs	r1, #6
+ 8001298:	f361 1306 	bfi	r3, r1, #4, #3
+ 800129c:	6193      	str	r3, [r2, #24]
+								//if the preload > 0 so enable the OC1PE
+								if(Sitting->TIME_RCR){
+ 800129e:	68bb      	ldr	r3, [r7, #8]
+ 80012a0:	889b      	ldrh	r3, [r3, #4]
+ 80012a2:	2b00      	cmp	r3, #0
+ 80012a4:	d005      	beq.n	80012b2 <GP_TIMx__CTC_start+0x73e>
+									TIMx->CCMR1.Compare_BIT_NAME.OC1PE=1;
+ 80012a6:	68fa      	ldr	r2, [r7, #12]
+ 80012a8:	6993      	ldr	r3, [r2, #24]
+ 80012aa:	f043 0308 	orr.w	r3, r3, #8
+ 80012ae:	6193      	str	r3, [r2, #24]
+ 80012b0:	e004      	b.n	80012bc <GP_TIMx__CTC_start+0x748>
+								}else{
+									TIMx->CCMR1.Compare_BIT_NAME.OC1PE=0;
+ 80012b2:	68fa      	ldr	r2, [r7, #12]
+ 80012b4:	6993      	ldr	r3, [r2, #24]
+ 80012b6:	f36f 03c3 	bfc	r3, #3, #1
+ 80012ba:	6193      	str	r3, [r2, #24]
+								}
+								TIMx->CCER.BIT_NAME.CC1P=CTC_Sitting->CTC_POL;
+ 80012bc:	687b      	ldr	r3, [r7, #4]
+ 80012be:	789b      	ldrb	r3, [r3, #2]
+ 80012c0:	f003 0301 	and.w	r3, r3, #1
+ 80012c4:	b2d9      	uxtb	r1, r3
+ 80012c6:	68fa      	ldr	r2, [r7, #12]
+ 80012c8:	6a13      	ldr	r3, [r2, #32]
+ 80012ca:	f361 0341 	bfi	r3, r1, #1, #1
+ 80012ce:	6213      	str	r3, [r2, #32]
+								//			CC1S	  00: CC1 channel is configured as output
+								TIMx->CCMR1.Compare_BIT_NAME.CC1S=0;
+ 80012d0:	68fa      	ldr	r2, [r7, #12]
+ 80012d2:	6993      	ldr	r3, [r2, #24]
+ 80012d4:	f36f 0301 	bfc	r3, #0, #2
+ 80012d8:	6193      	str	r3, [r2, #24]
+								//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+								TIMx->CCER.BIT_NAME.CC1E=1;
+ 80012da:	68fa      	ldr	r2, [r7, #12]
+ 80012dc:	6a13      	ldr	r3, [r2, #32]
+ 80012de:	f043 0301 	orr.w	r3, r3, #1
+ 80012e2:	6213      	str	r3, [r2, #32]
+								MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,1);
+ 80012e4:	2201      	movs	r2, #1
+ 80012e6:	2101      	movs	r1, #1
+ 80012e8:	68f8      	ldr	r0, [r7, #12]
+ 80012ea:	f7ff f97f 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+								break;
+ 80012ee:	e09e      	b.n	800142e <GP_TIMx__CTC_start+0x8ba>
+							case 2:
+								TIMx->CCR2=Sitting->TIME_CCR;
+ 80012f0:	68bb      	ldr	r3, [r7, #8]
+ 80012f2:	88db      	ldrh	r3, [r3, #6]
+ 80012f4:	461a      	mov	r2, r3
+ 80012f6:	68fb      	ldr	r3, [r7, #12]
+ 80012f8:	639a      	str	r2, [r3, #56]	; 0x38
+								TIMx->CCMR1.Compare_BIT_NAME.OC2M=PWM_AH;
+ 80012fa:	68fa      	ldr	r2, [r7, #12]
+ 80012fc:	6993      	ldr	r3, [r2, #24]
+ 80012fe:	2106      	movs	r1, #6
+ 8001300:	f361 330e 	bfi	r3, r1, #12, #3
+ 8001304:	6193      	str	r3, [r2, #24]
+								//if the preload > 0 so enable the OC1PE
+								if(Sitting->TIME_RCR){
+ 8001306:	68bb      	ldr	r3, [r7, #8]
+ 8001308:	889b      	ldrh	r3, [r3, #4]
+ 800130a:	2b00      	cmp	r3, #0
+ 800130c:	d005      	beq.n	800131a <GP_TIMx__CTC_start+0x7a6>
+									TIMx->CCMR1.Compare_BIT_NAME.OC2PE=1;
+ 800130e:	68fa      	ldr	r2, [r7, #12]
+ 8001310:	6993      	ldr	r3, [r2, #24]
+ 8001312:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 8001316:	6193      	str	r3, [r2, #24]
+ 8001318:	e004      	b.n	8001324 <GP_TIMx__CTC_start+0x7b0>
+								}else{
+									TIMx->CCMR1.Compare_BIT_NAME.OC2PE=0;
+ 800131a:	68fa      	ldr	r2, [r7, #12]
+ 800131c:	6993      	ldr	r3, [r2, #24]
+ 800131e:	f36f 23cb 	bfc	r3, #11, #1
+ 8001322:	6193      	str	r3, [r2, #24]
+								}
+								TIMx->CCER.BIT_NAME.CC2P=CTC_Sitting->CTC_POL;
+ 8001324:	687b      	ldr	r3, [r7, #4]
+ 8001326:	789b      	ldrb	r3, [r3, #2]
+ 8001328:	f003 0301 	and.w	r3, r3, #1
+ 800132c:	b2d9      	uxtb	r1, r3
+ 800132e:	68fa      	ldr	r2, [r7, #12]
+ 8001330:	6a13      	ldr	r3, [r2, #32]
+ 8001332:	f361 1345 	bfi	r3, r1, #5, #1
+ 8001336:	6213      	str	r3, [r2, #32]
+								//			CC1S	  00: CC1 channel is configured as output
+								TIMx->CCMR1.Compare_BIT_NAME.CC2S=0;
+ 8001338:	68fa      	ldr	r2, [r7, #12]
+ 800133a:	6993      	ldr	r3, [r2, #24]
+ 800133c:	f36f 2309 	bfc	r3, #8, #2
+ 8001340:	6193      	str	r3, [r2, #24]
+								//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+								TIMx->CCER.BIT_NAME.CC2E=1;
+ 8001342:	68fa      	ldr	r2, [r7, #12]
+ 8001344:	6a13      	ldr	r3, [r2, #32]
+ 8001346:	f043 0310 	orr.w	r3, r3, #16
+ 800134a:	6213      	str	r3, [r2, #32]
+								MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,2);
+ 800134c:	2202      	movs	r2, #2
+ 800134e:	2101      	movs	r1, #1
+ 8001350:	68f8      	ldr	r0, [r7, #12]
+ 8001352:	f7ff f94b 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+								break;
+ 8001356:	e06a      	b.n	800142e <GP_TIMx__CTC_start+0x8ba>
+							case 3:
+								TIMx->CCR3=Sitting->TIME_CCR;
+ 8001358:	68bb      	ldr	r3, [r7, #8]
+ 800135a:	88db      	ldrh	r3, [r3, #6]
+ 800135c:	461a      	mov	r2, r3
+ 800135e:	68fb      	ldr	r3, [r7, #12]
+ 8001360:	63da      	str	r2, [r3, #60]	; 0x3c
+								TIMx->CCMR2.Compare_BIT_NAME.OC3M=PWM_AH;
+ 8001362:	68fa      	ldr	r2, [r7, #12]
+ 8001364:	69d3      	ldr	r3, [r2, #28]
+ 8001366:	2106      	movs	r1, #6
+ 8001368:	f361 1306 	bfi	r3, r1, #4, #3
+ 800136c:	61d3      	str	r3, [r2, #28]
+								//if the preload > 0 so enable the OC1PE
+								if(Sitting->TIME_RCR){
+ 800136e:	68bb      	ldr	r3, [r7, #8]
+ 8001370:	889b      	ldrh	r3, [r3, #4]
+ 8001372:	2b00      	cmp	r3, #0
+ 8001374:	d005      	beq.n	8001382 <GP_TIMx__CTC_start+0x80e>
+									TIMx->CCMR2.Compare_BIT_NAME.OC3PE=1;
+ 8001376:	68fa      	ldr	r2, [r7, #12]
+ 8001378:	69d3      	ldr	r3, [r2, #28]
+ 800137a:	f043 0308 	orr.w	r3, r3, #8
+ 800137e:	61d3      	str	r3, [r2, #28]
+ 8001380:	e004      	b.n	800138c <GP_TIMx__CTC_start+0x818>
+								}else{
+									TIMx->CCMR2.Compare_BIT_NAME.OC3PE=0;
+ 8001382:	68fa      	ldr	r2, [r7, #12]
+ 8001384:	69d3      	ldr	r3, [r2, #28]
+ 8001386:	f36f 03c3 	bfc	r3, #3, #1
+ 800138a:	61d3      	str	r3, [r2, #28]
+								}
+								TIMx->CCER.BIT_NAME.CC3P=CTC_Sitting->CTC_POL;
+ 800138c:	687b      	ldr	r3, [r7, #4]
+ 800138e:	789b      	ldrb	r3, [r3, #2]
+ 8001390:	f003 0301 	and.w	r3, r3, #1
+ 8001394:	b2d9      	uxtb	r1, r3
+ 8001396:	68fa      	ldr	r2, [r7, #12]
+ 8001398:	6a13      	ldr	r3, [r2, #32]
+ 800139a:	f361 2349 	bfi	r3, r1, #9, #1
+ 800139e:	6213      	str	r3, [r2, #32]
+								//			CC1S	  00: CC1 channel is configured as output
+								TIMx->CCMR2.Compare_BIT_NAME.CC3S=0;
+ 80013a0:	68fa      	ldr	r2, [r7, #12]
+ 80013a2:	69d3      	ldr	r3, [r2, #28]
+ 80013a4:	f36f 0301 	bfc	r3, #0, #2
+ 80013a8:	61d3      	str	r3, [r2, #28]
+								//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+								TIMx->CCER.BIT_NAME.CC3E=1;
+ 80013aa:	68fa      	ldr	r2, [r7, #12]
+ 80013ac:	6a13      	ldr	r3, [r2, #32]
+ 80013ae:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 80013b2:	6213      	str	r3, [r2, #32]
+								MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,3);
+ 80013b4:	2203      	movs	r2, #3
+ 80013b6:	2101      	movs	r1, #1
+ 80013b8:	68f8      	ldr	r0, [r7, #12]
+ 80013ba:	f7ff f917 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+								break;
+ 80013be:	e036      	b.n	800142e <GP_TIMx__CTC_start+0x8ba>
+							case 4:
+								TIMx->CCR4=Sitting->TIME_CCR;
+ 80013c0:	68bb      	ldr	r3, [r7, #8]
+ 80013c2:	88db      	ldrh	r3, [r3, #6]
+ 80013c4:	461a      	mov	r2, r3
+ 80013c6:	68fb      	ldr	r3, [r7, #12]
+ 80013c8:	641a      	str	r2, [r3, #64]	; 0x40
+								TIMx->CCMR2.Compare_BIT_NAME.OC4M=PWM_AH;
+ 80013ca:	68fa      	ldr	r2, [r7, #12]
+ 80013cc:	69d3      	ldr	r3, [r2, #28]
+ 80013ce:	2106      	movs	r1, #6
+ 80013d0:	f361 330e 	bfi	r3, r1, #12, #3
+ 80013d4:	61d3      	str	r3, [r2, #28]
+								//if the preload > 0 so enable the OC1PE
+								if(Sitting->TIME_RCR){
+ 80013d6:	68bb      	ldr	r3, [r7, #8]
+ 80013d8:	889b      	ldrh	r3, [r3, #4]
+ 80013da:	2b00      	cmp	r3, #0
+ 80013dc:	d005      	beq.n	80013ea <GP_TIMx__CTC_start+0x876>
+									TIMx->CCMR2.Compare_BIT_NAME.OC4PE=1;
+ 80013de:	68fa      	ldr	r2, [r7, #12]
+ 80013e0:	69d3      	ldr	r3, [r2, #28]
+ 80013e2:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 80013e6:	61d3      	str	r3, [r2, #28]
+ 80013e8:	e004      	b.n	80013f4 <GP_TIMx__CTC_start+0x880>
+								}else{
+									TIMx->CCMR2.Compare_BIT_NAME.OC4PE=0;
+ 80013ea:	68fa      	ldr	r2, [r7, #12]
+ 80013ec:	69d3      	ldr	r3, [r2, #28]
+ 80013ee:	f36f 23cb 	bfc	r3, #11, #1
+ 80013f2:	61d3      	str	r3, [r2, #28]
+								}
+								TIMx->CCER.BIT_NAME.CC4P=CTC_Sitting->CTC_POL;
+ 80013f4:	687b      	ldr	r3, [r7, #4]
+ 80013f6:	789b      	ldrb	r3, [r3, #2]
+ 80013f8:	f003 0301 	and.w	r3, r3, #1
+ 80013fc:	b2d9      	uxtb	r1, r3
+ 80013fe:	68fa      	ldr	r2, [r7, #12]
+ 8001400:	6a13      	ldr	r3, [r2, #32]
+ 8001402:	f361 334d 	bfi	r3, r1, #13, #1
+ 8001406:	6213      	str	r3, [r2, #32]
+								//			CC1S	  00: CC1 channel is configured as output
+								TIMx->CCMR2.Compare_BIT_NAME.CC4S=0;
+ 8001408:	68fa      	ldr	r2, [r7, #12]
+ 800140a:	69d3      	ldr	r3, [r2, #28]
+ 800140c:	f36f 2309 	bfc	r3, #8, #2
+ 8001410:	61d3      	str	r3, [r2, #28]
+								//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+								TIMx->CCER.BIT_NAME.CC4E=1;
+ 8001412:	68fa      	ldr	r2, [r7, #12]
+ 8001414:	6a13      	ldr	r3, [r2, #32]
+ 8001416:	f443 5380 	orr.w	r3, r3, #4096	; 0x1000
+ 800141a:	6213      	str	r3, [r2, #32]
+								MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,4);
+ 800141c:	2204      	movs	r2, #4
+ 800141e:	2101      	movs	r1, #1
+ 8001420:	68f8      	ldr	r0, [r7, #12]
+ 8001422:	f7ff f8e3 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+								break;
+ 8001426:	e002      	b.n	800142e <GP_TIMx__CTC_start+0x8ba>
+							default:
+								GP_ERROR_HANDLER();
+ 8001428:	f7ff f8dc 	bl	80005e4 <GP_ERROR_HANDLER>
+								break;
+ 800142c:	bf00      	nop
+
+							}
+							break;
+ 800142e:	e0e4      	b.n	80015fa <GP_TIMx__CTC_start+0xa86>
+							case PWM_AL:
+								switch(CTC_Sitting->CHx_num){
+ 8001430:	687b      	ldr	r3, [r7, #4]
+ 8001432:	781b      	ldrb	r3, [r3, #0]
+ 8001434:	3b01      	subs	r3, #1
+ 8001436:	2b03      	cmp	r3, #3
+ 8001438:	f200 80d8 	bhi.w	80015ec <GP_TIMx__CTC_start+0xa78>
+ 800143c:	a201      	add	r2, pc, #4	; (adr r2, 8001444 <GP_TIMx__CTC_start+0x8d0>)
+ 800143e:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 8001442:	bf00      	nop
+ 8001444:	08001455 	.word	0x08001455
+ 8001448:	080014bb 	.word	0x080014bb
+ 800144c:	08001521 	.word	0x08001521
+ 8001450:	08001587 	.word	0x08001587
+								case 1:
+									TIMx->CCR1=Sitting->TIME_CCR;
+ 8001454:	68bb      	ldr	r3, [r7, #8]
+ 8001456:	88db      	ldrh	r3, [r3, #6]
+ 8001458:	461a      	mov	r2, r3
+ 800145a:	68fb      	ldr	r3, [r7, #12]
+ 800145c:	635a      	str	r2, [r3, #52]	; 0x34
+									TIMx->CCMR1.Compare_BIT_NAME.OC1M=PWM_AL;
+ 800145e:	68fa      	ldr	r2, [r7, #12]
+ 8001460:	6993      	ldr	r3, [r2, #24]
+ 8001462:	f043 0370 	orr.w	r3, r3, #112	; 0x70
+ 8001466:	6193      	str	r3, [r2, #24]
+									//if the preload > 0 so enable the OC1PE
+									if(Sitting->TIME_RCR){
+ 8001468:	68bb      	ldr	r3, [r7, #8]
+ 800146a:	889b      	ldrh	r3, [r3, #4]
+ 800146c:	2b00      	cmp	r3, #0
+ 800146e:	d005      	beq.n	800147c <GP_TIMx__CTC_start+0x908>
+										TIMx->CCMR1.Compare_BIT_NAME.OC1PE=1;
+ 8001470:	68fa      	ldr	r2, [r7, #12]
+ 8001472:	6993      	ldr	r3, [r2, #24]
+ 8001474:	f043 0308 	orr.w	r3, r3, #8
+ 8001478:	6193      	str	r3, [r2, #24]
+ 800147a:	e004      	b.n	8001486 <GP_TIMx__CTC_start+0x912>
+									}else{
+										TIMx->CCMR1.Compare_BIT_NAME.OC1PE=0;
+ 800147c:	68fa      	ldr	r2, [r7, #12]
+ 800147e:	6993      	ldr	r3, [r2, #24]
+ 8001480:	f36f 03c3 	bfc	r3, #3, #1
+ 8001484:	6193      	str	r3, [r2, #24]
+									}
+									TIMx->CCER.BIT_NAME.CC1P=CTC_Sitting->CTC_POL;
+ 8001486:	687b      	ldr	r3, [r7, #4]
+ 8001488:	789b      	ldrb	r3, [r3, #2]
+ 800148a:	f003 0301 	and.w	r3, r3, #1
+ 800148e:	b2d9      	uxtb	r1, r3
+ 8001490:	68fa      	ldr	r2, [r7, #12]
+ 8001492:	6a13      	ldr	r3, [r2, #32]
+ 8001494:	f361 0341 	bfi	r3, r1, #1, #1
+ 8001498:	6213      	str	r3, [r2, #32]
+									//			CC1S	  00: CC1 channel is configured as output
+									TIMx->CCMR1.Compare_BIT_NAME.CC1S=0;
+ 800149a:	68fa      	ldr	r2, [r7, #12]
+ 800149c:	6993      	ldr	r3, [r2, #24]
+ 800149e:	f36f 0301 	bfc	r3, #0, #2
+ 80014a2:	6193      	str	r3, [r2, #24]
+									//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+									TIMx->CCER.BIT_NAME.CC1E=1;
+ 80014a4:	68fa      	ldr	r2, [r7, #12]
+ 80014a6:	6a13      	ldr	r3, [r2, #32]
+ 80014a8:	f043 0301 	orr.w	r3, r3, #1
+ 80014ac:	6213      	str	r3, [r2, #32]
+									MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,1);
+ 80014ae:	2201      	movs	r2, #1
+ 80014b0:	2101      	movs	r1, #1
+ 80014b2:	68f8      	ldr	r0, [r7, #12]
+ 80014b4:	f7ff f89a 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+									break;
+ 80014b8:	e09b      	b.n	80015f2 <GP_TIMx__CTC_start+0xa7e>
+								case 2:
+									TIMx->CCR2=Sitting->TIME_CCR;
+ 80014ba:	68bb      	ldr	r3, [r7, #8]
+ 80014bc:	88db      	ldrh	r3, [r3, #6]
+ 80014be:	461a      	mov	r2, r3
+ 80014c0:	68fb      	ldr	r3, [r7, #12]
+ 80014c2:	639a      	str	r2, [r3, #56]	; 0x38
+									TIMx->CCMR1.Compare_BIT_NAME.OC2M=PWM_AL;
+ 80014c4:	68fa      	ldr	r2, [r7, #12]
+ 80014c6:	6993      	ldr	r3, [r2, #24]
+ 80014c8:	f443 43e0 	orr.w	r3, r3, #28672	; 0x7000
+ 80014cc:	6193      	str	r3, [r2, #24]
+									//if the preload > 0 so enable the OC1PE
+									if(Sitting->TIME_RCR){
+ 80014ce:	68bb      	ldr	r3, [r7, #8]
+ 80014d0:	889b      	ldrh	r3, [r3, #4]
+ 80014d2:	2b00      	cmp	r3, #0
+ 80014d4:	d005      	beq.n	80014e2 <GP_TIMx__CTC_start+0x96e>
+										TIMx->CCMR1.Compare_BIT_NAME.OC2PE=1;
+ 80014d6:	68fa      	ldr	r2, [r7, #12]
+ 80014d8:	6993      	ldr	r3, [r2, #24]
+ 80014da:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 80014de:	6193      	str	r3, [r2, #24]
+ 80014e0:	e004      	b.n	80014ec <GP_TIMx__CTC_start+0x978>
+									}else{
+										TIMx->CCMR1.Compare_BIT_NAME.OC2PE=0;
+ 80014e2:	68fa      	ldr	r2, [r7, #12]
+ 80014e4:	6993      	ldr	r3, [r2, #24]
+ 80014e6:	f36f 23cb 	bfc	r3, #11, #1
+ 80014ea:	6193      	str	r3, [r2, #24]
+									}
+									TIMx->CCER.BIT_NAME.CC2P=CTC_Sitting->CTC_POL;
+ 80014ec:	687b      	ldr	r3, [r7, #4]
+ 80014ee:	789b      	ldrb	r3, [r3, #2]
+ 80014f0:	f003 0301 	and.w	r3, r3, #1
+ 80014f4:	b2d9      	uxtb	r1, r3
+ 80014f6:	68fa      	ldr	r2, [r7, #12]
+ 80014f8:	6a13      	ldr	r3, [r2, #32]
+ 80014fa:	f361 1345 	bfi	r3, r1, #5, #1
+ 80014fe:	6213      	str	r3, [r2, #32]
+									//			CC1S	  00: CC1 channel is configured as output
+									TIMx->CCMR1.Compare_BIT_NAME.CC2S=0;
+ 8001500:	68fa      	ldr	r2, [r7, #12]
+ 8001502:	6993      	ldr	r3, [r2, #24]
+ 8001504:	f36f 2309 	bfc	r3, #8, #2
+ 8001508:	6193      	str	r3, [r2, #24]
+									//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+									TIMx->CCER.BIT_NAME.CC2E=1;
+ 800150a:	68fa      	ldr	r2, [r7, #12]
+ 800150c:	6a13      	ldr	r3, [r2, #32]
+ 800150e:	f043 0310 	orr.w	r3, r3, #16
+ 8001512:	6213      	str	r3, [r2, #32]
+									MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,2);
+ 8001514:	2202      	movs	r2, #2
+ 8001516:	2101      	movs	r1, #1
+ 8001518:	68f8      	ldr	r0, [r7, #12]
+ 800151a:	f7ff f867 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+									break;
+ 800151e:	e068      	b.n	80015f2 <GP_TIMx__CTC_start+0xa7e>
+								case 3:
+									TIMx->CCR3=Sitting->TIME_CCR;
+ 8001520:	68bb      	ldr	r3, [r7, #8]
+ 8001522:	88db      	ldrh	r3, [r3, #6]
+ 8001524:	461a      	mov	r2, r3
+ 8001526:	68fb      	ldr	r3, [r7, #12]
+ 8001528:	63da      	str	r2, [r3, #60]	; 0x3c
+									TIMx->CCMR2.Compare_BIT_NAME.OC3M=PWM_AL;
+ 800152a:	68fa      	ldr	r2, [r7, #12]
+ 800152c:	69d3      	ldr	r3, [r2, #28]
+ 800152e:	f043 0370 	orr.w	r3, r3, #112	; 0x70
+ 8001532:	61d3      	str	r3, [r2, #28]
+									//if the preload > 0 so enable the OC1PE
+									if(Sitting->TIME_RCR){
+ 8001534:	68bb      	ldr	r3, [r7, #8]
+ 8001536:	889b      	ldrh	r3, [r3, #4]
+ 8001538:	2b00      	cmp	r3, #0
+ 800153a:	d005      	beq.n	8001548 <GP_TIMx__CTC_start+0x9d4>
+										TIMx->CCMR2.Compare_BIT_NAME.OC3PE=1;
+ 800153c:	68fa      	ldr	r2, [r7, #12]
+ 800153e:	69d3      	ldr	r3, [r2, #28]
+ 8001540:	f043 0308 	orr.w	r3, r3, #8
+ 8001544:	61d3      	str	r3, [r2, #28]
+ 8001546:	e004      	b.n	8001552 <GP_TIMx__CTC_start+0x9de>
+									}else{
+										TIMx->CCMR2.Compare_BIT_NAME.OC3PE=0;
+ 8001548:	68fa      	ldr	r2, [r7, #12]
+ 800154a:	69d3      	ldr	r3, [r2, #28]
+ 800154c:	f36f 03c3 	bfc	r3, #3, #1
+ 8001550:	61d3      	str	r3, [r2, #28]
+									}
+									TIMx->CCER.BIT_NAME.CC3P=CTC_Sitting->CTC_POL;
+ 8001552:	687b      	ldr	r3, [r7, #4]
+ 8001554:	789b      	ldrb	r3, [r3, #2]
+ 8001556:	f003 0301 	and.w	r3, r3, #1
+ 800155a:	b2d9      	uxtb	r1, r3
+ 800155c:	68fa      	ldr	r2, [r7, #12]
+ 800155e:	6a13      	ldr	r3, [r2, #32]
+ 8001560:	f361 2349 	bfi	r3, r1, #9, #1
+ 8001564:	6213      	str	r3, [r2, #32]
+									//			CC1S	  00: CC1 channel is configured as output
+									TIMx->CCMR2.Compare_BIT_NAME.CC3S=0;
+ 8001566:	68fa      	ldr	r2, [r7, #12]
+ 8001568:	69d3      	ldr	r3, [r2, #28]
+ 800156a:	f36f 0301 	bfc	r3, #0, #2
+ 800156e:	61d3      	str	r3, [r2, #28]
+									//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+									TIMx->CCER.BIT_NAME.CC3E=1;
+ 8001570:	68fa      	ldr	r2, [r7, #12]
+ 8001572:	6a13      	ldr	r3, [r2, #32]
+ 8001574:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8001578:	6213      	str	r3, [r2, #32]
+									MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,3);
+ 800157a:	2203      	movs	r2, #3
+ 800157c:	2101      	movs	r1, #1
+ 800157e:	68f8      	ldr	r0, [r7, #12]
+ 8001580:	f7ff f834 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+									break;
+ 8001584:	e035      	b.n	80015f2 <GP_TIMx__CTC_start+0xa7e>
+								case 4:
+									TIMx->CCR4=Sitting->TIME_CCR;
+ 8001586:	68bb      	ldr	r3, [r7, #8]
+ 8001588:	88db      	ldrh	r3, [r3, #6]
+ 800158a:	461a      	mov	r2, r3
+ 800158c:	68fb      	ldr	r3, [r7, #12]
+ 800158e:	641a      	str	r2, [r3, #64]	; 0x40
+									TIMx->CCMR2.Compare_BIT_NAME.OC4M=PWM_AL;
+ 8001590:	68fa      	ldr	r2, [r7, #12]
+ 8001592:	69d3      	ldr	r3, [r2, #28]
+ 8001594:	f443 43e0 	orr.w	r3, r3, #28672	; 0x7000
+ 8001598:	61d3      	str	r3, [r2, #28]
+									//if the preload > 0 so enable the OC1PE
+									if(Sitting->TIME_RCR){
+ 800159a:	68bb      	ldr	r3, [r7, #8]
+ 800159c:	889b      	ldrh	r3, [r3, #4]
+ 800159e:	2b00      	cmp	r3, #0
+ 80015a0:	d005      	beq.n	80015ae <GP_TIMx__CTC_start+0xa3a>
+										TIMx->CCMR2.Compare_BIT_NAME.OC4PE=1;
+ 80015a2:	68fa      	ldr	r2, [r7, #12]
+ 80015a4:	69d3      	ldr	r3, [r2, #28]
+ 80015a6:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 80015aa:	61d3      	str	r3, [r2, #28]
+ 80015ac:	e004      	b.n	80015b8 <GP_TIMx__CTC_start+0xa44>
+									}else{
+										TIMx->CCMR2.Compare_BIT_NAME.OC4PE=0;
+ 80015ae:	68fa      	ldr	r2, [r7, #12]
+ 80015b0:	69d3      	ldr	r3, [r2, #28]
+ 80015b2:	f36f 23cb 	bfc	r3, #11, #1
+ 80015b6:	61d3      	str	r3, [r2, #28]
+									}
+									TIMx->CCER.BIT_NAME.CC4P=CTC_Sitting->CTC_POL;
+ 80015b8:	687b      	ldr	r3, [r7, #4]
+ 80015ba:	789b      	ldrb	r3, [r3, #2]
+ 80015bc:	f003 0301 	and.w	r3, r3, #1
+ 80015c0:	b2d9      	uxtb	r1, r3
+ 80015c2:	68fa      	ldr	r2, [r7, #12]
+ 80015c4:	6a13      	ldr	r3, [r2, #32]
+ 80015c6:	f361 334d 	bfi	r3, r1, #13, #1
+ 80015ca:	6213      	str	r3, [r2, #32]
+									//			CC1S	  00: CC1 channel is configured as output
+									TIMx->CCMR2.Compare_BIT_NAME.CC4S=0;
+ 80015cc:	68fa      	ldr	r2, [r7, #12]
+ 80015ce:	69d3      	ldr	r3, [r2, #28]
+ 80015d0:	f36f 2309 	bfc	r3, #8, #2
+ 80015d4:	61d3      	str	r3, [r2, #28]
+									//Note: CCxS bits are writable only when the channel is OFF (CC2E = 0 in TIMx_CCER).**************
+
+									TIMx->CCER.BIT_NAME.CC4E=1;
+ 80015d6:	68fa      	ldr	r2, [r7, #12]
+ 80015d8:	6a13      	ldr	r3, [r2, #32]
+ 80015da:	f443 5380 	orr.w	r3, r3, #4096	; 0x1000
+ 80015de:	6213      	str	r3, [r2, #32]
+									MCAL_SET_GP_TIMx_GPIO(TIMx,PWM,4);
+ 80015e0:	2204      	movs	r2, #4
+ 80015e2:	2101      	movs	r1, #1
+ 80015e4:	68f8      	ldr	r0, [r7, #12]
+ 80015e6:	f7ff f801 	bl	80005ec <MCAL_SET_GP_TIMx_GPIO>
+
+									break;
+ 80015ea:	e002      	b.n	80015f2 <GP_TIMx__CTC_start+0xa7e>
+								default:
+									GP_ERROR_HANDLER();
+ 80015ec:	f7fe fffa 	bl	80005e4 <GP_ERROR_HANDLER>
+									break;
+ 80015f0:	bf00      	nop
+
+								}
+								break;
+ 80015f2:	e002      	b.n	80015fa <GP_TIMx__CTC_start+0xa86>
+
+								default:
+									GP_ERROR_HANDLER();
+ 80015f4:	f7fe fff6 	bl	80005e4 <GP_ERROR_HANDLER>
+									break;
+ 80015f8:	bf00      	nop
+		}
+		TIMx->CR1.BIT_NAME.CEN=1;
+ 80015fa:	68fa      	ldr	r2, [r7, #12]
+ 80015fc:	6813      	ldr	r3, [r2, #0]
+ 80015fe:	f043 0301 	orr.w	r3, r3, #1
+ 8001602:	6013      	str	r3, [r2, #0]
+
+		if(Sitting->INT_EN_DIS==INT_EN){
+ 8001604:	68bb      	ldr	r3, [r7, #8]
+ 8001606:	7a1b      	ldrb	r3, [r3, #8]
+ 8001608:	2b00      	cmp	r3, #0
+ 800160a:	d14b      	bne.n	80016a4 <GP_TIMx__CTC_start+0xb30>
+			switch (CTC_Sitting->CHx_num) {
+ 800160c:	687b      	ldr	r3, [r7, #4]
+ 800160e:	781b      	ldrb	r3, [r3, #0]
+ 8001610:	3b01      	subs	r3, #1
+ 8001612:	2b03      	cmp	r3, #3
+ 8001614:	d822      	bhi.n	800165c <GP_TIMx__CTC_start+0xae8>
+ 8001616:	a201      	add	r2, pc, #4	; (adr r2, 800161c <GP_TIMx__CTC_start+0xaa8>)
+ 8001618:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 800161c:	0800162d 	.word	0x0800162d
+ 8001620:	08001639 	.word	0x08001639
+ 8001624:	08001645 	.word	0x08001645
+ 8001628:	08001651 	.word	0x08001651
+			case 1:
+				TIMx->DIER.BIT_NAME.CC1IE=1;
+ 800162c:	68fa      	ldr	r2, [r7, #12]
+ 800162e:	68d3      	ldr	r3, [r2, #12]
+ 8001630:	f043 0302 	orr.w	r3, r3, #2
+ 8001634:	60d3      	str	r3, [r2, #12]
+
+				break;
+ 8001636:	e014      	b.n	8001662 <GP_TIMx__CTC_start+0xaee>
+			case 2:
+				TIMx->DIER.BIT_NAME.CC2IE=1;
+ 8001638:	68fa      	ldr	r2, [r7, #12]
+ 800163a:	68d3      	ldr	r3, [r2, #12]
+ 800163c:	f043 0304 	orr.w	r3, r3, #4
+ 8001640:	60d3      	str	r3, [r2, #12]
+
+				break;
+ 8001642:	e00e      	b.n	8001662 <GP_TIMx__CTC_start+0xaee>
+			case 3:
+				TIMx->DIER.BIT_NAME.CC3IE=1;
+ 8001644:	68fa      	ldr	r2, [r7, #12]
+ 8001646:	68d3      	ldr	r3, [r2, #12]
+ 8001648:	f043 0308 	orr.w	r3, r3, #8
+ 800164c:	60d3      	str	r3, [r2, #12]
+
+				break;
+ 800164e:	e008      	b.n	8001662 <GP_TIMx__CTC_start+0xaee>
+			case 4:
+				TIMx->DIER.BIT_NAME.CC4IE=1;
+ 8001650:	68fa      	ldr	r2, [r7, #12]
+ 8001652:	68d3      	ldr	r3, [r2, #12]
+ 8001654:	f043 0310 	orr.w	r3, r3, #16
+ 8001658:	60d3      	str	r3, [r2, #12]
+
+				break;
+ 800165a:	e002      	b.n	8001662 <GP_TIMx__CTC_start+0xaee>
+			default:
+				GP_ERROR_HANDLER();
+ 800165c:	f7fe ffc2 	bl	80005e4 <GP_ERROR_HANDLER>
+				break;
+ 8001660:	bf00      	nop
+			}
+			if(TIMx== TIM2) 	NVIC_ISER0|=(1<<28);
+ 8001662:	68fb      	ldr	r3, [r7, #12]
+ 8001664:	f1b3 4f80 	cmp.w	r3, #1073741824	; 0x40000000
+ 8001668:	d106      	bne.n	8001678 <GP_TIMx__CTC_start+0xb04>
+ 800166a:	4b3f      	ldr	r3, [pc, #252]	; (8001768 <GP_TIMx__CTC_start+0xbf4>)
+ 800166c:	681b      	ldr	r3, [r3, #0]
+ 800166e:	4a3e      	ldr	r2, [pc, #248]	; (8001768 <GP_TIMx__CTC_start+0xbf4>)
+ 8001670:	f043 5380 	orr.w	r3, r3, #268435456	; 0x10000000
+ 8001674:	6013      	str	r3, [r2, #0]
+		if(Sitting->INT_EN_DIS==INT_EN){
+ 8001676:	e071      	b.n	800175c <GP_TIMx__CTC_start+0xbe8>
+			else if(TIMx== TIM3) NVIC_ISER0|=(1<<29);
+ 8001678:	68fb      	ldr	r3, [r7, #12]
+ 800167a:	4a3c      	ldr	r2, [pc, #240]	; (800176c <GP_TIMx__CTC_start+0xbf8>)
+ 800167c:	4293      	cmp	r3, r2
+ 800167e:	d106      	bne.n	800168e <GP_TIMx__CTC_start+0xb1a>
+ 8001680:	4b39      	ldr	r3, [pc, #228]	; (8001768 <GP_TIMx__CTC_start+0xbf4>)
+ 8001682:	681b      	ldr	r3, [r3, #0]
+ 8001684:	4a38      	ldr	r2, [pc, #224]	; (8001768 <GP_TIMx__CTC_start+0xbf4>)
+ 8001686:	f043 5300 	orr.w	r3, r3, #536870912	; 0x20000000
+ 800168a:	6013      	str	r3, [r2, #0]
+		if(Sitting->INT_EN_DIS==INT_EN){
+ 800168c:	e066      	b.n	800175c <GP_TIMx__CTC_start+0xbe8>
+			else if(TIMx== TIM4) NVIC_ISER0|=(1<<30);
+ 800168e:	68fb      	ldr	r3, [r7, #12]
+ 8001690:	4a37      	ldr	r2, [pc, #220]	; (8001770 <GP_TIMx__CTC_start+0xbfc>)
+ 8001692:	4293      	cmp	r3, r2
+ 8001694:	d162      	bne.n	800175c <GP_TIMx__CTC_start+0xbe8>
+ 8001696:	4b34      	ldr	r3, [pc, #208]	; (8001768 <GP_TIMx__CTC_start+0xbf4>)
+ 8001698:	681b      	ldr	r3, [r3, #0]
+ 800169a:	4a33      	ldr	r2, [pc, #204]	; (8001768 <GP_TIMx__CTC_start+0xbf4>)
+ 800169c:	f043 4380 	orr.w	r3, r3, #1073741824	; 0x40000000
+ 80016a0:	6013      	str	r3, [r2, #0]
+		if(Sitting->INT_EN_DIS==INT_EN){
+ 80016a2:	e05b      	b.n	800175c <GP_TIMx__CTC_start+0xbe8>
+
+		}else{
+			switch (CTC_Sitting->CHx_num) {
+ 80016a4:	687b      	ldr	r3, [r7, #4]
+ 80016a6:	781b      	ldrb	r3, [r3, #0]
+ 80016a8:	3b01      	subs	r3, #1
+ 80016aa:	2b03      	cmp	r3, #3
+ 80016ac:	d84f      	bhi.n	800174e <GP_TIMx__CTC_start+0xbda>
+ 80016ae:	a201      	add	r2, pc, #4	; (adr r2, 80016b4 <GP_TIMx__CTC_start+0xb40>)
+ 80016b0:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 80016b4:	080016c5 	.word	0x080016c5
+ 80016b8:	080016e1 	.word	0x080016e1
+ 80016bc:	08001717 	.word	0x08001717
+ 80016c0:	08001733 	.word	0x08001733
+			case 1:
+				while(!TIMx->SR.BIT_NAME.CC1IF);
+ 80016c4:	bf00      	nop
+ 80016c6:	68fb      	ldr	r3, [r7, #12]
+ 80016c8:	691b      	ldr	r3, [r3, #16]
+ 80016ca:	f3c3 0340 	ubfx	r3, r3, #1, #1
+ 80016ce:	b2db      	uxtb	r3, r3
+ 80016d0:	2b00      	cmp	r3, #0
+ 80016d2:	d0f8      	beq.n	80016c6 <GP_TIMx__CTC_start+0xb52>
+				TIMx->SR.BIT_NAME.CC1IF=0;
+ 80016d4:	68fa      	ldr	r2, [r7, #12]
+ 80016d6:	6913      	ldr	r3, [r2, #16]
+ 80016d8:	f36f 0341 	bfc	r3, #1, #1
+ 80016dc:	6113      	str	r3, [r2, #16]
+				break;
+ 80016de:	e039      	b.n	8001754 <GP_TIMx__CTC_start+0xbe0>
+			case 2:
+				while(!TIMx->SR.BIT_NAME.UIF);
+ 80016e0:	bf00      	nop
+ 80016e2:	68fb      	ldr	r3, [r7, #12]
+ 80016e4:	691b      	ldr	r3, [r3, #16]
+ 80016e6:	f3c3 0300 	ubfx	r3, r3, #0, #1
+ 80016ea:	b2db      	uxtb	r3, r3
+ 80016ec:	2b00      	cmp	r3, #0
+ 80016ee:	d0f8      	beq.n	80016e2 <GP_TIMx__CTC_start+0xb6e>
+
+				while(!TIMx->SR.BIT_NAME.CC2IF);
+ 80016f0:	bf00      	nop
+ 80016f2:	68fb      	ldr	r3, [r7, #12]
+ 80016f4:	691b      	ldr	r3, [r3, #16]
+ 80016f6:	f3c3 0380 	ubfx	r3, r3, #2, #1
+ 80016fa:	b2db      	uxtb	r3, r3
+ 80016fc:	2b00      	cmp	r3, #0
+ 80016fe:	d0f8      	beq.n	80016f2 <GP_TIMx__CTC_start+0xb7e>
+				TIMx->SR.BIT_NAME.CC2IF=0;
+ 8001700:	68fa      	ldr	r2, [r7, #12]
+ 8001702:	6913      	ldr	r3, [r2, #16]
+ 8001704:	f36f 0382 	bfc	r3, #2, #1
+ 8001708:	6113      	str	r3, [r2, #16]
+				TIMx->SR.BIT_NAME.UIF=0;
+ 800170a:	68fa      	ldr	r2, [r7, #12]
+ 800170c:	6913      	ldr	r3, [r2, #16]
+ 800170e:	f36f 0300 	bfc	r3, #0, #1
+ 8001712:	6113      	str	r3, [r2, #16]
+
+				break;
+ 8001714:	e01e      	b.n	8001754 <GP_TIMx__CTC_start+0xbe0>
+			case 3:
+				while(!TIMx->SR.BIT_NAME.CC3IF);
+ 8001716:	bf00      	nop
+ 8001718:	68fb      	ldr	r3, [r7, #12]
+ 800171a:	691b      	ldr	r3, [r3, #16]
+ 800171c:	f3c3 03c0 	ubfx	r3, r3, #3, #1
+ 8001720:	b2db      	uxtb	r3, r3
+ 8001722:	2b00      	cmp	r3, #0
+ 8001724:	d0f8      	beq.n	8001718 <GP_TIMx__CTC_start+0xba4>
+				TIMx->SR.BIT_NAME.CC3IF=0;
+ 8001726:	68fa      	ldr	r2, [r7, #12]
+ 8001728:	6913      	ldr	r3, [r2, #16]
+ 800172a:	f36f 03c3 	bfc	r3, #3, #1
+ 800172e:	6113      	str	r3, [r2, #16]
+				break;
+ 8001730:	e010      	b.n	8001754 <GP_TIMx__CTC_start+0xbe0>
+			case 4:
+				while(!TIMx->SR.BIT_NAME.CC4IF);
+ 8001732:	bf00      	nop
+ 8001734:	68fb      	ldr	r3, [r7, #12]
+ 8001736:	691b      	ldr	r3, [r3, #16]
+ 8001738:	f3c3 1300 	ubfx	r3, r3, #4, #1
+ 800173c:	b2db      	uxtb	r3, r3
+ 800173e:	2b00      	cmp	r3, #0
+ 8001740:	d0f8      	beq.n	8001734 <GP_TIMx__CTC_start+0xbc0>
+				TIMx->SR.BIT_NAME.CC4IF=0;
+ 8001742:	68fa      	ldr	r2, [r7, #12]
+ 8001744:	6913      	ldr	r3, [r2, #16]
+ 8001746:	f36f 1304 	bfc	r3, #4, #1
+ 800174a:	6113      	str	r3, [r2, #16]
+				break;
+ 800174c:	e002      	b.n	8001754 <GP_TIMx__CTC_start+0xbe0>
+			default:
+				GP_ERROR_HANDLER();
+ 800174e:	f7fe ff49 	bl	80005e4 <GP_ERROR_HANDLER>
+				break;
+ 8001752:	bf00      	nop
+		if(Sitting->INT_EN_DIS==INT_EN){
+ 8001754:	e002      	b.n	800175c <GP_TIMx__CTC_start+0xbe8>
+			}
+
+		}
+	}else{
+		GP_ERROR_HANDLER();
+ 8001756:	f7fe ff45 	bl	80005e4 <GP_ERROR_HANDLER>
+	}
+}
+ 800175a:	e000      	b.n	800175e <GP_TIMx__CTC_start+0xbea>
+		if(Sitting->INT_EN_DIS==INT_EN){
+ 800175c:	bf00      	nop
+}
+ 800175e:	bf00      	nop
+ 8001760:	3714      	adds	r7, #20
+ 8001762:	46bd      	mov	sp, r7
+ 8001764:	bd90      	pop	{r4, r7, pc}
+ 8001766:	bf00      	nop
+ 8001768:	e000e100 	.word	0xe000e100
+ 800176c:	40000400 	.word	0x40000400
+ 8001770:	40000800 	.word	0x40000800
+
+08001774 <GP_TIMx_Deint>:
+
+void GP_TIMX_Clear(GP_TIMx_REG* TIMx){
+
+	TIMx->CNT=0;
+}
+void GP_TIMx_Deint(GP_TIMx_REG* TIMx){
+ 8001774:	b480      	push	{r7}
+ 8001776:	b083      	sub	sp, #12
+ 8001778:	af00      	add	r7, sp, #0
+ 800177a:	6078      	str	r0, [r7, #4]
+	TIMx->CR1.ALL_BITS=0;
+ 800177c:	687b      	ldr	r3, [r7, #4]
+ 800177e:	2200      	movs	r2, #0
+ 8001780:	601a      	str	r2, [r3, #0]
+	TIMx->ARR=0;
+ 8001782:	687b      	ldr	r3, [r7, #4]
+ 8001784:	2200      	movs	r2, #0
+ 8001786:	62da      	str	r2, [r3, #44]	; 0x2c
+	TIMx->CCER.ALL_BITS=0;
+ 8001788:	687b      	ldr	r3, [r7, #4]
+ 800178a:	2200      	movs	r2, #0
+ 800178c:	621a      	str	r2, [r3, #32]
+	TIMx->CCMR1.ALL_BITS=0;
+ 800178e:	687b      	ldr	r3, [r7, #4]
+ 8001790:	2200      	movs	r2, #0
+ 8001792:	619a      	str	r2, [r3, #24]
+	TIMx->CCMR2.ALL_BITS=0;
+ 8001794:	687b      	ldr	r3, [r7, #4]
+ 8001796:	2200      	movs	r2, #0
+ 8001798:	61da      	str	r2, [r3, #28]
+	TIMx->CCR1=0;
+ 800179a:	687b      	ldr	r3, [r7, #4]
+ 800179c:	2200      	movs	r2, #0
+ 800179e:	635a      	str	r2, [r3, #52]	; 0x34
+	TIMx->CCR2=0;
+ 80017a0:	687b      	ldr	r3, [r7, #4]
+ 80017a2:	2200      	movs	r2, #0
+ 80017a4:	639a      	str	r2, [r3, #56]	; 0x38
+	TIMx->CCR3=0;
+ 80017a6:	687b      	ldr	r3, [r7, #4]
+ 80017a8:	2200      	movs	r2, #0
+ 80017aa:	63da      	str	r2, [r3, #60]	; 0x3c
+	TIMx->CCR4=0;
+ 80017ac:	687b      	ldr	r3, [r7, #4]
+ 80017ae:	2200      	movs	r2, #0
+ 80017b0:	641a      	str	r2, [r3, #64]	; 0x40
+	TIMx->CNT=0;
+ 80017b2:	687b      	ldr	r3, [r7, #4]
+ 80017b4:	2200      	movs	r2, #0
+ 80017b6:	625a      	str	r2, [r3, #36]	; 0x24
+	TIMx->CR2.ALL_BITS=0;
+ 80017b8:	687b      	ldr	r3, [r7, #4]
+ 80017ba:	2200      	movs	r2, #0
+ 80017bc:	605a      	str	r2, [r3, #4]
+	TIMx->PSC=0;
+ 80017be:	687b      	ldr	r3, [r7, #4]
+ 80017c0:	2200      	movs	r2, #0
+ 80017c2:	629a      	str	r2, [r3, #40]	; 0x28
+	if(TIMx== TIM2)			{RCC->APB1RSTR|=(1<<0);		RCC->APB1RSTR&=~(1<<0);	}
+ 80017c4:	687b      	ldr	r3, [r7, #4]
+ 80017c6:	f1b3 4f80 	cmp.w	r3, #1073741824	; 0x40000000
+ 80017ca:	d10c      	bne.n	80017e6 <GP_TIMx_Deint+0x72>
+ 80017cc:	4b19      	ldr	r3, [pc, #100]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 80017ce:	691b      	ldr	r3, [r3, #16]
+ 80017d0:	4a18      	ldr	r2, [pc, #96]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 80017d2:	f043 0301 	orr.w	r3, r3, #1
+ 80017d6:	6113      	str	r3, [r2, #16]
+ 80017d8:	4b16      	ldr	r3, [pc, #88]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 80017da:	691b      	ldr	r3, [r3, #16]
+ 80017dc:	4a15      	ldr	r2, [pc, #84]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 80017de:	f023 0301 	bic.w	r3, r3, #1
+ 80017e2:	6113      	str	r3, [r2, #16]
+			else if(TIMx== TIM3)	{RCC->APB1RSTR|=(1<<1);		RCC->APB1RSTR&=~(1<<1);	}
+			else if(TIMx== TIM4)	{RCC->APB1RSTR|=(1<<2);		RCC->APB1RSTR&=~(1<<2);	}
+}
+ 80017e4:	e020      	b.n	8001828 <GP_TIMx_Deint+0xb4>
+			else if(TIMx== TIM3)	{RCC->APB1RSTR|=(1<<1);		RCC->APB1RSTR&=~(1<<1);	}
+ 80017e6:	687b      	ldr	r3, [r7, #4]
+ 80017e8:	4a13      	ldr	r2, [pc, #76]	; (8001838 <GP_TIMx_Deint+0xc4>)
+ 80017ea:	4293      	cmp	r3, r2
+ 80017ec:	d10c      	bne.n	8001808 <GP_TIMx_Deint+0x94>
+ 80017ee:	4b11      	ldr	r3, [pc, #68]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 80017f0:	691b      	ldr	r3, [r3, #16]
+ 80017f2:	4a10      	ldr	r2, [pc, #64]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 80017f4:	f043 0302 	orr.w	r3, r3, #2
+ 80017f8:	6113      	str	r3, [r2, #16]
+ 80017fa:	4b0e      	ldr	r3, [pc, #56]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 80017fc:	691b      	ldr	r3, [r3, #16]
+ 80017fe:	4a0d      	ldr	r2, [pc, #52]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 8001800:	f023 0302 	bic.w	r3, r3, #2
+ 8001804:	6113      	str	r3, [r2, #16]
+}
+ 8001806:	e00f      	b.n	8001828 <GP_TIMx_Deint+0xb4>
+			else if(TIMx== TIM4)	{RCC->APB1RSTR|=(1<<2);		RCC->APB1RSTR&=~(1<<2);	}
+ 8001808:	687b      	ldr	r3, [r7, #4]
+ 800180a:	4a0c      	ldr	r2, [pc, #48]	; (800183c <GP_TIMx_Deint+0xc8>)
+ 800180c:	4293      	cmp	r3, r2
+ 800180e:	d10b      	bne.n	8001828 <GP_TIMx_Deint+0xb4>
+ 8001810:	4b08      	ldr	r3, [pc, #32]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 8001812:	691b      	ldr	r3, [r3, #16]
+ 8001814:	4a07      	ldr	r2, [pc, #28]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 8001816:	f043 0304 	orr.w	r3, r3, #4
+ 800181a:	6113      	str	r3, [r2, #16]
+ 800181c:	4b05      	ldr	r3, [pc, #20]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 800181e:	691b      	ldr	r3, [r3, #16]
+ 8001820:	4a04      	ldr	r2, [pc, #16]	; (8001834 <GP_TIMx_Deint+0xc0>)
+ 8001822:	f023 0304 	bic.w	r3, r3, #4
+ 8001826:	6113      	str	r3, [r2, #16]
+}
+ 8001828:	bf00      	nop
+ 800182a:	370c      	adds	r7, #12
+ 800182c:	46bd      	mov	sp, r7
+ 800182e:	bc80      	pop	{r7}
+ 8001830:	4770      	bx	lr
+ 8001832:	bf00      	nop
+ 8001834:	40021000 	.word	0x40021000
+ 8001838:	40000400 	.word	0x40000400
+ 800183c:	40000800 	.word	0x40000800
+
+08001840 <TIM2_IRQHandler>:
+
+void TIM2_IRQHandler(){
+ 8001840:	b580      	push	{r7, lr}
+ 8001842:	b082      	sub	sp, #8
+ 8001844:	af00      	add	r7, sp, #0
+	GP_TIMx_ERROR_src *ERROR;
+	if(TIM2->SR.BIT_NAME.UIF){
+ 8001846:	f04f 4380 	mov.w	r3, #1073741824	; 0x40000000
+ 800184a:	691b      	ldr	r3, [r3, #16]
+ 800184c:	f3c3 0300 	ubfx	r3, r3, #0, #1
+ 8001850:	b2db      	uxtb	r3, r3
+ 8001852:	2b00      	cmp	r3, #0
+ 8001854:	d00b      	beq.n	800186e <TIM2_IRQHandler+0x2e>
+			ERROR->UIF=1;
+ 8001856:	687a      	ldr	r2, [r7, #4]
+ 8001858:	7813      	ldrb	r3, [r2, #0]
+ 800185a:	f043 0301 	orr.w	r3, r3, #1
+ 800185e:	7013      	strb	r3, [r2, #0]
+			TIM2->SR.BIT_NAME.UIF=0;
+ 8001860:	f04f 4280 	mov.w	r2, #1073741824	; 0x40000000
+ 8001864:	6913      	ldr	r3, [r2, #16]
+ 8001866:	f36f 0300 	bfc	r3, #0, #1
+ 800186a:	6113      	str	r3, [r2, #16]
+ 800186c:	e04e      	b.n	800190c <TIM2_IRQHandler+0xcc>
+		}
+
+		else if(TIM2->SR.BIT_NAME.CC1IF){
+ 800186e:	f04f 4380 	mov.w	r3, #1073741824	; 0x40000000
+ 8001872:	691b      	ldr	r3, [r3, #16]
+ 8001874:	f3c3 0340 	ubfx	r3, r3, #1, #1
+ 8001878:	b2db      	uxtb	r3, r3
+ 800187a:	2b00      	cmp	r3, #0
+ 800187c:	d00b      	beq.n	8001896 <TIM2_IRQHandler+0x56>
+			ERROR->CC1IF=1;
+ 800187e:	687a      	ldr	r2, [r7, #4]
+ 8001880:	7813      	ldrb	r3, [r2, #0]
+ 8001882:	f043 0302 	orr.w	r3, r3, #2
+ 8001886:	7013      	strb	r3, [r2, #0]
+			TIM2->SR.BIT_NAME.CC1IF=0;
+ 8001888:	f04f 4280 	mov.w	r2, #1073741824	; 0x40000000
+ 800188c:	6913      	ldr	r3, [r2, #16]
+ 800188e:	f36f 0341 	bfc	r3, #1, #1
+ 8001892:	6113      	str	r3, [r2, #16]
+ 8001894:	e03a      	b.n	800190c <TIM2_IRQHandler+0xcc>
+
+
+		}
+		else if(TIM2->SR.BIT_NAME.CC2IF){
+ 8001896:	f04f 4380 	mov.w	r3, #1073741824	; 0x40000000
+ 800189a:	691b      	ldr	r3, [r3, #16]
+ 800189c:	f3c3 0380 	ubfx	r3, r3, #2, #1
+ 80018a0:	b2db      	uxtb	r3, r3
+ 80018a2:	2b00      	cmp	r3, #0
+ 80018a4:	d00b      	beq.n	80018be <TIM2_IRQHandler+0x7e>
+			ERROR->CC2IF=1;
+ 80018a6:	687a      	ldr	r2, [r7, #4]
+ 80018a8:	7813      	ldrb	r3, [r2, #0]
+ 80018aa:	f043 0304 	orr.w	r3, r3, #4
+ 80018ae:	7013      	strb	r3, [r2, #0]
+			TIM2->SR.BIT_NAME.CC2IF=0;
+ 80018b0:	f04f 4280 	mov.w	r2, #1073741824	; 0x40000000
+ 80018b4:	6913      	ldr	r3, [r2, #16]
+ 80018b6:	f36f 0382 	bfc	r3, #2, #1
+ 80018ba:	6113      	str	r3, [r2, #16]
+ 80018bc:	e026      	b.n	800190c <TIM2_IRQHandler+0xcc>
+
+		}
+		else if(TIM2->SR.BIT_NAME.CC3IF){
+ 80018be:	f04f 4380 	mov.w	r3, #1073741824	; 0x40000000
+ 80018c2:	691b      	ldr	r3, [r3, #16]
+ 80018c4:	f3c3 03c0 	ubfx	r3, r3, #3, #1
+ 80018c8:	b2db      	uxtb	r3, r3
+ 80018ca:	2b00      	cmp	r3, #0
+ 80018cc:	d00b      	beq.n	80018e6 <TIM2_IRQHandler+0xa6>
+			ERROR->CC3IF=1;
+ 80018ce:	687a      	ldr	r2, [r7, #4]
+ 80018d0:	7813      	ldrb	r3, [r2, #0]
+ 80018d2:	f043 0308 	orr.w	r3, r3, #8
+ 80018d6:	7013      	strb	r3, [r2, #0]
+			TIM2->SR.BIT_NAME.CC3IF=0;
+ 80018d8:	f04f 4280 	mov.w	r2, #1073741824	; 0x40000000
+ 80018dc:	6913      	ldr	r3, [r2, #16]
+ 80018de:	f36f 03c3 	bfc	r3, #3, #1
+ 80018e2:	6113      	str	r3, [r2, #16]
+ 80018e4:	e012      	b.n	800190c <TIM2_IRQHandler+0xcc>
+
+		}
+		else if(TIM2->SR.BIT_NAME.CC4IF){
+ 80018e6:	f04f 4380 	mov.w	r3, #1073741824	; 0x40000000
+ 80018ea:	691b      	ldr	r3, [r3, #16]
+ 80018ec:	f3c3 1300 	ubfx	r3, r3, #4, #1
+ 80018f0:	b2db      	uxtb	r3, r3
+ 80018f2:	2b00      	cmp	r3, #0
+ 80018f4:	d00a      	beq.n	800190c <TIM2_IRQHandler+0xcc>
+			ERROR->CC4IF=1;
+ 80018f6:	687a      	ldr	r2, [r7, #4]
+ 80018f8:	7813      	ldrb	r3, [r2, #0]
+ 80018fa:	f043 0310 	orr.w	r3, r3, #16
+ 80018fe:	7013      	strb	r3, [r2, #0]
+			TIM2->SR.BIT_NAME.CC4IF=0;
+ 8001900:	f04f 4280 	mov.w	r2, #1073741824	; 0x40000000
+ 8001904:	6913      	ldr	r3, [r2, #16]
+ 8001906:	f36f 1304 	bfc	r3, #4, #1
+ 800190a:	6113      	str	r3, [r2, #16]
+
+		}
+	g_GP_Sitting[0].f_callback(ERROR);
+ 800190c:	4b03      	ldr	r3, [pc, #12]	; (800191c <TIM2_IRQHandler+0xdc>)
+ 800190e:	68db      	ldr	r3, [r3, #12]
+ 8001910:	6878      	ldr	r0, [r7, #4]
+ 8001912:	4798      	blx	r3
+
+}
+ 8001914:	bf00      	nop
+ 8001916:	3708      	adds	r7, #8
+ 8001918:	46bd      	mov	sp, r7
+ 800191a:	bd80      	pop	{r7, pc}
+ 800191c:	20000058 	.word	0x20000058
+
+08001920 <TIM3_IRQHandler>:
+void TIM3_IRQHandler(){
+ 8001920:	b580      	push	{r7, lr}
+ 8001922:	b082      	sub	sp, #8
+ 8001924:	af00      	add	r7, sp, #0
+	GP_TIMx_ERROR_src *ERROR;
+	if(TIM3->SR.BIT_NAME.UIF){
+ 8001926:	4b30      	ldr	r3, [pc, #192]	; (80019e8 <TIM3_IRQHandler+0xc8>)
+ 8001928:	691b      	ldr	r3, [r3, #16]
+ 800192a:	f3c3 0300 	ubfx	r3, r3, #0, #1
+ 800192e:	b2db      	uxtb	r3, r3
+ 8001930:	2b00      	cmp	r3, #0
+ 8001932:	d00a      	beq.n	800194a <TIM3_IRQHandler+0x2a>
+		ERROR->UIF=1;
+ 8001934:	687a      	ldr	r2, [r7, #4]
+ 8001936:	7813      	ldrb	r3, [r2, #0]
+ 8001938:	f043 0301 	orr.w	r3, r3, #1
+ 800193c:	7013      	strb	r3, [r2, #0]
+		TIM3->SR.BIT_NAME.UIF=0;
+ 800193e:	4a2a      	ldr	r2, [pc, #168]	; (80019e8 <TIM3_IRQHandler+0xc8>)
+ 8001940:	6913      	ldr	r3, [r2, #16]
+ 8001942:	f36f 0300 	bfc	r3, #0, #1
+ 8001946:	6113      	str	r3, [r2, #16]
+ 8001948:	e046      	b.n	80019d8 <TIM3_IRQHandler+0xb8>
+	}
+
+	else if(TIM3->SR.BIT_NAME.CC1IF){
+ 800194a:	4b27      	ldr	r3, [pc, #156]	; (80019e8 <TIM3_IRQHandler+0xc8>)
+ 800194c:	691b      	ldr	r3, [r3, #16]
+ 800194e:	f3c3 0340 	ubfx	r3, r3, #1, #1
+ 8001952:	b2db      	uxtb	r3, r3
+ 8001954:	2b00      	cmp	r3, #0
+ 8001956:	d00a      	beq.n	800196e <TIM3_IRQHandler+0x4e>
+		ERROR->CC1IF=1;
+ 8001958:	687a      	ldr	r2, [r7, #4]
+ 800195a:	7813      	ldrb	r3, [r2, #0]
+ 800195c:	f043 0302 	orr.w	r3, r3, #2
+ 8001960:	7013      	strb	r3, [r2, #0]
+		TIM3->SR.BIT_NAME.CC1IF=0;
+ 8001962:	4a21      	ldr	r2, [pc, #132]	; (80019e8 <TIM3_IRQHandler+0xc8>)
+ 8001964:	6913      	ldr	r3, [r2, #16]
+ 8001966:	f36f 0341 	bfc	r3, #1, #1
+ 800196a:	6113      	str	r3, [r2, #16]
+ 800196c:	e034      	b.n	80019d8 <TIM3_IRQHandler+0xb8>
+
+
+	}
+	else if(TIM3->SR.BIT_NAME.CC2IF){
+ 800196e:	4b1e      	ldr	r3, [pc, #120]	; (80019e8 <TIM3_IRQHandler+0xc8>)
+ 8001970:	691b      	ldr	r3, [r3, #16]
+ 8001972:	f3c3 0380 	ubfx	r3, r3, #2, #1
+ 8001976:	b2db      	uxtb	r3, r3
+ 8001978:	2b00      	cmp	r3, #0
+ 800197a:	d00a      	beq.n	8001992 <TIM3_IRQHandler+0x72>
+		ERROR->CC2IF=1;
+ 800197c:	687a      	ldr	r2, [r7, #4]
+ 800197e:	7813      	ldrb	r3, [r2, #0]
+ 8001980:	f043 0304 	orr.w	r3, r3, #4
+ 8001984:	7013      	strb	r3, [r2, #0]
+		TIM3->SR.BIT_NAME.CC2IF=0;
+ 8001986:	4a18      	ldr	r2, [pc, #96]	; (80019e8 <TIM3_IRQHandler+0xc8>)
+ 8001988:	6913      	ldr	r3, [r2, #16]
+ 800198a:	f36f 0382 	bfc	r3, #2, #1
+ 800198e:	6113      	str	r3, [r2, #16]
+ 8001990:	e022      	b.n	80019d8 <TIM3_IRQHandler+0xb8>
+
+	}
+	else if(TIM3->SR.BIT_NAME.CC3IF){
+ 8001992:	4b15      	ldr	r3, [pc, #84]	; (80019e8 <TIM3_IRQHandler+0xc8>)
+ 8001994:	691b      	ldr	r3, [r3, #16]
+ 8001996:	f3c3 03c0 	ubfx	r3, r3, #3, #1
+ 800199a:	b2db      	uxtb	r3, r3
+ 800199c:	2b00      	cmp	r3, #0
+ 800199e:	d00a      	beq.n	80019b6 <TIM3_IRQHandler+0x96>
+		ERROR->CC3IF=1;
+ 80019a0:	687a      	ldr	r2, [r7, #4]
+ 80019a2:	7813      	ldrb	r3, [r2, #0]
+ 80019a4:	f043 0308 	orr.w	r3, r3, #8
+ 80019a8:	7013      	strb	r3, [r2, #0]
+		TIM3->SR.BIT_NAME.CC3IF=0;
+ 80019aa:	4a0f      	ldr	r2, [pc, #60]	; (80019e8 <TIM3_IRQHandler+0xc8>)
+ 80019ac:	6913      	ldr	r3, [r2, #16]
+ 80019ae:	f36f 03c3 	bfc	r3, #3, #1
+ 80019b2:	6113      	str	r3, [r2, #16]
+ 80019b4:	e010      	b.n	80019d8 <TIM3_IRQHandler+0xb8>
+
+	}
+	else if(TIM3->SR.BIT_NAME.CC4IF){
+ 80019b6:	4b0c      	ldr	r3, [pc, #48]	; (80019e8 <TIM3_IRQHandler+0xc8>)
+ 80019b8:	691b      	ldr	r3, [r3, #16]
+ 80019ba:	f3c3 1300 	ubfx	r3, r3, #4, #1
+ 80019be:	b2db      	uxtb	r3, r3
+ 80019c0:	2b00      	cmp	r3, #0
+ 80019c2:	d009      	beq.n	80019d8 <TIM3_IRQHandler+0xb8>
+		ERROR->CC4IF=1;
+ 80019c4:	687a      	ldr	r2, [r7, #4]
+ 80019c6:	7813      	ldrb	r3, [r2, #0]
+ 80019c8:	f043 0310 	orr.w	r3, r3, #16
+ 80019cc:	7013      	strb	r3, [r2, #0]
+		TIM3->SR.BIT_NAME.CC4IF=0;
+ 80019ce:	4a06      	ldr	r2, [pc, #24]	; (80019e8 <TIM3_IRQHandler+0xc8>)
+ 80019d0:	6913      	ldr	r3, [r2, #16]
+ 80019d2:	f36f 1304 	bfc	r3, #4, #1
+ 80019d6:	6113      	str	r3, [r2, #16]
+
+	}
+	g_GP_Sitting[1].f_callback(ERROR);
+ 80019d8:	4b04      	ldr	r3, [pc, #16]	; (80019ec <TIM3_IRQHandler+0xcc>)
+ 80019da:	69db      	ldr	r3, [r3, #28]
+ 80019dc:	6878      	ldr	r0, [r7, #4]
+ 80019de:	4798      	blx	r3
+
+
+}void TIM4_IRQHandler(){
+ 80019e0:	bf00      	nop
+ 80019e2:	3708      	adds	r7, #8
+ 80019e4:	46bd      	mov	sp, r7
+ 80019e6:	bd80      	pop	{r7, pc}
+ 80019e8:	40000400 	.word	0x40000400
+ 80019ec:	20000058 	.word	0x20000058
+
+080019f0 <TIM4_IRQHandler>:
+ 80019f0:	b580      	push	{r7, lr}
+ 80019f2:	b082      	sub	sp, #8
+ 80019f4:	af00      	add	r7, sp, #0
+	volatile  GP_TIMx_ERROR_src *ERROR;
+	if(TIM4->SR.BIT_NAME.UIF){
+ 80019f6:	4b33      	ldr	r3, [pc, #204]	; (8001ac4 <TIM4_IRQHandler+0xd4>)
+ 80019f8:	691b      	ldr	r3, [r3, #16]
+ 80019fa:	f3c3 0300 	ubfx	r3, r3, #0, #1
+ 80019fe:	b2db      	uxtb	r3, r3
+ 8001a00:	2b00      	cmp	r3, #0
+ 8001a02:	d00a      	beq.n	8001a1a <TIM4_IRQHandler+0x2a>
+			ERROR->UIF=1;
+ 8001a04:	687a      	ldr	r2, [r7, #4]
+ 8001a06:	7813      	ldrb	r3, [r2, #0]
+ 8001a08:	f043 0301 	orr.w	r3, r3, #1
+ 8001a0c:	7013      	strb	r3, [r2, #0]
+			TIM4->SR.BIT_NAME.UIF=0;
+ 8001a0e:	4a2d      	ldr	r2, [pc, #180]	; (8001ac4 <TIM4_IRQHandler+0xd4>)
+ 8001a10:	6913      	ldr	r3, [r2, #16]
+ 8001a12:	f36f 0300 	bfc	r3, #0, #1
+ 8001a16:	6113      	str	r3, [r2, #16]
+ 8001a18:	e04b      	b.n	8001ab2 <TIM4_IRQHandler+0xc2>
+		}
+
+		else if(TIM4->SR.BIT_NAME.CC1IF){
+ 8001a1a:	4b2a      	ldr	r3, [pc, #168]	; (8001ac4 <TIM4_IRQHandler+0xd4>)
+ 8001a1c:	691b      	ldr	r3, [r3, #16]
+ 8001a1e:	f3c3 0340 	ubfx	r3, r3, #1, #1
+ 8001a22:	b2db      	uxtb	r3, r3
+ 8001a24:	2b00      	cmp	r3, #0
+ 8001a26:	d00a      	beq.n	8001a3e <TIM4_IRQHandler+0x4e>
+			ERROR->CC1IF=1;
+ 8001a28:	687a      	ldr	r2, [r7, #4]
+ 8001a2a:	7813      	ldrb	r3, [r2, #0]
+ 8001a2c:	f043 0302 	orr.w	r3, r3, #2
+ 8001a30:	7013      	strb	r3, [r2, #0]
+			TIM4->SR.BIT_NAME.CC1IF=0;
+ 8001a32:	4a24      	ldr	r2, [pc, #144]	; (8001ac4 <TIM4_IRQHandler+0xd4>)
+ 8001a34:	6913      	ldr	r3, [r2, #16]
+ 8001a36:	f36f 0341 	bfc	r3, #1, #1
+ 8001a3a:	6113      	str	r3, [r2, #16]
+ 8001a3c:	e039      	b.n	8001ab2 <TIM4_IRQHandler+0xc2>
+
+
+		}
+		else if(TIM4->SR.BIT_NAME.CC2IF){
+ 8001a3e:	4b21      	ldr	r3, [pc, #132]	; (8001ac4 <TIM4_IRQHandler+0xd4>)
+ 8001a40:	691b      	ldr	r3, [r3, #16]
+ 8001a42:	f3c3 0380 	ubfx	r3, r3, #2, #1
+ 8001a46:	b2db      	uxtb	r3, r3
+ 8001a48:	2b00      	cmp	r3, #0
+ 8001a4a:	d00f      	beq.n	8001a6c <TIM4_IRQHandler+0x7c>
+			ERROR->CC2IF=1;
+ 8001a4c:	687a      	ldr	r2, [r7, #4]
+ 8001a4e:	7813      	ldrb	r3, [r2, #0]
+ 8001a50:	f043 0304 	orr.w	r3, r3, #4
+ 8001a54:	7013      	strb	r3, [r2, #0]
+			TIM4->SR.BIT_NAME.CC2IF=0;
+ 8001a56:	4a1b      	ldr	r2, [pc, #108]	; (8001ac4 <TIM4_IRQHandler+0xd4>)
+ 8001a58:	6913      	ldr	r3, [r2, #16]
+ 8001a5a:	f36f 0382 	bfc	r3, #2, #1
+ 8001a5e:	6113      	str	r3, [r2, #16]
+			ERROR->UIF=1;
+ 8001a60:	687a      	ldr	r2, [r7, #4]
+ 8001a62:	7813      	ldrb	r3, [r2, #0]
+ 8001a64:	f043 0301 	orr.w	r3, r3, #1
+ 8001a68:	7013      	strb	r3, [r2, #0]
+ 8001a6a:	e022      	b.n	8001ab2 <TIM4_IRQHandler+0xc2>
+
+		}
+		else if(TIM4->SR.BIT_NAME.CC3IF){
+ 8001a6c:	4b15      	ldr	r3, [pc, #84]	; (8001ac4 <TIM4_IRQHandler+0xd4>)
+ 8001a6e:	691b      	ldr	r3, [r3, #16]
+ 8001a70:	f3c3 03c0 	ubfx	r3, r3, #3, #1
+ 8001a74:	b2db      	uxtb	r3, r3
+ 8001a76:	2b00      	cmp	r3, #0
+ 8001a78:	d00a      	beq.n	8001a90 <TIM4_IRQHandler+0xa0>
+			ERROR->CC3IF=1;
+ 8001a7a:	687a      	ldr	r2, [r7, #4]
+ 8001a7c:	7813      	ldrb	r3, [r2, #0]
+ 8001a7e:	f043 0308 	orr.w	r3, r3, #8
+ 8001a82:	7013      	strb	r3, [r2, #0]
+			TIM4->SR.BIT_NAME.CC3IF=0;
+ 8001a84:	4a0f      	ldr	r2, [pc, #60]	; (8001ac4 <TIM4_IRQHandler+0xd4>)
+ 8001a86:	6913      	ldr	r3, [r2, #16]
+ 8001a88:	f36f 03c3 	bfc	r3, #3, #1
+ 8001a8c:	6113      	str	r3, [r2, #16]
+ 8001a8e:	e010      	b.n	8001ab2 <TIM4_IRQHandler+0xc2>
+
+		}
+		else if(TIM4->SR.BIT_NAME.CC4IF){
+ 8001a90:	4b0c      	ldr	r3, [pc, #48]	; (8001ac4 <TIM4_IRQHandler+0xd4>)
+ 8001a92:	691b      	ldr	r3, [r3, #16]
+ 8001a94:	f3c3 1300 	ubfx	r3, r3, #4, #1
+ 8001a98:	b2db      	uxtb	r3, r3
+ 8001a9a:	2b00      	cmp	r3, #0
+ 8001a9c:	d009      	beq.n	8001ab2 <TIM4_IRQHandler+0xc2>
+			ERROR->CC4IF=1;
+ 8001a9e:	687a      	ldr	r2, [r7, #4]
+ 8001aa0:	7813      	ldrb	r3, [r2, #0]
+ 8001aa2:	f043 0310 	orr.w	r3, r3, #16
+ 8001aa6:	7013      	strb	r3, [r2, #0]
+			TIM4->SR.BIT_NAME.CC4IF=0;
+ 8001aa8:	4a06      	ldr	r2, [pc, #24]	; (8001ac4 <TIM4_IRQHandler+0xd4>)
+ 8001aaa:	6913      	ldr	r3, [r2, #16]
+ 8001aac:	f36f 1304 	bfc	r3, #4, #1
+ 8001ab0:	6113      	str	r3, [r2, #16]
+
+		}
+	g_GP_Sitting[2].f_callback(ERROR);
+ 8001ab2:	4b05      	ldr	r3, [pc, #20]	; (8001ac8 <TIM4_IRQHandler+0xd8>)
+ 8001ab4:	6adb      	ldr	r3, [r3, #44]	; 0x2c
+ 8001ab6:	6878      	ldr	r0, [r7, #4]
+ 8001ab8:	4798      	blx	r3
+
+
+}
+ 8001aba:	bf00      	nop
+ 8001abc:	3708      	adds	r7, #8
+ 8001abe:	46bd      	mov	sp, r7
+ 8001ac0:	bd80      	pop	{r7, pc}
+ 8001ac2:	bf00      	nop
+ 8001ac4:	40000800 	.word	0x40000800
+ 8001ac8:	20000058 	.word	0x20000058
+
+08001acc <_delay_us>:
+
+
+void _delay_us(GP_TIMx_REG* TIMx ,uint16_t delay){
+ 8001acc:	b580      	push	{r7, lr}
+ 8001ace:	b088      	sub	sp, #32
+ 8001ad0:	af00      	add	r7, sp, #0
+ 8001ad2:	6078      	str	r0, [r7, #4]
+ 8001ad4:	460b      	mov	r3, r1
+ 8001ad6:	807b      	strh	r3, [r7, #2]
+	uint16_t PRE_scal=(F_CPU/1000000UL);
+ 8001ad8:	2308      	movs	r3, #8
+ 8001ada:	83fb      	strh	r3, [r7, #30]
+	if(PRE_scal!=1) PRE_scal--; //The counter clock frequency CK_CNT is equal to fCK_PSC / (PSC[15:0] + 1).
+ 8001adc:	8bfb      	ldrh	r3, [r7, #30]
+ 8001ade:	2b01      	cmp	r3, #1
+ 8001ae0:	d002      	beq.n	8001ae8 <_delay_us+0x1c>
+ 8001ae2:	8bfb      	ldrh	r3, [r7, #30]
+ 8001ae4:	3b01      	subs	r3, #1
+ 8001ae6:	83fb      	strh	r3, [r7, #30]
+	GP_TIMERx_config l_t_delay={PRE_scal,delay,0,0,INT_DIS,NORMAL,NULL};
+ 8001ae8:	8bfb      	ldrh	r3, [r7, #30]
+ 8001aea:	81bb      	strh	r3, [r7, #12]
+ 8001aec:	887b      	ldrh	r3, [r7, #2]
+ 8001aee:	81fb      	strh	r3, [r7, #14]
+ 8001af0:	2300      	movs	r3, #0
+ 8001af2:	823b      	strh	r3, [r7, #16]
+ 8001af4:	2300      	movs	r3, #0
+ 8001af6:	827b      	strh	r3, [r7, #18]
+ 8001af8:	2301      	movs	r3, #1
+ 8001afa:	753b      	strb	r3, [r7, #20]
+ 8001afc:	2300      	movs	r3, #0
+ 8001afe:	757b      	strb	r3, [r7, #21]
+ 8001b00:	2300      	movs	r3, #0
+ 8001b02:	61bb      	str	r3, [r7, #24]
+	GP_TIMERx_NORMAL_config NORMAL_SIT={Up};
+ 8001b04:	2300      	movs	r3, #0
+ 8001b06:	723b      	strb	r3, [r7, #8]
+	GP_TIMx_start(TIMx,&l_t_delay,&NORMAL_SIT);
+ 8001b08:	f107 0208 	add.w	r2, r7, #8
+ 8001b0c:	f107 030c 	add.w	r3, r7, #12
+ 8001b10:	4619      	mov	r1, r3
+ 8001b12:	6878      	ldr	r0, [r7, #4]
+ 8001b14:	f7fe ff50 	bl	80009b8 <GP_TIMx_start>
+
+}
+ 8001b18:	bf00      	nop
+ 8001b1a:	3720      	adds	r7, #32
+ 8001b1c:	46bd      	mov	sp, r7
+ 8001b1e:	bd80      	pop	{r7, pc}
+
+08001b20 <_delay_ms>:
+
+
+void _delay_ms(GP_TIMx_REG* TIMx ,uint16_t delay){
+ 8001b20:	b580      	push	{r7, lr}
+ 8001b22:	b084      	sub	sp, #16
+ 8001b24:	af00      	add	r7, sp, #0
+ 8001b26:	6078      	str	r0, [r7, #4]
+ 8001b28:	460b      	mov	r3, r1
+ 8001b2a:	807b      	strh	r3, [r7, #2]
+	for(uint32_t i=0;i<delay;i++)
+ 8001b2c:	2300      	movs	r3, #0
+ 8001b2e:	60fb      	str	r3, [r7, #12]
+ 8001b30:	e007      	b.n	8001b42 <_delay_ms+0x22>
+	_delay_us(TIMx,1000);
+ 8001b32:	f44f 717a 	mov.w	r1, #1000	; 0x3e8
+ 8001b36:	6878      	ldr	r0, [r7, #4]
+ 8001b38:	f7ff ffc8 	bl	8001acc <_delay_us>
+	for(uint32_t i=0;i<delay;i++)
+ 8001b3c:	68fb      	ldr	r3, [r7, #12]
+ 8001b3e:	3301      	adds	r3, #1
+ 8001b40:	60fb      	str	r3, [r7, #12]
+ 8001b42:	887b      	ldrh	r3, [r7, #2]
+ 8001b44:	68fa      	ldr	r2, [r7, #12]
+ 8001b46:	429a      	cmp	r2, r3
+ 8001b48:	d3f3      	bcc.n	8001b32 <_delay_ms+0x12>
+}
+ 8001b4a:	bf00      	nop
+ 8001b4c:	bf00      	nop
+ 8001b4e:	3710      	adds	r7, #16
+ 8001b50:	46bd      	mov	sp, r7
+ 8001b52:	bd80      	pop	{r7, pc}
+
+08001b54 <SPI1_IRQHandler>:
+
+
+}
+
+
+void SPI1_IRQHandler(void){
+ 8001b54:	b580      	push	{r7, lr}
+ 8001b56:	b082      	sub	sp, #8
+ 8001b58:	af00      	add	r7, sp, #0
+	Flag_source flagv2;
+	get_flag_source(&flagv2,SPI1);
+ 8001b5a:	1d3b      	adds	r3, r7, #4
+ 8001b5c:	4905      	ldr	r1, [pc, #20]	; (8001b74 <SPI1_IRQHandler+0x20>)
+ 8001b5e:	4618      	mov	r0, r3
+ 8001b60:	f000 f80c 	bl	8001b7c <get_flag_source>
+	G_P_Config_t[0].P_CallBack(flagv2);
+ 8001b64:	4b04      	ldr	r3, [pc, #16]	; (8001b78 <SPI1_IRQHandler+0x24>)
+ 8001b66:	68db      	ldr	r3, [r3, #12]
+ 8001b68:	7938      	ldrb	r0, [r7, #4]
+ 8001b6a:	4798      	blx	r3
+}
+ 8001b6c:	bf00      	nop
+ 8001b6e:	3708      	adds	r7, #8
+ 8001b70:	46bd      	mov	sp, r7
+ 8001b72:	bd80      	pop	{r7, pc}
+ 8001b74:	40013000 	.word	0x40013000
+ 8001b78:	2000008c 	.word	0x2000008c
+
+08001b7c <get_flag_source>:
+void get_flag_source(Flag_source *flag,SPI_Reg* SPIx){
+ 8001b7c:	b480      	push	{r7}
+ 8001b7e:	b083      	sub	sp, #12
+ 8001b80:	af00      	add	r7, sp, #0
+ 8001b82:	6078      	str	r0, [r7, #4]
+ 8001b84:	6039      	str	r1, [r7, #0]
+
+	if(SPIx->SPI_SR.Bit_Name.RXNE){
+ 8001b86:	683b      	ldr	r3, [r7, #0]
+ 8001b88:	689b      	ldr	r3, [r3, #8]
+ 8001b8a:	f3c3 0300 	ubfx	r3, r3, #0, #1
+ 8001b8e:	b2db      	uxtb	r3, r3
+ 8001b90:	2b00      	cmp	r3, #0
+ 8001b92:	d00f      	beq.n	8001bb4 <get_flag_source+0x38>
+			flag->TXE_FLAG=0;
+ 8001b94:	687a      	ldr	r2, [r7, #4]
+ 8001b96:	7813      	ldrb	r3, [r2, #0]
+ 8001b98:	f36f 0300 	bfc	r3, #0, #1
+ 8001b9c:	7013      	strb	r3, [r2, #0]
+			flag->RXNE_FLAG=1;
+ 8001b9e:	687a      	ldr	r2, [r7, #4]
+ 8001ba0:	7813      	ldrb	r3, [r2, #0]
+ 8001ba2:	f043 0302 	orr.w	r3, r3, #2
+ 8001ba6:	7013      	strb	r3, [r2, #0]
+			SPIx->SPI_CR2.Bit_Name.RXNEIE=0;
+ 8001ba8:	683a      	ldr	r2, [r7, #0]
+ 8001baa:	7913      	ldrb	r3, [r2, #4]
+ 8001bac:	f36f 1386 	bfc	r3, #6, #1
+ 8001bb0:	7113      	strb	r3, [r2, #4]
+		}else if(SPIx->SPI_SR.Bit_Name.TXE){
+		flag->TXE_FLAG=1;
+		flag->RXNE_FLAG=0;
+		SPIx->SPI_CR2.Bit_Name.TXEIE=0;
+	}
+}
+ 8001bb2:	e015      	b.n	8001be0 <get_flag_source+0x64>
+		}else if(SPIx->SPI_SR.Bit_Name.TXE){
+ 8001bb4:	683b      	ldr	r3, [r7, #0]
+ 8001bb6:	689b      	ldr	r3, [r3, #8]
+ 8001bb8:	f3c3 0340 	ubfx	r3, r3, #1, #1
+ 8001bbc:	b2db      	uxtb	r3, r3
+ 8001bbe:	2b00      	cmp	r3, #0
+ 8001bc0:	d00e      	beq.n	8001be0 <get_flag_source+0x64>
+		flag->TXE_FLAG=1;
+ 8001bc2:	687a      	ldr	r2, [r7, #4]
+ 8001bc4:	7813      	ldrb	r3, [r2, #0]
+ 8001bc6:	f043 0301 	orr.w	r3, r3, #1
+ 8001bca:	7013      	strb	r3, [r2, #0]
+		flag->RXNE_FLAG=0;
+ 8001bcc:	687a      	ldr	r2, [r7, #4]
+ 8001bce:	7813      	ldrb	r3, [r2, #0]
+ 8001bd0:	f36f 0341 	bfc	r3, #1, #1
+ 8001bd4:	7013      	strb	r3, [r2, #0]
+		SPIx->SPI_CR2.Bit_Name.TXEIE=0;
+ 8001bd6:	683a      	ldr	r2, [r7, #0]
+ 8001bd8:	7913      	ldrb	r3, [r2, #4]
+ 8001bda:	f36f 13c7 	bfc	r3, #7, #1
+ 8001bde:	7113      	strb	r3, [r2, #4]
+}
+ 8001be0:	bf00      	nop
+ 8001be2:	370c      	adds	r7, #12
+ 8001be4:	46bd      	mov	sp, r7
+ 8001be6:	bc80      	pop	{r7}
+ 8001be8:	4770      	bx	lr
+
+08001bea <ERROR_HANDLER>:
+
+
+#include "Timer1_8.h"
+TIMERx_type g_Sitting;
+TIM1_8_REG* g_TIMX;
+void ERROR_HANDLER(){
+ 8001bea:	b480      	push	{r7}
+ 8001bec:	af00      	add	r7, sp, #0
+	while(1);
+ 8001bee:	e7fe      	b.n	8001bee <ERROR_HANDLER+0x4>
+
+08001bf0 <TIM1_UP_IRQHandler>:
+
+}
+
+
+
+void TIM1_UP_IRQHandler(){
+ 8001bf0:	b580      	push	{r7, lr}
+ 8001bf2:	af00      	add	r7, sp, #0
+	g_Sitting.f_callback();
+ 8001bf4:	4b05      	ldr	r3, [pc, #20]	; (8001c0c <TIM1_UP_IRQHandler+0x1c>)
+ 8001bf6:	68db      	ldr	r3, [r3, #12]
+ 8001bf8:	4798      	blx	r3
+	g_TIMX->SR.BIT_NAME.UIF=0;
+ 8001bfa:	4b05      	ldr	r3, [pc, #20]	; (8001c10 <TIM1_UP_IRQHandler+0x20>)
+ 8001bfc:	681a      	ldr	r2, [r3, #0]
+ 8001bfe:	6913      	ldr	r3, [r2, #16]
+ 8001c00:	f36f 0300 	bfc	r3, #0, #1
+ 8001c04:	6113      	str	r3, [r2, #16]
+
+}
+ 8001c06:	bf00      	nop
+ 8001c08:	bd80      	pop	{r7, pc}
+ 8001c0a:	bf00      	nop
+ 8001c0c:	200000ac 	.word	0x200000ac
+ 8001c10:	200000bc 	.word	0x200000bc
+
+08001c14 <TIM1_CC_IRQHandler>:
+
+
+void TIM1_CC_IRQHandler(){
+ 8001c14:	b580      	push	{r7, lr}
+ 8001c16:	af00      	add	r7, sp, #0
+	g_Sitting.f_callback();
+ 8001c18:	4b05      	ldr	r3, [pc, #20]	; (8001c30 <TIM1_CC_IRQHandler+0x1c>)
+ 8001c1a:	68db      	ldr	r3, [r3, #12]
+ 8001c1c:	4798      	blx	r3
+	g_TIMX->SR.BIT_NAME.CC1IF=0;
+ 8001c1e:	4b05      	ldr	r3, [pc, #20]	; (8001c34 <TIM1_CC_IRQHandler+0x20>)
+ 8001c20:	681a      	ldr	r2, [r3, #0]
+ 8001c22:	6913      	ldr	r3, [r2, #16]
+ 8001c24:	f36f 0341 	bfc	r3, #1, #1
+ 8001c28:	6113      	str	r3, [r2, #16]
+
+}
+ 8001c2a:	bf00      	nop
+ 8001c2c:	bd80      	pop	{r7, pc}
+ 8001c2e:	bf00      	nop
+ 8001c30:	200000ac 	.word	0x200000ac
+ 8001c34:	200000bc 	.word	0x200000bc
+
+08001c38 <TIM1_BRK_IRQHandler>:
+void TIM1_BRK_IRQHandler(){
+ 8001c38:	b580      	push	{r7, lr}
+ 8001c3a:	af00      	add	r7, sp, #0
+	g_Sitting.f_callback();
+ 8001c3c:	4b05      	ldr	r3, [pc, #20]	; (8001c54 <TIM1_BRK_IRQHandler+0x1c>)
+ 8001c3e:	68db      	ldr	r3, [r3, #12]
+ 8001c40:	4798      	blx	r3
+	g_TIMX->SR.BIT_NAME.UIF=0;
+ 8001c42:	4b05      	ldr	r3, [pc, #20]	; (8001c58 <TIM1_BRK_IRQHandler+0x20>)
+ 8001c44:	681a      	ldr	r2, [r3, #0]
+ 8001c46:	6913      	ldr	r3, [r2, #16]
+ 8001c48:	f36f 0300 	bfc	r3, #0, #1
+ 8001c4c:	6113      	str	r3, [r2, #16]
+
+}
+ 8001c4e:	bf00      	nop
+ 8001c50:	bd80      	pop	{r7, pc}
+ 8001c52:	bf00      	nop
+ 8001c54:	200000ac 	.word	0x200000ac
+ 8001c58:	200000bc 	.word	0x200000bc
+
+08001c5c <TIM1_TRG_COM_IRQHandler>:
+void TIM1_TRG_COM_IRQHandler(){
+ 8001c5c:	b580      	push	{r7, lr}
+ 8001c5e:	af00      	add	r7, sp, #0
+	g_Sitting.f_callback();
+ 8001c60:	4b05      	ldr	r3, [pc, #20]	; (8001c78 <TIM1_TRG_COM_IRQHandler+0x1c>)
+ 8001c62:	68db      	ldr	r3, [r3, #12]
+ 8001c64:	4798      	blx	r3
+	g_TIMX->SR.BIT_NAME.UIF=0;
+ 8001c66:	4b05      	ldr	r3, [pc, #20]	; (8001c7c <TIM1_TRG_COM_IRQHandler+0x20>)
+ 8001c68:	681a      	ldr	r2, [r3, #0]
+ 8001c6a:	6913      	ldr	r3, [r2, #16]
+ 8001c6c:	f36f 0300 	bfc	r3, #0, #1
+ 8001c70:	6113      	str	r3, [r2, #16]
+
+}
+ 8001c72:	bf00      	nop
+ 8001c74:	bd80      	pop	{r7, pc}
+ 8001c76:	bf00      	nop
+ 8001c78:	200000ac 	.word	0x200000ac
+ 8001c7c:	200000bc 	.word	0x200000bc
+
+08001c80 <USART1_IRQHandler>:
+		MCAL_GPIO_init(GPIOB, &GPIO);
+		GPIO =(PIN_config) {PIN_11,INPUT_FI,0}; //CONFIGRATION OF RX PIN
+		MCAL_GPIO_init(GPIOB, &GPIO);
+		}
+}
+void USART1_IRQHandler(void){
+ 8001c80:	b580      	push	{r7, lr}
+ 8001c82:	af00      	add	r7, sp, #0
+	G_P_config[0].P_Call_Back();
+ 8001c84:	4b02      	ldr	r3, [pc, #8]	; (8001c90 <USART1_IRQHandler+0x10>)
+ 8001c86:	68db      	ldr	r3, [r3, #12]
+ 8001c88:	4798      	blx	r3
+}
+ 8001c8a:	bf00      	nop
+ 8001c8c:	bd80      	pop	{r7, pc}
+ 8001c8e:	bf00      	nop
+ 8001c90:	200000c0 	.word	0x200000c0
+
+08001c94 <USART2_IRQHandler>:
+void USART2_IRQHandler(void){
+ 8001c94:	b580      	push	{r7, lr}
+ 8001c96:	af00      	add	r7, sp, #0
+	G_P_config[1].P_Call_Back();
+ 8001c98:	4b02      	ldr	r3, [pc, #8]	; (8001ca4 <USART2_IRQHandler+0x10>)
+ 8001c9a:	69db      	ldr	r3, [r3, #28]
+ 8001c9c:	4798      	blx	r3
+}void USART3_IRQHandler(void){
+ 8001c9e:	bf00      	nop
+ 8001ca0:	bd80      	pop	{r7, pc}
+ 8001ca2:	bf00      	nop
+ 8001ca4:	200000c0 	.word	0x200000c0
+
+08001ca8 <USART3_IRQHandler>:
+ 8001ca8:	b580      	push	{r7, lr}
+ 8001caa:	af00      	add	r7, sp, #0
+	G_P_config[2].P_Call_Back();
+ 8001cac:	4b02      	ldr	r3, [pc, #8]	; (8001cb8 <USART3_IRQHandler+0x10>)
+ 8001cae:	6adb      	ldr	r3, [r3, #44]	; 0x2c
+ 8001cb0:	4798      	blx	r3
+}
+ 8001cb2:	bf00      	nop
+ 8001cb4:	bd80      	pop	{r7, pc}
+ 8001cb6:	bf00      	nop
+ 8001cb8:	200000c0 	.word	0x200000c0
+
+08001cbc <servo_degree>:
+uint32_t sec_s;
+uint8_t g_edgeCount = 0;
+uint16_t g_timeHigh = 0;
+
+
+void servo_degree(GP_TIMx_REG* TIMx,uint8_t degree,uint8_t position){
+ 8001cbc:	b580      	push	{r7, lr}
+ 8001cbe:	b08c      	sub	sp, #48	; 0x30
+ 8001cc0:	af00      	add	r7, sp, #0
+ 8001cc2:	6078      	str	r0, [r7, #4]
+ 8001cc4:	460b      	mov	r3, r1
+ 8001cc6:	70fb      	strb	r3, [r7, #3]
+ 8001cc8:	4613      	mov	r3, r2
+ 8001cca:	70bb      	strb	r3, [r7, #2]
+	/* F_CPU is 8Mhz and if i make the prescaler 8 i will get tick every 1 us so i will make the ARR reg 20000us(20ms)
+	 * (50 hz of the servo and change the degree (1 to 2 ms change the degree*/
+	uint32_t deg=0;
+ 8001ccc:	2300      	movs	r3, #0
+ 8001cce:	62fb      	str	r3, [r7, #44]	; 0x2c
+	switch(position){
+ 8001cd0:	78bb      	ldrb	r3, [r7, #2]
+ 8001cd2:	2b2b      	cmp	r3, #43	; 0x2b
+ 8001cd4:	d013      	beq.n	8001cfe <servo_degree+0x42>
+ 8001cd6:	2b2d      	cmp	r3, #45	; 0x2d
+ 8001cd8:	d122      	bne.n	8001d20 <servo_degree+0x64>
+	case '-':
+		deg=((100000+556*(90-degree))/100);
+ 8001cda:	78fb      	ldrb	r3, [r7, #3]
+ 8001cdc:	f1c3 035a 	rsb	r3, r3, #90	; 0x5a
+ 8001ce0:	f44f 720b 	mov.w	r2, #556	; 0x22c
+ 8001ce4:	fb02 f303 	mul.w	r3, r2, r3
+ 8001ce8:	f503 33c3 	add.w	r3, r3, #99840	; 0x18600
+ 8001cec:	33a0      	adds	r3, #160	; 0xa0
+ 8001cee:	4a28      	ldr	r2, [pc, #160]	; (8001d90 <servo_degree+0xd4>)
+ 8001cf0:	fb82 1203 	smull	r1, r2, r2, r3
+ 8001cf4:	1152      	asrs	r2, r2, #5
+ 8001cf6:	17db      	asrs	r3, r3, #31
+ 8001cf8:	1ad3      	subs	r3, r2, r3
+ 8001cfa:	62fb      	str	r3, [r7, #44]	; 0x2c
+		break;
+ 8001cfc:	e021      	b.n	8001d42 <servo_degree+0x86>
+	case '+':
+		deg=((150000+556*degree)/100);
+ 8001cfe:	78fb      	ldrb	r3, [r7, #3]
+ 8001d00:	f44f 720b 	mov.w	r2, #556	; 0x22c
+ 8001d04:	fb02 f303 	mul.w	r3, r2, r3
+ 8001d08:	f503 3312 	add.w	r3, r3, #149504	; 0x24800
+ 8001d0c:	f503 73f8 	add.w	r3, r3, #496	; 0x1f0
+ 8001d10:	4a1f      	ldr	r2, [pc, #124]	; (8001d90 <servo_degree+0xd4>)
+ 8001d12:	fb82 1203 	smull	r1, r2, r2, r3
+ 8001d16:	1152      	asrs	r2, r2, #5
+ 8001d18:	17db      	asrs	r3, r3, #31
+ 8001d1a:	1ad3      	subs	r3, r2, r3
+ 8001d1c:	62fb      	str	r3, [r7, #44]	; 0x2c
+
+		break;
+ 8001d1e:	e010      	b.n	8001d42 <servo_degree+0x86>
+	default:
+		deg=((150000+556*degree)/100);
+ 8001d20:	78fb      	ldrb	r3, [r7, #3]
+ 8001d22:	f44f 720b 	mov.w	r2, #556	; 0x22c
+ 8001d26:	fb02 f303 	mul.w	r3, r2, r3
+ 8001d2a:	f503 3312 	add.w	r3, r3, #149504	; 0x24800
+ 8001d2e:	f503 73f8 	add.w	r3, r3, #496	; 0x1f0
+ 8001d32:	4a17      	ldr	r2, [pc, #92]	; (8001d90 <servo_degree+0xd4>)
+ 8001d34:	fb82 1203 	smull	r1, r2, r2, r3
+ 8001d38:	1152      	asrs	r2, r2, #5
+ 8001d3a:	17db      	asrs	r3, r3, #31
+ 8001d3c:	1ad3      	subs	r3, r2, r3
+ 8001d3e:	62fb      	str	r3, [r7, #44]	; 0x2c
+
+		break;
+ 8001d40:	bf00      	nop
+	}
+	GP_TIMERx_config Sitting=(GP_TIMERx_config){7,20000,0,deg,INT_DIS,PWM,NULL};
+ 8001d42:	2307      	movs	r3, #7
+ 8001d44:	83bb      	strh	r3, [r7, #28]
+ 8001d46:	f644 6320 	movw	r3, #20000	; 0x4e20
+ 8001d4a:	83fb      	strh	r3, [r7, #30]
+ 8001d4c:	2300      	movs	r3, #0
+ 8001d4e:	843b      	strh	r3, [r7, #32]
+ 8001d50:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8001d52:	b29b      	uxth	r3, r3
+ 8001d54:	847b      	strh	r3, [r7, #34]	; 0x22
+ 8001d56:	2301      	movs	r3, #1
+ 8001d58:	f887 3024 	strb.w	r3, [r7, #36]	; 0x24
+ 8001d5c:	2301      	movs	r3, #1
+ 8001d5e:	f887 3025 	strb.w	r3, [r7, #37]	; 0x25
+ 8001d62:	2300      	movs	r3, #0
+ 8001d64:	62bb      	str	r3, [r7, #40]	; 0x28
+	GP_TIMERx_CTC_config CTC_Sitting={2,PWM_AH,ACTIVE_L};
+ 8001d66:	4a0b      	ldr	r2, [pc, #44]	; (8001d94 <servo_degree+0xd8>)
+ 8001d68:	f107 0308 	add.w	r3, r7, #8
+ 8001d6c:	6812      	ldr	r2, [r2, #0]
+ 8001d6e:	4611      	mov	r1, r2
+ 8001d70:	8019      	strh	r1, [r3, #0]
+ 8001d72:	3302      	adds	r3, #2
+ 8001d74:	0c12      	lsrs	r2, r2, #16
+ 8001d76:	701a      	strb	r2, [r3, #0]
+
+	GP_TIMx__CTC_start(TIM3, &Sitting, &CTC_Sitting);
+ 8001d78:	f107 0208 	add.w	r2, r7, #8
+ 8001d7c:	f107 031c 	add.w	r3, r7, #28
+ 8001d80:	4619      	mov	r1, r3
+ 8001d82:	4805      	ldr	r0, [pc, #20]	; (8001d98 <servo_degree+0xdc>)
+ 8001d84:	f7fe fef6 	bl	8000b74 <GP_TIMx__CTC_start>
+}
+ 8001d88:	bf00      	nop
+ 8001d8a:	3730      	adds	r7, #48	; 0x30
+ 8001d8c:	46bd      	mov	sp, r7
+ 8001d8e:	bd80      	pop	{r7, pc}
+ 8001d90:	51eb851f 	.word	0x51eb851f
+ 8001d94:	08001ef0 	.word	0x08001ef0
+ 8001d98:	40000400 	.word	0x40000400
+
+08001d9c <main>:
+
+
+
+
+
+void main(void){
+ 8001d9c:	b580      	push	{r7, lr}
+ 8001d9e:	b082      	sub	sp, #8
+ 8001da0:	af00      	add	r7, sp, #0
+	PIN_config PIN={PIN_0,OUTPUT_PP,SPEED_10};
+ 8001da2:	4b14      	ldr	r3, [pc, #80]	; (8001df4 <main+0x58>)
+ 8001da4:	681b      	ldr	r3, [r3, #0]
+ 8001da6:	607b      	str	r3, [r7, #4]
+	MCAL_GPIO_init(GPIOA, &PIN);
+ 8001da8:	1d3b      	adds	r3, r7, #4
+ 8001daa:	4619      	mov	r1, r3
+ 8001dac:	4812      	ldr	r0, [pc, #72]	; (8001df8 <main+0x5c>)
+ 8001dae:	f7fe fb07 	bl	80003c0 <MCAL_GPIO_init>
+	while(1){
+		MCAL_write_PIN(GPIOA, PIN_0, 1);
+ 8001db2:	2201      	movs	r2, #1
+ 8001db4:	2100      	movs	r1, #0
+ 8001db6:	4810      	ldr	r0, [pc, #64]	; (8001df8 <main+0x5c>)
+ 8001db8:	f7fe fbec 	bl	8000594 <MCAL_write_PIN>
+		servo_degree(TIM3,55,'+');
+ 8001dbc:	222b      	movs	r2, #43	; 0x2b
+ 8001dbe:	2137      	movs	r1, #55	; 0x37
+ 8001dc0:	480e      	ldr	r0, [pc, #56]	; (8001dfc <main+0x60>)
+ 8001dc2:	f7ff ff7b 	bl	8001cbc <servo_degree>
+
+		_delay_ms(TIM2, 500);
+ 8001dc6:	f44f 71fa 	mov.w	r1, #500	; 0x1f4
+ 8001dca:	f04f 4080 	mov.w	r0, #1073741824	; 0x40000000
+ 8001dce:	f7ff fea7 	bl	8001b20 <_delay_ms>
+		MCAL_write_PIN(GPIOA, PIN_0, 0);
+ 8001dd2:	2200      	movs	r2, #0
+ 8001dd4:	2100      	movs	r1, #0
+ 8001dd6:	4808      	ldr	r0, [pc, #32]	; (8001df8 <main+0x5c>)
+ 8001dd8:	f7fe fbdc 	bl	8000594 <MCAL_write_PIN>
+		servo_degree(TIM3,86,'-');
+ 8001ddc:	222d      	movs	r2, #45	; 0x2d
+ 8001dde:	2156      	movs	r1, #86	; 0x56
+ 8001de0:	4806      	ldr	r0, [pc, #24]	; (8001dfc <main+0x60>)
+ 8001de2:	f7ff ff6b 	bl	8001cbc <servo_degree>
+
+
+		_delay_ms(TIM2, 500);
+ 8001de6:	f44f 71fa 	mov.w	r1, #500	; 0x1f4
+ 8001dea:	f04f 4080 	mov.w	r0, #1073741824	; 0x40000000
+ 8001dee:	f7ff fe97 	bl	8001b20 <_delay_ms>
+		MCAL_write_PIN(GPIOA, PIN_0, 1);
+ 8001df2:	e7de      	b.n	8001db2 <main+0x16>
+ 8001df4:	08001ef4 	.word	0x08001ef4
+ 8001df8:	40010800 	.word	0x40010800
+ 8001dfc:	40000400 	.word	0x40000400
+
+08001e00 <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 8001e00:	480d      	ldr	r0, [pc, #52]	; (8001e38 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 8001e02:	4685      	mov	sp, r0
+/* Call the clock system intitialization function.*/
+  bl  SystemInit
+ 8001e04:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 8001e08:	480c      	ldr	r0, [pc, #48]	; (8001e3c <LoopForever+0x6>)
+  ldr r1, =_edata
+ 8001e0a:	490d      	ldr	r1, [pc, #52]	; (8001e40 <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 8001e0c:	4a0d      	ldr	r2, [pc, #52]	; (8001e44 <LoopForever+0xe>)
+  movs r3, #0
+ 8001e0e:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 8001e10:	e002      	b.n	8001e18 <LoopCopyDataInit>
+
+08001e12 <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 8001e12:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 8001e14:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 8001e16:	3304      	adds	r3, #4
+
+08001e18 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 8001e18:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 8001e1a:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 8001e1c:	d3f9      	bcc.n	8001e12 <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 8001e1e:	4a0a      	ldr	r2, [pc, #40]	; (8001e48 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 8001e20:	4c0a      	ldr	r4, [pc, #40]	; (8001e4c <LoopForever+0x16>)
+  movs r3, #0
+ 8001e22:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 8001e24:	e001      	b.n	8001e2a <LoopFillZerobss>
+
+08001e26 <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 8001e26:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 8001e28:	3204      	adds	r2, #4
+
+08001e2a <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 8001e2a:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 8001e2c:	d3fb      	bcc.n	8001e26 <FillZerobss>
+
+/* Call static constructors */
+  bl __libc_init_array
+ 8001e2e:	f000 f811 	bl	8001e54 <__libc_init_array>
+/* Call the application's entry point.*/
+  bl main
+ 8001e32:	f7ff ffb3 	bl	8001d9c <main>
+
+08001e36 <LoopForever>:
+
+LoopForever:
+    b LoopForever
+ 8001e36:	e7fe      	b.n	8001e36 <LoopForever>
+  ldr   r0, =_estack
+ 8001e38:	20002800 	.word	0x20002800
+  ldr r0, =_sdata
+ 8001e3c:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 8001e40:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 8001e44:	08001f00 	.word	0x08001f00
+  ldr r2, =_sbss
+ 8001e48:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 8001e4c:	200000f0 	.word	0x200000f0
+
+08001e50 <ADC1_2_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 8001e50:	e7fe      	b.n	8001e50 <ADC1_2_IRQHandler>
+	...
+
+08001e54 <__libc_init_array>:
+ 8001e54:	b570      	push	{r4, r5, r6, lr}
+ 8001e56:	2600      	movs	r6, #0
+ 8001e58:	4d0c      	ldr	r5, [pc, #48]	; (8001e8c <__libc_init_array+0x38>)
+ 8001e5a:	4c0d      	ldr	r4, [pc, #52]	; (8001e90 <__libc_init_array+0x3c>)
+ 8001e5c:	1b64      	subs	r4, r4, r5
+ 8001e5e:	10a4      	asrs	r4, r4, #2
+ 8001e60:	42a6      	cmp	r6, r4
+ 8001e62:	d109      	bne.n	8001e78 <__libc_init_array+0x24>
+ 8001e64:	f000 f81a 	bl	8001e9c <_init>
+ 8001e68:	2600      	movs	r6, #0
+ 8001e6a:	4d0a      	ldr	r5, [pc, #40]	; (8001e94 <__libc_init_array+0x40>)
+ 8001e6c:	4c0a      	ldr	r4, [pc, #40]	; (8001e98 <__libc_init_array+0x44>)
+ 8001e6e:	1b64      	subs	r4, r4, r5
+ 8001e70:	10a4      	asrs	r4, r4, #2
+ 8001e72:	42a6      	cmp	r6, r4
+ 8001e74:	d105      	bne.n	8001e82 <__libc_init_array+0x2e>
+ 8001e76:	bd70      	pop	{r4, r5, r6, pc}
+ 8001e78:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8001e7c:	4798      	blx	r3
+ 8001e7e:	3601      	adds	r6, #1
+ 8001e80:	e7ee      	b.n	8001e60 <__libc_init_array+0xc>
+ 8001e82:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8001e86:	4798      	blx	r3
+ 8001e88:	3601      	adds	r6, #1
+ 8001e8a:	e7f2      	b.n	8001e72 <__libc_init_array+0x1e>
+ 8001e8c:	08001ef8 	.word	0x08001ef8
+ 8001e90:	08001ef8 	.word	0x08001ef8
+ 8001e94:	08001ef8 	.word	0x08001ef8
+ 8001e98:	08001efc 	.word	0x08001efc
+
+08001e9c <_init>:
+ 8001e9c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8001e9e:	bf00      	nop
+ 8001ea0:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8001ea2:	bc08      	pop	{r3}
+ 8001ea4:	469e      	mov	lr, r3
+ 8001ea6:	4770      	bx	lr
+
+08001ea8 <_fini>:
+ 8001ea8:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8001eaa:	bf00      	nop
+ 8001eac:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8001eae:	bc08      	pop	{r3}
+ 8001eb0:	469e      	mov	lr, r3
+ 8001eb2:	4770      	bx	lr

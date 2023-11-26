@@ -1,0 +1,8 @@
+../HAL/LCD.c:4:6:EN_PULS	1
+../HAL/LCD.c:11:6:LCD_sendCommand	1
+../HAL/LCD.c:43:6:LCD_init	1
+../HAL/LCD.c:125:6:LCD_clearScreen	1
+../HAL/LCD.c:131:6:LCD_sendCharcter	1
+../HAL/LCD.c:164:6:LCD_sendString	2
+../HAL/LCD.c:170:6:LCD_moveCURSER	5
+../HAL/LCD.c:189:6:LCD_intgerToString	1
