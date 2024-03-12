@@ -1,0 +1,10 @@
+../MCAL/CAN.c:11:6:ERROR_HANDLER	4	static
+../MCAL/CAN.c:14:6:MCAL_CAN_SET_GPIO	16	static
+../MCAL/CAN.c:21:12:MCAL_CAN_init	16	static
+../MCAL/CAN.c:148:12:MCAL_CAN_TX	24	static
+../MCAL/CAN.c:224:12:MCAL_CAN_ADD_Filter	16	static
+../MCAL/CAN.c:495:12:MCAL_CAN_RX	24	static
+../MCAL/CAN.c:609:6:MCAL_CAN_RESET	4	static
+../MCAL/CAN.c:615:6:USB_LP_CAN_RX0_IRQHandler	8	static
+../MCAL/CAN.c:618:6:CAN_RX1_IRQHandler	8	static
+../MCAL/CAN.c:622:6:CAN_SCE_IRQHandler	8	static

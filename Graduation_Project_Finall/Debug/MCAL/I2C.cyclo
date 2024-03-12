@@ -1,0 +1,11 @@
+../MCAL/I2C.c:10:6:MCAL_I2C_SET_GPIO	3
+../MCAL/I2C.c:38:10:GET_flag_status	9
+../MCAL/I2C.c:65:6:I2C_init	7
+../MCAL/I2C.c:93:6:I2C_Deinit	3
+../MCAL/I2C.c:100:6:I2C_Start_BIT	3
+../MCAL/I2C.c:107:6:I2C_REPATED_Start_BIT	2
+../MCAL/I2C.c:114:6:I2C_Stop_BIT	1
+../MCAL/I2C.c:118:6:I2C_WriteADDRESS	3
+../MCAL/I2C.c:131:6:I2C_WriteByte	2
+../MCAL/I2C.c:135:6:I2C_ReciveByte	2
+../MCAL/I2C.c:141:6:I2C_MASTER_Transsimte	4

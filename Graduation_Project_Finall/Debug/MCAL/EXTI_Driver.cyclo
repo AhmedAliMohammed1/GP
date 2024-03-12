@@ -1,0 +1,10 @@
+../MCAL/EXTI_Driver.c:11:6:NVIC_ENABLE	8
+../MCAL/EXTI_Driver.c:46:6:NVIC_DISABLE	8
+../MCAL/EXTI_Driver.c:81:7:MCAL_EXTI_init	9
+../MCAL/EXTI_Driver.c:116:7:EXTI0_IRQHandler	1
+../MCAL/EXTI_Driver.c:120:7:EXTI1_IRQHandler	1
+../MCAL/EXTI_Driver.c:125:7:EXTI2_IRQHandler	1
+../MCAL/EXTI_Driver.c:130:7:EXTI3_IRQHandler	1
+../MCAL/EXTI_Driver.c:135:7:EXTI4_IRQHandler	1
+../MCAL/EXTI_Driver.c:140:7:EXTI9_5_IRQHandler	6
+../MCAL/EXTI_Driver.c:147:7:EXTI15_10_IRQHandler	7
