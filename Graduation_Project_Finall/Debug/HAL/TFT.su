@@ -1,4 +1,8 @@
-../HAL/TFT.c:17:6:TFT_init	40	static
-../HAL/TFT.c:62:6:TFT_send_command	16	static
-../HAL/TFT.c:77:6:TFT_send_data	16	static
-../HAL/TFT.c:94:6:TFT_send_image	32	static
+TFT.c:17:6:TFT_init	56	static
+TFT.c:71:6:TFT_SET_LOCATION	24	static
+TFT.c:90:6:TFT_SEND_Image	40	static
+TFT.c:114:6:TFT_SET_BACKGROUND	32	static
+TFT.c:127:6:TFT_MAKE_option	16	static
+TFT.c:148:6:TFT_send_command	16	static
+TFT.c:163:6:TFT_send_data	16	static
+TFT.c:180:9:TFT_send_image	24	static

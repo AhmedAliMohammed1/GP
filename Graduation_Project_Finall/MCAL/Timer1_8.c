@@ -60,7 +60,7 @@ void TIMER_1_8_start(TIM1_8_REG* TIMx,TIMERx_type* Sitting){
 
 
 	}else{
-		while(!TIMx->SR.BIT_NAME.UIF);
+ 		while(!TIMx->SR.BIT_NAME.UIF);
 		TIMx->SR.BIT_NAME.UIF=0;
 	}
 

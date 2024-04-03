@@ -27,39 +27,40 @@
 #define TFT_SET_Row_MODE 0x2B
 #define TFT_Memory_Write_MODE 0x2C
 #define TFT_Software_Reset_MODE 0x1
+#define TFT_Memory_Access_Control 0x36
+
+
 
 #define TFT_width 320
 #define TFT_height 480
 
-#define NO_PARKING_SIGN_FLAG	7
-#define NO_WAITING_SIGN_FLAG	8
-#define _100_KM_SIGN_FLAG		9
-#define _120_KM_SIGN_FLAG		10
-#define _20_KM_SIGN_FLAG		11
-#define _30_KM_SIGN_FLAG		12
-#define _40_KM_SIGN_FLAG		13
-#define _50_KM_SIGN_FLAG		14
-#define _70_KM_SIGN_FLAG		16
-#define _80_KM_SIGN_FLAG		17
-#define _90_KM_SIGN_FLAG		18
-#define STOP_SIGN_FLAG			19
+#define NO_PARKING_SIGN_FLAG	0x7
+#define NO_WAITING_SIGN_FLAG	0x8
+#define _100_KM_SIGN_FLAG		0x9
+#define _120_KM_SIGN_FLAG		0x10
+#define _20_KM_SIGN_FLAG		0x11
+#define _30_KM_SIGN_FLAG		0x12
+#define _40_KM_SIGN_FLAG		0x13
+#define _50_KM_SIGN_FLAG		0x14
+#define _70_KM_SIGN_FLAG		0x16
+#define _80_KM_SIGN_FLAG		0x17
+#define _90_KM_SIGN_FLAG		0x18
+#define STOP_SIGN_FLAG			0x19
 
 /********enums*******/
 typedef enum{
 	RGB_4_4_4=0x33,RGB_5_6_5=0x55,RGB_6_6_6=0x66
 }RGB_fromat;
-
+typedef enum{default_option,X_ROTATE,Y_ROTATE}IMAGE_option;
 
 /********Fun*******/
 void TFT_init(RGB_fromat RGB);
 void TFT_send_command(uint8_t command);
 void TFT_send_data(uint8_t data);
-void TFT_send_image(uint8_t image_flag);
-void send_frame();
-void send_frame1();
-void TFT_saveData(I2C_REG * I2Cx,uint16_t *data,uint32_t len,uint16_t add);
-void TFT_ReadData(I2C_REG * I2Cx,uint16_t *data,uint32_t len,uint16_t add);
-void TFT_send_image_v2(uint16_t *image);
+uint8_t TFT_send_image(uint8_t image_flag);
+void TFT_SEND_Image(uint16_t x1,uint16_t x2,uint16_t y1,uint16_t y2,uint16_t* image);
+void TFT_SET_BACKGROUND(uint16_t x1,uint16_t x2,uint16_t y1,uint16_t y2,uint8_t r,uint8_t g,uint8_t b);
+void TFT_MAKE_option(IMAGE_option OPTION);
 /********Defines*******/
 
 #endif /* INC_TFT_H_ */

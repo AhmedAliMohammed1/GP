@@ -22,7 +22,10 @@ void DMS_init(){
 
 uint8_t DMS_read(){
 	if((MCAL_Read_PIN(DMS_PORT, TOUCH1)) || (MCAL_Read_PIN(DMS_PORT, TOUCH2)) ||(MCAL_Read_PIN(DMS_PORT, TOUCH3)) || (MCAL_Read_PIN(DMS_PORT, TOUCH4))){
+		_TIM1_delay_ms(100);
+		if((MCAL_Read_PIN(DMS_PORT, TOUCH1)) || (MCAL_Read_PIN(DMS_PORT, TOUCH2)) ||(MCAL_Read_PIN(DMS_PORT, TOUCH3)) || (MCAL_Read_PIN(DMS_PORT, TOUCH4))){
 		return 1;
+		}
 	}
 	return 0;
 }

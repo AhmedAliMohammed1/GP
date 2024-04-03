@@ -1,6 +1,5 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (11.3.rel1)
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
@@ -15,13 +14,6 @@ C_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-FreeRTOS/portable/MemMang/%.o FreeRTOS/portable/MemMang/%.su FreeRTOS/portable/MemMang/%.cyclo: ../FreeRTOS/portable/MemMang/%.c FreeRTOS/portable/MemMang/subdir.mk
-	arm-none-eabi-gcc -gdwarf-2 "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F103CBTx -DSTM32F1 -c -I../Inc -I"C:/Users/medoo/Desktop/WorkSpace/Graduation_Project_Finall/FreeRTOS/include" -I"C:/Users/medoo/Desktop/WorkSpace/Graduation_Project_Finall/FreeRTOS/portable/ARM_CM3" -I"C:/Users/medoo/Desktop/WorkSpace/Graduation_Project_Finall/FreeRTOS/portable/MemMang" -I"C:/Users/medoo/Desktop/WorkSpace/Graduation_Project_Finall/HAL/inc" -I"C:/Users/medoo/Desktop/WorkSpace/Graduation_Project_Finall/MCAL/inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
-
-clean: clean-FreeRTOS-2f-portable-2f-MemMang
-
-clean-FreeRTOS-2f-portable-2f-MemMang:
-	-$(RM) ./FreeRTOS/portable/MemMang/heap_1.cyclo ./FreeRTOS/portable/MemMang/heap_1.d ./FreeRTOS/portable/MemMang/heap_1.o ./FreeRTOS/portable/MemMang/heap_1.su
-
-.PHONY: clean-FreeRTOS-2f-portable-2f-MemMang
+FreeRTOS/portable/MemMang/heap_1.o: ../FreeRTOS/portable/MemMang/heap_1.c
+	arm-none-eabi-gcc -gdwarf-2 "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F103CBTx -DSTM32F1 -c -I../Inc -I"C:/Users/Ahmed/Desktop/EmbeddedSys/Mastering-Embedded-System-Diploma/GRAD_Project/Graduation_Project_Finall/FreeRTOS/include" -I"C:/Users/Ahmed/Desktop/EmbeddedSys/Mastering-Embedded-System-Diploma/GRAD_Project/Graduation_Project_Finall/FreeRTOS/portable/ARM_CM3" -I"C:/Users/Ahmed/Desktop/EmbeddedSys/Mastering-Embedded-System-Diploma/GRAD_Project/Graduation_Project_Finall/FreeRTOS/portable/MemMang" -I"C:/Users/Ahmed/Desktop/EmbeddedSys/Mastering-Embedded-System-Diploma/GRAD_Project/Graduation_Project_Finall/HAL/inc" -I"C:/Users/Ahmed/Desktop/EmbeddedSys/Mastering-Embedded-System-Diploma/GRAD_Project/Graduation_Project_Finall/MCAL/inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"FreeRTOS/portable/MemMang/heap_1.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 

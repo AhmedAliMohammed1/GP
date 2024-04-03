@@ -1,7 +1,7 @@
-../MCAL/SPI.c:11:6:MCAL_SPI_init	24	static
-../MCAL/SPI.c:51:6:MCAL_SPI_Deinit	16	static
-../MCAL/SPI.c:57:9:MCAL_SPI_SendData	24	static
-../MCAL/SPI.c:73:6:MCAL_SPI_ReciveData	24	static
-../MCAL/SPI.c:90:6:MCAL_SET_GPIO	96	static
-../MCAL/SPI.c:143:6:SPI1_IRQHandler	16	static
-../MCAL/SPI.c:148:6:get_flag_source	16	static
+SPI.c:11:6:MCAL_SPI_init	24	static
+SPI.c:51:6:MCAL_SPI_Deinit	16	static
+SPI.c:57:9:MCAL_SPI_SendData	24	static
+SPI.c:73:6:MCAL_SPI_ReciveData	24	static
+SPI.c:90:6:MCAL_SET_GPIO	24	static
+SPI.c:143:6:SPI1_IRQHandler	16	static
+SPI.c:148:6:get_flag_source	16	static

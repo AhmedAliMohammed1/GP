@@ -1,8 +1,8 @@
-../HAL/LCD.c:4:6:EN_PULS	8	static
-../HAL/LCD.c:11:6:LCD_sendCommand	16	static
-../HAL/LCD.c:43:6:LCD_init	8	static
-../HAL/LCD.c:125:6:LCD_clearScreen	8	static
-../HAL/LCD.c:131:6:LCD_sendCharcter	16	static
-../HAL/LCD.c:164:6:LCD_sendString	24	static
-../HAL/LCD.c:170:6:LCD_moveCURSER	16	static
-../HAL/LCD.c:189:6:LCD_intgerToString	80	static
+LCD.c:4:6:EN_PULS	8	static
+LCD.c:11:6:LCD_sendCommand	16	static
+LCD.c:43:6:LCD_init	8	static
+LCD.c:125:6:LCD_clearScreen	8	static
+LCD.c:131:6:LCD_sendCharcter	16	static
+LCD.c:164:6:LCD_sendString	24	static
+LCD.c:170:6:LCD_moveCURSER	16	static
+LCD.c:189:6:LCD_intgerToString	80	static

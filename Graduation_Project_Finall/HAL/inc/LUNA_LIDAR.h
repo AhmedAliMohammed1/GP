@@ -10,8 +10,8 @@
 #define LUNA_LIDAR_H_
 #include <stdint.h>
 #define LUNA_UART_INSTANT USART3
-#define Distance_SET 100
-#define MAX_Distance_SET 100
+#define Distance_SET 300
+#define MAX_Distance_SET 500
 
 typedef enum
 {
@@ -34,5 +34,6 @@ typedef enum
 void LUNA_INIT(LUNA_MODES mode,OUTPUT_FORMAT format);
 
 void LUNA_dist(void);
-
+void LUNA_ENABLE();
+void LUNA_Disable();
 #endif /* LUNA_LIDAR_H_ */

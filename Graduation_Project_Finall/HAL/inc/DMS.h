@@ -9,6 +9,7 @@
 #define INC_DMS_H_
 
 #include "GPIO_Driver.h"
+#include "Timer1_8.h"
 #define TOUCH1	PIN_1
 #define TOUCH2	PIN_12
 #define TOUCH3	PIN_11

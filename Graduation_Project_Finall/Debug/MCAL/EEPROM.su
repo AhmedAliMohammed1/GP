@@ -1,2 +1,2 @@
-../MCAL/EEPROM.c:10:6:EPPROM_write	32	static
-../MCAL/EEPROM.c:29:6:EPPROM_READ	32	static
+EEPROM.c:10:6:EPPROM_write	32	static
+EEPROM.c:29:6:EPPROM_READ	32	static

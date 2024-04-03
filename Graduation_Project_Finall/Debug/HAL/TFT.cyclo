@@ -1,4 +1,0 @@
-../HAL/TFT.c:17:6:TFT_init	1
-../HAL/TFT.c:62:6:TFT_send_command	1
-../HAL/TFT.c:77:6:TFT_send_data	1
-../HAL/TFT.c:94:6:TFT_send_image	6

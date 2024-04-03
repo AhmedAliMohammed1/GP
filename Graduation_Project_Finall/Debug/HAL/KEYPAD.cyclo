@@ -1,2 +1,0 @@
-../HAL/KEYPAD.c:13:6:KEYPAD_init	1
-../HAL/KEYPAD.c:24:15:Get_Pressed_KEY	21

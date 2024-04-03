@@ -104,6 +104,7 @@ void MCAL_USART_Deinit(USART_REG *USARTx){
 
 void MCAL_USART_SendData(USART_REG *USARTx,uint8_t data){
 	USART_Config_t * L_P_config_pin=NULL;
+//	USARTx->DR=0;
 	if(USARTx==USART1){
 		L_P_config_pin=&G_P_config[0];
 	}		else if(USARTx==USART2){
