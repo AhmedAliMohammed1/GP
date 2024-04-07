@@ -18,4 +18,5 @@
 
 
 void DMS_init();
+uint8_t DMS_read();
 #endif /* INC_DMS_H_ */

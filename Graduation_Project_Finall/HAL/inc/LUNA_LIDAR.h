@@ -9,6 +9,7 @@
 #ifndef LUNA_LIDAR_H_
 #define LUNA_LIDAR_H_
 #include <stdint.h>
+#include "Timer1_8.h"
 #define LUNA_UART_INSTANT USART3
 #define Distance_SET 300
 #define MAX_Distance_SET 500

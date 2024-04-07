@@ -89,13 +89,14 @@ uint8_t ACC_START_OF_FRAME=0; //'#'
 uint8_t ACC_END_OF_FRAME=0; //'*'
 uint16_t GR_ACC_FLAG_=0;
 uint8_t GR_ACC_FLAG_send=0;
-
+uint8_t DMS__zero_COUNTER=0,DMS__one_COUNTER=0;
 /*****************************************/
 uint16_t ACC_dis=0;
 uint16_t ACC_AMP=0;
 /////////////////////////////
 TaskHandle_t FACE_ID_TASK_Handle;
 TaskHandle_t TSR_Handller_TASK_Handle;
+
 uint8_t CAR_ON_counter=0;
 uint8_t CAR_login_counter=0;
 

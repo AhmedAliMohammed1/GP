@@ -30,6 +30,12 @@
 
 #include <stdint.h>
 
+//static const uint16_t _100_KM_SIGN;
+//static const uint16_t _40_KM_SIGN;
+//static const uint16_t _NO_SIGN;
+//
+//static const uint16_t NO_WAITING_SIGN;
+//static const uint16_t _120_KM_SIGN;
 
 
 static const uint16_t _100_KM_SIGN[10000] = {

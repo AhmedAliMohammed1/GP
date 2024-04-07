@@ -77,24 +77,34 @@ void Sys_Clk_init(){
 
 
 void DMS_Handller_TASK(){
-	while(1){
-		if(xSemaphoreTake(DMS_Semaphore,5) ==pdTRUE){
-			// here the action would take
-			MCAL_USART_SendData(TSR_UART_INSTANT, DMS_TAKE_ACTION);
-		}else{
-			MCAL_USART_SendData(TSR_UART_INSTANT, DMS_Release_ACTION);
-		}
 
-	}
-}
-void DMS_read_TASK(){
-	while(1){
-		if(DMS_read() ==0){
-			xSemaphoreGive(DMS_Semaphore);
-		}
 
-	}
+  while(1){
+
+    if(DMS_read()==0){
+      DMS__one_COUNTER=0;
+    if(  DMS__zero_COUNTER==0){
+      MCAL_USART_SendData(TSR_UART_INSTANT, DMS_TAKE_ACTION);
+      DMS__zero_COUNTER++;
+    }
+
+    }else{
+      DMS__zero_COUNTER=0;
+      if(DMS__one_COUNTER==0){
+        MCAL_USART_SendData(TSR_UART_INSTANT, DMS_Release_ACTION);
+        DMS__one_COUNTER++;
+      }
+    }
+
+
+
+
+
+
+
+  }
 }
+
 
 
 /***********************************/
@@ -307,6 +317,7 @@ void ACC_throttel_Handller_TASK(){
 void ACC_STATE_READ_TASK(){
 	while(1){
 
+//		LUNA_dist();
 		if(MCAL_Read_PIN(ACC_BOTTON_PORT, ACC_BOTTON_PIN)){
 			_TIM1_delay_ms(30);
 			if(MCAL_Read_PIN(ACC_BOTTON_PORT, ACC_BOTTON_PIN)){
@@ -560,9 +571,9 @@ void TSR_init(void){
 
 void CAR_ON_Handler(){
 	CAR_login_counter=0;
-	if((MCAL_Read_PIN(GPIOB, PIN_1)==0) ){
+	if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==0) ){
 		_TIM1_delay_ms(30);
-		if((MCAL_Read_PIN(GPIOB, PIN_1)==0) ){
+		if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==0) ){
 
 			if(CAR_ON_counter ==1 &&GR_FACE_FLAG_send !=0x99&&GR_FACE_FLAG_send !=0x00){
 				//				MCAL_USART_Deinit(LUNA_UART_INSTANT);
@@ -570,6 +581,8 @@ void CAR_ON_Handler(){
 				CAR_ON_counter=0;
 				GR_FACE_FLAG_send=0;
 				CAR_login_counter=0;
+				DMS__zero_COUNTER=0;
+				DMS__one_COUNTER=0;
 				//UART SEND
 				TFT_SET_BACKGROUND(0,159,0,127,0xff,0xff,0xff);
 //
@@ -578,6 +591,7 @@ void CAR_ON_Handler(){
 				_TIM1_delay_ms(30);
 
 				vTaskResume(FACE_ID_TASK_Handle);
+//				vTaskPrioritySet(FACE_ID_TASK_Handle,5);
 
 			}
 		}
@@ -595,9 +609,9 @@ void CAR_ON_init(){
 void FACE_ID_TASK(){
 	while(1){
 //		_TIM1_delay_ms(500);
-		if((MCAL_Read_PIN(GPIOB, PIN_1)==1) ){
+		if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==1) ){
 			_TIM1_delay_ms(30);
-			if((MCAL_Read_PIN(GPIOB, PIN_1)==1) ){
+			if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==1) ){
 				//UART SEND
 
 				//				MCAL_USART_Deinit(LUNA_UART_INSTANT);
@@ -616,6 +630,7 @@ void FACE_ID_TASK(){
 					//				LUNA_INIT(CONTIOUS_RANGING_MODE,BYTE_9_CM);
 					//				LUNA_ENABLE();
 					vTaskSuspend(FACE_ID_TASK_Handle);
+//					vTaskPrioritySet(FACE_ID_TASK_Handle,1);
 
 
 				}
@@ -646,22 +661,35 @@ void FACE_ID_TASK(){
 
 void HW_init(){
 	Sys_Clk_init();
-	_TIM1_delay_s(1);
+	_TIM1_delay_ms(100);
 	////////////*********TFT_init***************//////////////////
 	TFT_init(RGB_5_6_5);
+	_TIM1_delay_ms(100);
+
 	////////////*********TSR init***************//////////////////
 	TSR_init();
+	_TIM1_delay_ms(100);
 
 	////////////*********ACC_throtel_init*********//////////////////
 	ACC_throtel_init();
+	_TIM1_delay_ms(100);
+
 	////////////*********DAC init***************//////////////////
 	ACC_DAC_init();
+	_TIM1_delay_ms(100);
+
 	////////////*********DMS_init***************//////////////////
 	DMS_init();
+	_TIM1_delay_ms(100);
+
 	////////////*********CAR_ON_init***************//////////////////
 	CAR_ON_init();
+	_TIM1_delay_ms(100);
+
 	////////////*********LUNA_INIT***************//////////////////
 	LUNA_INIT(CONTIOUS_RANGING_MODE,BYTE_9_CM);
+	_TIM1_delay_ms(100);
+//	MCAL_USART_Deinit(LUNA_UART_INSTANT);
 
 
 	//	PIN_config PINx={PIN_13,OUTPUT_PP,SPEED_10};
@@ -672,7 +700,7 @@ void HW_init(){
 }
 int main(void)
 {
-	_TIM1_delay_s(2);
+//	_TIM1_delay_s(2);
 	HW_init();
 
 	///////////////////////////
@@ -700,17 +728,14 @@ int main(void)
 		Error_Handller();
 	}
 
-	if(xTaskCreate(DMS_read_TASK,"DMS_read_TASK",256,NULL,2,NULL)!=pdPASS ){
-		Error_Handller();
-	}
+
 	///////////////////////
 	if(xTaskCreate(FACE_ID_TASK,"FACE_ID_TASK",256,NULL,5,&FACE_ID_TASK_Handle)!=pdPASS ){
 		Error_Handller();
 	}
 
 
-	DMS_Semaphore = xSemaphoreCreateBinary();
-	TSR__Flags_Queue=xQueueCreate(10,sizeof(char));
+    MCAL_USART_SendData(TSR_UART_INSTANT, 'D');
 
 	vTaskStartScheduler();
 

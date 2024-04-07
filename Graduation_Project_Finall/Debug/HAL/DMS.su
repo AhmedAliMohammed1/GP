@@ -1,2 +1,2 @@
-DMS.c:11:6:DMS_init	16	static
-DMS.c:23:9:DMS_read	8	static
+../HAL/DMS.c:11:6:DMS_init	24	static
+../HAL/DMS.c:23:9:DMS_read	8	static
