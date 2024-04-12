@@ -70,4 +70,7 @@ void Icu_setEdgeDetectionType (TIM1_8_REG* TIMx,Edge dir);
 uint16_t TIMER_1_getTime();
 void TIMER_1_Clear();
 void TIMER_1_Deint();
+void _TIM1_delay_us(uint16_t delay);
+void _TIM1_delay_ms(uint16_t delay);
+void _TIM1_delay_s(uint16_t delay);
 #endif /* INC_TIMER1_8_H_ */

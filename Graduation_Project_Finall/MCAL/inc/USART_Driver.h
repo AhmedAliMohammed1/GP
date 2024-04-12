@@ -65,7 +65,7 @@ typedef struct {
 #define Mantissa_100(F_CLK,BUAD_RATE)  (uint32_t)((USARTDIV(F_CLK,BUAD_RATE)) *100)
 #define DIV_Fraction(F_CLK,BUAD_RATE)  (uint32_t)((( (USARTDIV_100(F_CLK,BUAD_RATE)) -  (Mantissa_100(F_CLK,BUAD_RATE)) )*16)/100)
 #define BRR(F_CLK,BUAD_RATE)			(( (Mantissa(F_CLK,BUAD_RATE)) <<4) | ((DIV_Fraction(F_CLK,BUAD_RATE))&0xF) )
-
+#define UART_STATUS_CHECK(UART_inistant) (UART_inistant->SR &(1<<5))
 
 
 

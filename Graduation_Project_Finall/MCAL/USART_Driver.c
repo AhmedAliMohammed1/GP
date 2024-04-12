@@ -181,11 +181,18 @@ void SET_GPIO(USART_REG *USARTx){
 		}
 }
 void USART1_IRQHandler(void){
-	G_P_config[0].P_Call_Back();
+	if( UART_STATUS_CHECK(USART1)){
+		G_P_config[0].P_Call_Back();
+
+	}
 }
 void USART2_IRQHandler(void){
-	G_P_config[1].P_Call_Back();
+	if( UART_STATUS_CHECK(USART2)){
+		G_P_config[1].P_Call_Back();
+	}
 }void USART3_IRQHandler(void){
-	G_P_config[2].P_Call_Back();
+	if( UART_STATUS_CHECK(USART3)){
+		G_P_config[2].P_Call_Back();
+	}
 }
 

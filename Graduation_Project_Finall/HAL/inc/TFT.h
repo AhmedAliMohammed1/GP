@@ -57,10 +57,16 @@ typedef enum{default_option,X_ROTATE,Y_ROTATE}IMAGE_option;
 void TFT_init(RGB_fromat RGB);
 void TFT_send_command(uint8_t command);
 void TFT_send_data(uint8_t data);
-uint8_t TFT_send_image(uint8_t image_flag);
+uint8_t TFT_send_TSR_image(uint8_t image_flag);
 void TFT_SEND_Image(uint16_t x1,uint16_t x2,uint16_t y1,uint16_t y2,uint16_t* image);
 void TFT_SET_BACKGROUND(uint16_t x1,uint16_t x2,uint16_t y1,uint16_t y2,uint8_t r,uint8_t g,uint8_t b);
 void TFT_MAKE_option(IMAGE_option OPTION);
+void TFT_KM_H_ICON_Print();
+void TFT_SPEED_ICON_Print();
+void TFT_send_ACC_image(uint8_t NUMBER);
+void TFT_cruise_control_ICON_Print(uint8_t on_off);
+void TFT_HOD_ICON_Print(uint8_t on_off);
+void TFT_Welcome_ICON_Print();
 /********Defines*******/
 
 #endif /* INC_TFT_H_ */

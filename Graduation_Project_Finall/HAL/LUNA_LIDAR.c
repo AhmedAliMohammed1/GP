@@ -7,7 +7,7 @@ uint8_t LUNA_CheckSum=0;
 void LUNA_CallBack(){
 	static uint8_t x=0;
 
-	if(  LUNA_UART_INSTANT->SR &(1<<5)){
+
 		if(x==0){
 			if(MCAL_USART_ReciveData(LUNA_UART_INSTANT)==0x59){
 				x++;
@@ -44,7 +44,7 @@ void LUNA_CallBack(){
 			x=0;
 		}
 
-		}
+
 
 
 }

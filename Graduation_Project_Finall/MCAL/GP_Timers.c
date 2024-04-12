@@ -63,7 +63,7 @@ void MCAL_SET_GP_TIMx_GPIO(GP_TIMx_REG* TIMx,GP_TIMER_Mode MODE,uint8_t CHx){
 				MCAL_GPIO_init(GPIOA, &pin);
 				break;
 			default:
-				ERROR_HANDLER();
+				GP_ERROR_HANDLER();
 			}
 			break;
 			case ICU:
@@ -87,7 +87,7 @@ void MCAL_SET_GP_TIMx_GPIO(GP_TIMx_REG* TIMx,GP_TIMER_Mode MODE,uint8_t CHx){
 					MCAL_GPIO_init(GPIOA, &pin);
 					break;
 				default:
-					ERROR_HANDLER();
+					GP_ERROR_HANDLER();
 				}
 				break;
 				default:
@@ -120,7 +120,7 @@ void MCAL_SET_GP_TIMx_GPIO(GP_TIMx_REG* TIMx,GP_TIMER_Mode MODE,uint8_t CHx){
 				MCAL_GPIO_init(GPIOB, &pin);
 				break;
 			default:
-				ERROR_HANDLER();
+				GP_ERROR_HANDLER();
 			}
 			break;
 			case ICU:
@@ -143,7 +143,7 @@ void MCAL_SET_GP_TIMx_GPIO(GP_TIMx_REG* TIMx,GP_TIMER_Mode MODE,uint8_t CHx){
 					MCAL_GPIO_init(GPIOB, &pin);
 					break;
 				default:
-					ERROR_HANDLER();
+					GP_ERROR_HANDLER();
 				}
 				break;
 				default:
@@ -178,7 +178,7 @@ void MCAL_SET_GP_TIMx_GPIO(GP_TIMx_REG* TIMx,GP_TIMER_Mode MODE,uint8_t CHx){
 				MCAL_GPIO_init(GPIOB, &pin);
 				break;
 			default:
-				ERROR_HANDLER();
+				GP_ERROR_HANDLER();
 			}
 			break;
 			case ICU:
@@ -201,7 +201,7 @@ void MCAL_SET_GP_TIMx_GPIO(GP_TIMx_REG* TIMx,GP_TIMER_Mode MODE,uint8_t CHx){
 					MCAL_GPIO_init(GPIOB, &pin);
 					break;
 				default:
-					ERROR_HANDLER();
+					GP_ERROR_HANDLER();
 				}
 				break;
 				default:
@@ -232,7 +232,7 @@ void GP_TIMx_start(GP_TIMx_REG* TIMx,GP_TIMERx_config* Sitting,GP_TIMERx_NORMAL_
 		else if(TIMx== TIM4) {RCC->APB1ENR|=(1<<2);		g_GP_Sitting[2]=(* Sitting);}
 
 		// 2.select the pre vale
-		TIMx->PSC=Sitting->TIME_PSC;
+		TIMx->PSC=Sitting->TIME_PSC -1;
 
 		TIMx->ARR=Sitting->TIME_ARR;
 
@@ -312,6 +312,33 @@ void GP_TIMx__CTC_change(GP_TIMx_REG* TIMx,uint8_t ch_num,uint16_t ccr_val){
 
 	}
 }
+void GP_TIMx__CTC_change_freq_width(GP_TIMx_REG* TIMx,uint8_t ch_num,uint16_t arr,uint16_t ccr_val){
+	TIMx->ARR=arr;
+	switch(ch_num){
+	case 1:
+		TIMx->CCR1=ccr_val;
+
+		break;
+	case 2:
+		TIMx->CCR2=ccr_val;
+
+		break;
+	case 3:
+		TIMx->CCR3=ccr_val;
+
+
+		break;
+	case 4:
+		TIMx->CCR4=ccr_val;
+
+
+		break;
+	default:
+		GP_ERROR_HANDLER();
+		break;
+
+	}
+}
 void GP_TIMx__CTC_start(GP_TIMx_REG* TIMx,GP_TIMERx_config* Sitting,GP_TIMERx_CTC_config* CTC_Sitting){
 
 	if(Sitting->mode==PWM ||Sitting->mode==CTC ){
@@ -322,7 +349,7 @@ void GP_TIMx__CTC_start(GP_TIMx_REG* TIMx,GP_TIMERx_config* Sitting,GP_TIMERx_CT
 		else if(TIMx== TIM3) {RCC->APB1ENR|=(1<<1);	g_GP_Sitting[1]=(* Sitting);	}
 		else if(TIMx== TIM4) {RCC->APB1ENR|=(1<<2);		g_GP_Sitting[2]=(* Sitting);}
 		// 2.select the pre vale
-		TIMx->PSC=Sitting->TIME_PSC;
+		TIMx->PSC=Sitting->TIME_PSC -1;
 
 		TIMx->ARR=Sitting->TIME_ARR;
 		TIMx->CR1.BIT_NAME.ARPE=0;

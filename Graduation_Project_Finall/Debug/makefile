@@ -39,13 +39,13 @@ $(wildcard ../makefile.targets) \
 
 
 BUILD_ARTIFACT_NAME := Graduation_Project_Finall
-BUILD_ARTIFACT_EXTENSION := axf
+BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-Graduation_Project_Finall.axf \
+Graduation_Project_Finall.elf \
 
 MAP_FILES += \
 Graduation_Project_Finall.map \
@@ -64,11 +64,11 @@ Graduation_Project_Finall.hex \
 all: main-build
 
 # Main-build Target
-main-build: Graduation_Project_Finall.axf secondary-outputs
+main-build: Graduation_Project_Finall.elf secondary-outputs
 
 # Tool invocations
-Graduation_Project_Finall.axf Graduation_Project_Finall.map: $(OBJS) $(USER_OBJS) C:\Users\medoo\Desktop\GP\Graduation_Project_Finall\STM32F103CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -gdwarf-2 -o "Graduation_Project_Finall.axf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\medoo\Desktop\GP\Graduation_Project_Finall\STM32F103CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Graduation_Project_Finall.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Graduation_Project_Finall.elf Graduation_Project_Finall.map: $(OBJS) $(USER_OBJS) C:\Users\medoo\Desktop\GP\Graduation_Project_Finall\STM32F103CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -gdwarf-2 -o "Graduation_Project_Finall.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\medoo\Desktop\GP\Graduation_Project_Finall\STM32F103CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Graduation_Project_Finall.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -89,7 +89,7 @@ Graduation_Project_Finall.hex: $(EXECUTABLES) makefile objects.list $(OPTIONAL_T
 
 # Other Targets
 clean:
-	-$(RM) Graduation_Project_Finall.axf Graduation_Project_Finall.hex Graduation_Project_Finall.list Graduation_Project_Finall.map default.size.stdout
+	-$(RM) Graduation_Project_Finall.elf Graduation_Project_Finall.hex Graduation_Project_Finall.list Graduation_Project_Finall.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_HEX)

@@ -49,7 +49,14 @@ void Error_Handller(){
 	while(1);
 }
 
-
+/**================================================================
+ * @Fn- Sys_Clk_init
+ * @brief - this fun shall to select the system clock accourding to datasheet
+ * @param [in] - void
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
 void Sys_Clk_init(){
 	// system speed 36Mhz
 	RCC->CFGR |=(0b0101 <<18); //1111: PLL input clock x 16
@@ -67,21 +74,89 @@ void Sys_Clk_init(){
 
 
 
+/********************* HALL EFFECT *****************/
+/**================================================================
+ * @Fn- HALL_EFFECT_TIMER_ENABLE
+ * @brief - this fun shall to enable and disable global variable every 1 sec to control other handler
+ * @param [in] - void
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
+void HALL_EFFECT_TIMER_ENABLE(){
+	HALL_TIMER_EN ^=1;
+
+}
+/**================================================================
+ * @Fn- HALL_EFFECT_HANDLLER
+ * @brief - this fun shall to get final speed of vichle using hall effect sensor and HALL_EFFECT_TIMER_ENABLE to calulate the time
+ * @param [in] - void
+ * @param [out] - Void
+ * @retval -
+ * Note- this fun called every rissing edege from hall effect sensor
+ * and update the HALL_EFFECT_KM_H every 1sec and caluclate it from HALL_EFFECT_N_PULSES
+ */
+void HALL_EFFECT_HANDLLER(){
+	if(HALL_TIMER_EN){
+		HALL_EFFECT_COUNTER++;
+	}else{
+		if(HALL_EFFECT_COUNTER){
+		HALL_EFFECT_N_PULSES=HALL_EFFECT_COUNTER;
+		HALL_EFFECT_RPS=((HALL_EFFECT_N_PULSES*HALL_EFFECT_TIME_CONVERSION)/HALL_EFFECT_REV_PER_PULSES);
+		HALL_EFFECT_RPM=HALL_EFFECT_RPS *60;
+//		_TIM1_delay_ms(1);
+		HALL_EFFECT_KM_H=((HALL_EFFECT_RPM*3*PI*MOTOR_SHAFT_RADIUS)/(2500000));
+		_TIM1_delay_ms(1);
+		HALL_EFFECT_COUNTER=0;
+		}
+	}
+
+}
+/**================================================================
+ * @Fn- HALL_EFECT_Init
+ * @brief - this fun shall to init the hall effect EXTI and the timer that calulate the time
+ * @param [in] - void
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
+void HALL_EFECT_Init(){
+	{
+		GP_TIMERx_config GP_sitting={(MCAL_GET_H_CLCK()/1000) // to get tick every 1ms
+				,1000 //to get interrupt every 1SEC
+				,0,0,INT_EN,NORMAL,HALL_EFFECT_TIMER_ENABLE};
+		GP_TIMERx_NORMAL_config GP_sitting_NORMA={Up};
+		GP_TIMx_start(HALL_EFFECT_TIMx_instant,&GP_sitting,&GP_sitting_NORMA);
+	}
 
 
+	{
+		EXTI_config_t HALL_EFFECT_SITTING={HALL_EFFECT_EXTI_LINE,RISEING,ENABLE,HALL_EFFECT_HANDLLER};
+		MCAL_EXTI_init(&HALL_EFFECT_SITTING);
+
+	}
+}
+
 /************DMS TASK*************/
 /************DMS TASK*************/
 /************DMS TASK*************/
 /************DMS TASK*************/
 /************DMS TASK*************/
 
-
+/**================================================================
+ * @Fn- DMS_Handller_TASK
+ * @brief - this TASK shall to take the DMS sensors read and take action depending on it
+ * @param [in] - void
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
 void DMS_Handller_TASK(){
 
 
   while(1){
-
-    if(DMS_read()==0){
+	  DMS_DATA=DMS_read();
+    if(DMS_DATA==0){
       DMS__one_COUNTER=0;
     if(  DMS__zero_COUNTER==0){
       MCAL_USART_SendData(TSR_UART_INSTANT, DMS_TAKE_ACTION);
@@ -137,22 +212,42 @@ void DMS_Handller_TASK(){
 
 
 
+/**================================================================
+ * @Fn- ACC_CONVERT_ADC_TODICMAL
+ * @brief - this fun shall to ADC value and convert it to Digital value to send it to DAC
+ * @param [in] - ACC_THROTTEL_ (ADC value)
+ * @param [out] - ACC_DICIMAL_VAL (Disimal Value)
+ * @retval -
+ * Note-
+ */
 
 
-
-uint16_t ACC_THROTTEL_DATA=0x00;
-uint8_t  ACC_DICIMAL_VAL=0;
 uint8_t ACC_CONVERT_ADC_TODICMAL(uint8_t ACC_THROTTEL_){
 	uint8_t ACC_DICIMAL_VAL=((((ACC_THROTTEL_-ACC_TROTTEL_MIN_ADC_VAL)*(ACC_DAC_MAX_DECIMAL-ACC_DAC_MIN_DECIMAL))/(ACC_TROTTEL_Max_ADC_VAL-ACC_TROTTEL_MIN_ADC_VAL))+ACC_DAC_MIN_DECIMAL);
 
 	return ACC_DICIMAL_VAL;
 
 }
+/**================================================================
+ * @Fn- ACC_ADC_CallBack
+ * @brief - this fun shall to read the ADC value if the ADC work with interrupt
+ * @param [in] - void
+ * @param [out] - void
+ * @retval -
+ * Note- the ADC must work as interrupt otherwise this fun will not work
+ */
 void ACC_ADC_CallBack(){
 	ADC_read(ADC1,ACC_THROTTEL_CHx,&ACC_THROTTEL_DATA);
 
 }
-
+/**================================================================
+ * @Fn- ACC_throtel_init
+ * @brief - this fun shall to init the ACC( INIT ADC,ACC GPIO PIN)
+ * @param [in] - void
+ * @param [out] - void
+ * @retval -
+ * Note-
+ */
 void ACC_throtel_init(){
 	ADC_Analog_WDG AWDG={0,0,0,0};
 	ADC_CONFIG config={ACC_THROTTEL_CHx,ADC_Continuous_conversion,ADC_1_5_cycles,ADC_Polling,&AWDG,ACC_ADC_CallBack};
@@ -162,6 +257,14 @@ void ACC_throtel_init(){
 	MCAL_GPIO_init(ACC_BOTTON_PORT, &PINx);
 
 }
+/**================================================================
+ * @Fn- ACC_throtel_init
+ * @brief - this fun shall to init the DAC
+ * @param [in] - void
+ * @param [out] - void
+ * @retval -
+ * Note-
+ */
 void ACC_DAC_init(){
 	PIN_config PINx={ACC_DAC_0,OUTPUT_PP,SPEED_10};
 	MCAL_GPIO_init(GPIOA, &PINx);
@@ -183,16 +286,16 @@ void ACC_DAC_init(){
 }
 
 
+
 /**================================================================
- * @Fn- TSR_START
- * @brief - this fun shall to start the frame of TSR
- * @param [in] - void
- * @param [out] - Void
+ * @Fn- ACC_throtel_init
+ * @brief - this fun shall to send the data to the DAC to get the analog volt
+ * @param [in] - decimal_val the disimal value
+ * @param [out] - void
  * @retval -
- * Note-
+ * Note- the DAC designed is 8-bit dac so the value should be between 0-255
+ * and we need the volt not be less 0.8 so decimal_val sould be between 64-255
  */
-
-
 
 void ACC_FROM_ADC_TO_DAC(uint16_t decimal_val){
 
@@ -215,7 +318,7 @@ void ACC_FROM_ADC_TO_DAC(uint16_t decimal_val){
 /**================================================================
  * @Fn- ACC_Handller_TASK
  * @brief - this task shall to get the distance form luna lidar and start
- * to send the action through can bus to atmega
+ * change the state of the veichle
  * @param [in] - void
  * @param [out] - Void
  * @retval -
@@ -263,12 +366,12 @@ void ACC_Handller_TASK(){
  * @param [in] - void
  * @param [out] - Void
  * @retval -
- * Note-
+ * Note- ACC_DICIMAL_VAL is a global variable and update every 1ms from ACC_STATE_READ_TASK
  */
 
 void ACC_throttel_Handller_TASK(){
 	uint8_t ACC_counter=0;
-	uint16_t ADC_to_send=0,ADC_SAVED=0;
+	uint16_t ADC_SAVED=0;
 	while(1){
 
 		if(ACC_ST==ACC_ON){
@@ -307,7 +410,8 @@ void ACC_throttel_Handller_TASK(){
 }
 /**================================================================
  * @Fn- ACC_throttel_Handller_TASK
- * @brief - this task shall to get if the ACC is on or not
+ * @brief - this task shall to read the state of ACC_BOTTON_PIN
+ * and read THROTTEL_DATA and convert it to DICIMAL_VAL
  * @param [in] - void
  * @param [out] - Void
  * @retval -
@@ -322,6 +426,8 @@ void ACC_STATE_READ_TASK(){
 			_TIM1_delay_ms(30);
 			if(MCAL_Read_PIN(ACC_BOTTON_PORT, ACC_BOTTON_PIN)){
 				ACC_ST=1;
+
+
 			}
 		}else{
 			ACC_ST=0;
@@ -372,19 +478,25 @@ void ACC_STATE_READ_TASK(){
 
 
 /**================================================================
- * @Fn- TSR_Handller_TASK
- * @brief - this task shall to get the flags from the TSR and decide what sign should printed
+ * @Fn- TFT_Handller_TASK
+ * @brief - this task shall to print various things to the TFT
  * @param [in] - void
  * @param [out] - Void
  * @retval -
- * Note-
+ * Note- it must to change the Priority of this task while sending the data to TFT screen to make sure
+ * that there is no data corruption
  */
-void TSR_Handller_TASK(){
+void TFT_Handller_TASK(){
 	while(1){
 		//	  if(GR_TSR_FLAG_OLED_send !=0x99){
 		vTaskPrioritySet(TSR_Handller_TASK_Handle,4);
-		TFT_send_image(GR_TSR_FLAG_OLED_send);
+		TFT_send_ACC_image(HALL_EFFECT_KM_H);
+		TFT_send_TSR_image(GR_TSR_FLAG_OLED_send);
+		TFT_cruise_control_ICON_Print(ACC_ST);
+		TFT_HOD_ICON_Print(DMS_DATA);
 		vTaskPrioritySet(TSR_Handller_TASK_Handle,2);
+
+
 		//	  }
 	}
 }
@@ -392,29 +504,17 @@ void TSR_Handller_TASK(){
 /**================================================================
  * @Fn- TSR_call_Back
  * @brief - this task shall to get the flags PC using TSR_UART_INSTANT
- * to send the action through can bus to atmega
+ * to send the actions to other tasks
  * @param [in] - void
  * @param [out] - Void
  * @retval -
  * Note-
  */
 void TSR_call_Back(void){
-	if(  USART1->SR &(1<<5)){
-		PC_Uart_Flag=  MCAL_USART_ReciveData(USART1);
+	PC_Uart_Flag=  MCAL_USART_ReciveData(TSR_UART_INSTANT);
 
 
-	}
 
-
-	//	MCAL_USART_SendData(USART1, PC_Uart_Flag);
-	/*
-	  0x38 0x2A
-	  0x0038
-	  0x0008
-
-	  0x0000 | 0x0008
-	  0x0008
-	 */
 	switch(PC_Uart_Flag){
 	case '#':
 		TSR_START_Flag=1;
@@ -432,11 +532,11 @@ void TSR_call_Back(void){
 		break;
 
 	case '@':
-		ACC_START_OF_FRAME=1;
-		ACC_END_OF_FRAME=0;
+		DMS_START_OF_FRAME=1;
+		DMS_END_OF_FRAME=0;
 		break;
 	case '&':
-		ACC_END_OF_FRAME=1;
+		DMS_END_OF_FRAME=1;
 		break;
 
 	}
@@ -495,22 +595,22 @@ void TSR_call_Back(void){
 	////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////
-	if(ACC_START_OF_FRAME){
+	if(DMS_START_OF_FRAME){
 		if(PC_Counter ==0)
 			PC_Uart_Flag=0;
 
-		if(ACC_END_OF_FRAME ==0){
-			GR_ACC_FLAG_ = (GR_ACC_FLAG_<<8)| PC_Uart_Flag;
+		if(DMS_END_OF_FRAME ==0){
+			GR_DMS_FLAG_ = (GR_DMS_FLAG_<<8)| PC_Uart_Flag;
 			PC_Counter++;
 
 
 		}else{
-			GR_ACC_FLAG_ &=0x0F0F;
-			GR_ACC_FLAG_send = ((GR_ACC_FLAG_ &0x0F00)>>4) |((GR_ACC_FLAG_&0x000F));
-			GR_ACC_FLAG_=0;
+			GR_DMS_FLAG_ &=0x0F0F;
+			GR_DMS_FLAG_send = ((GR_DMS_FLAG_ &0x0F00)>>4) |((GR_DMS_FLAG_&0x000F));
+			GR_DMS_FLAG_=0;
 			///////////////
-			ACC_START_OF_FRAME=0;
-			ACC_END_OF_FRAME=0;
+			DMS_START_OF_FRAME=0;
+			DMS_END_OF_FRAME=0;
 			PC_Counter=0;
 
 
@@ -524,14 +624,6 @@ void TSR_call_Back(void){
 
 
 
-	//  if(PC_Uart_Flag != '*'){
-	//    GR_TSR_FLAG_OLED = (GR_TSR_FLAG_OLED<<8)| PC_Uart_Flag;
-	//  }else{
-	//    GR_TSR_FLAG_OLED &=0x0F0F;
-	//    GR_TSR_FLAG_OLED_send = ((GR_TSR_FLAG_OLED &0x0F00)>>4) |((GR_TSR_FLAG_OLED&0x000F));
-	//    GR_TSR_FLAG_OLED=0;
-	//
-	//  }
 
 
 }
@@ -568,16 +660,22 @@ void TSR_init(void){
 /************FACE ID TASK*************/
 /************FACE ID TASK*************/
 /************FACE ID TASK*************/
-
+/**================================================================
+ * @Fn- CAR_ON_Handler
+ * @brief - this fun shall to  off the car depending on EXTI when detecting the FALLING edge from the switch
+ * @param [in] - void
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
 void CAR_ON_Handler(){
 	CAR_login_counter=0;
 	if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==0) ){
-		_TIM1_delay_ms(30);
+		_TIM1_delay_ms(30); //depouncing delay
 		if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==0) ){
 
 			if(CAR_ON_counter ==1 &&GR_FACE_FLAG_send !=0x99&&GR_FACE_FLAG_send !=0x00){
-				//				MCAL_USART_Deinit(LUNA_UART_INSTANT);
-				//				NVIC_ISER1 |=(1<<(USART1_IRQ-32));
+
 				CAR_ON_counter=0;
 				GR_FACE_FLAG_send=0;
 				CAR_login_counter=0;
@@ -600,35 +698,48 @@ void CAR_ON_Handler(){
 
 
 }
+/**================================================================
+ * @Fn- CAR_ON_init
+ * @brief - this fun shall to init the swtich that control the car on off
+ * @param [in] - void
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
 void CAR_ON_init(){
 	EXTI_config_t CAR_BOTTON_SITTING={EXT1PB1,FALLING,ENABLE,CAR_ON_Handler};
 	MCAL_EXTI_init(&CAR_BOTTON_SITTING);
 	PIN_config pin={CONTACT_BOTTON_PIN,INPUT_PD};
 	MCAL_GPIO_init(CONTACT_BOTTON_PORT, &pin);
 }
+/**================================================================
+ * @Fn- FACE_ID_TASK
+ * @brief - this task shall to control the on and off the car depending on the FACE ID and Mobile APP
+ * @param [in] - void
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
 void FACE_ID_TASK(){
 	while(1){
 //		_TIM1_delay_ms(500);
 		if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==1) ){
-			_TIM1_delay_ms(30);
+			_TIM1_delay_ms(30); //depouncing delay
 			if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==1) ){
 				//UART SEND
 
-				//				MCAL_USART_Deinit(LUNA_UART_INSTANT);
 				if(CAR_login_counter==0){
 					MCAL_USART_SendData(TSR_UART_INSTANT,CAR_ON_FLAG);
 					CAR_login_counter++;
 				}
-				//				if(GR_FACE_FLAG_send ==0x99){
-				//					MCAL_USART_SendData(TSR_UART_INSTANT,CAR_OFF_FLAG);
-				//
-				//				}
+
 				if(GR_FACE_FLAG_send !=0x99 && GR_FACE_FLAG_send !=0x00){
 					CAR_ON_counter=1;
 					CAR_login_counter=0;
-					//				////////////*********LUNA_INIT***************//////////////////
-					//				LUNA_INIT(CONTIOUS_RANGING_MODE,BYTE_9_CM);
-					//				LUNA_ENABLE();
+
+					TFT_Welcome_ICON_Print();
+					TFT_SPEED_ICON_Print();
+					TFT_KM_H_ICON_Print();
 					vTaskSuspend(FACE_ID_TASK_Handle);
 //					vTaskPrioritySet(FACE_ID_TASK_Handle,1);
 
@@ -636,7 +747,7 @@ void FACE_ID_TASK(){
 				}
 			}
 		}else{
-			//			MCAL_write_PIN(GPIOB, PIN_13, 0);
+			//			this will happen in CAR_ON_Handler because of falling edge
 		}
 
 	}
@@ -655,8 +766,14 @@ void FACE_ID_TASK(){
 
 
 
-
-
+/**================================================================
+ * @Fn- HW_init
+ * @brief - this fun shall to all hardware and software periphrals
+ * @param [in] - void
+ * @param [out] - Void
+ * @retval -
+ * Note-
+ */
 
 
 void HW_init(){
@@ -685,17 +802,13 @@ void HW_init(){
 	////////////*********CAR_ON_init***************//////////////////
 	CAR_ON_init();
 	_TIM1_delay_ms(100);
+	////////////*********HALL_EFECT_Init***************//////////////////
 
+	HALL_EFECT_Init();
+	_TIM1_delay_ms(100);
 	////////////*********LUNA_INIT***************//////////////////
 	LUNA_INIT(CONTIOUS_RANGING_MODE,BYTE_9_CM);
 	_TIM1_delay_ms(100);
-//	MCAL_USART_Deinit(LUNA_UART_INSTANT);
-
-
-	//	PIN_config PINx={PIN_13,OUTPUT_PP,SPEED_10};
-	//	MCAL_GPIO_init(GPIOB, &PINx);
-
-
 
 }
 int main(void)
@@ -713,12 +826,12 @@ int main(void)
 	}
 
 
-	if(xTaskCreate(ACC_STATE_READ_TASK,"BOTTON_READ",256,NULL,2,NULL)!=pdPASS ){
+	if(xTaskCreate(ACC_STATE_READ_TASK,"BOTTON_READ",256,NULL,2,&ACC_STATE_READ_TASK_Handle)!=pdPASS ){
 		Error_Handller();
 	}
 	///////////////////////
 
-	if(xTaskCreate(TSR_Handller_TASK,"TSR_Handller_TASK",256,NULL,2,&TSR_Handller_TASK_Handle)!=pdPASS ){
+	if(xTaskCreate(TFT_Handller_TASK,"TFT_Handller_TASK",256,NULL,2,&TSR_Handller_TASK_Handle)!=pdPASS ){
 		Error_Handller();
 	}
 
@@ -735,7 +848,7 @@ int main(void)
 	}
 
 
-    MCAL_USART_SendData(TSR_UART_INSTANT, 'D');
+//    MCAL_USART_SendData(TSR_UART_INSTANT, 'D');
 
 	vTaskStartScheduler();
 

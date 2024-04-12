@@ -115,5 +115,5 @@ void _delay_us(GP_TIMx_REG* TIMx ,uint16_t delay);
 void _delay_ms(GP_TIMx_REG* TIMx ,uint16_t delay);
 void _delay_s(GP_TIMx_REG* TIMx ,uint16_t delay);
 void GP_TIMx__CTC_change(GP_TIMx_REG* TIMx,uint8_t ch_num,uint16_t ccr_val);
-
+void GP_TIMx__CTC_change_freq_width(GP_TIMx_REG* TIMx,uint8_t ch_num,uint16_t arr,uint16_t ccr_val);
 #endif /* INC_GP_TIMERS_H_ */
