@@ -60,9 +60,9 @@ void Error_Handller(){
 void Sys_Clk_init(){
 	// system speed 36Mhz
 	RCC->CFGR |=(0b0101 <<18); //1111: PLL input clock x 16
-//	RCC->CFGR |=(0b100<<8); //100: HCLK divided by 2
-//	RCC->CFGR |=(1 <<16); //PLL entry clock source
-//	RCC->CR|=(1<<16); //HSE clock enable
+	//	RCC->CFGR |=(0b100<<8); //100: HCLK divided by 2
+	//	RCC->CFGR |=(1 <<16); //PLL entry clock source
+	//	RCC->CR|=(1<<16); //HSE clock enable
 
 	RCC->CR|=(1<<24); //PLL ON
 	RCC->CFGR |=(0b10 <<0); //10: PLL selected as system clock
@@ -101,13 +101,13 @@ void HALL_EFFECT_HANDLLER(){
 		HALL_EFFECT_COUNTER++;
 	}else{
 		if(HALL_EFFECT_COUNTER){
-		HALL_EFFECT_N_PULSES=HALL_EFFECT_COUNTER;
-		HALL_EFFECT_RPS=((HALL_EFFECT_N_PULSES*HALL_EFFECT_TIME_CONVERSION)/HALL_EFFECT_REV_PER_PULSES);
-		HALL_EFFECT_RPM=HALL_EFFECT_RPS *60;
-//		_TIM1_delay_ms(1);
-		HALL_EFFECT_KM_H=((HALL_EFFECT_RPM*3*PI*MOTOR_SHAFT_RADIUS)/(2500000));
-		_TIM1_delay_ms(1);
-		HALL_EFFECT_COUNTER=0;
+			HALL_EFFECT_N_PULSES=HALL_EFFECT_COUNTER;
+			HALL_EFFECT_RPS=((HALL_EFFECT_N_PULSES*HALL_EFFECT_TIME_CONVERSION)/HALL_EFFECT_REV_PER_PULSES);
+			HALL_EFFECT_RPM=HALL_EFFECT_RPS *60;
+			//		_TIM1_delay_ms(1);
+			HALL_EFFECT_KM_H=((HALL_EFFECT_RPM*3*PI*MOTOR_SHAFT_RADIUS)/(2500000));
+			_TIM1_delay_ms(1);
+			HALL_EFFECT_COUNTER=0;
 		}
 	}
 
@@ -154,30 +154,30 @@ void HALL_EFECT_Init(){
 void DMS_Handller_TASK(){
 
 
-  while(1){
-	  DMS_DATA=DMS_read();
-    if(DMS_DATA==0){
-      DMS__one_COUNTER=0;
-    if(  DMS__zero_COUNTER==0){
-      MCAL_USART_SendData(TSR_UART_INSTANT, DMS_TAKE_ACTION);
-      DMS__zero_COUNTER++;
-    }
+	while(1){
+		DMS_DATA=DMS_read();
+		if(DMS_DATA==0){
+			DMS__one_COUNTER=0;
+			if(  DMS__zero_COUNTER==0){
+				MCAL_USART_SendData(TSR_UART_INSTANT, DMS_TAKE_ACTION);
+				DMS__zero_COUNTER++;
+			}
 
-    }else{
-      DMS__zero_COUNTER=0;
-      if(DMS__one_COUNTER==0){
-        MCAL_USART_SendData(TSR_UART_INSTANT, DMS_Release_ACTION);
-        DMS__one_COUNTER++;
-      }
-    }
-
-
+		}else{
+			DMS__zero_COUNTER=0;
+			if(DMS__one_COUNTER==0){
+				MCAL_USART_SendData(TSR_UART_INSTANT, DMS_Release_ACTION);
+				DMS__one_COUNTER++;
+			}
+		}
 
 
 
 
 
-  }
+
+
+	}
 }
 
 
@@ -330,13 +330,16 @@ void ACC_Handller_TASK(){
 		//      ACC_AMP=500;
 		if((LUNA_AMP>=100) && (LUNA_AMP<=65535) ){
 			if(LUNA_dis ==0x00){
-				ACC_ACTION=ACC_CAR_GO;
+				if(GR_DMS_FLAG_send != DMS_EYES_CLOSED_FORCE_STOP)
+					ACC_ACTION=ACC_CAR_GO;
+				else
+					ACC_ACTION=ACC_CAR_STOP;
 
-			}else if(LUNA_dis <= Distance_SET){
+			}else if((LUNA_dis <= ACC_distance_stop) ||(GR_DMS_FLAG_send == DMS_EYES_CLOSED_FORCE_STOP) ||((GR_DMS_FLAG_send ==DMS_EYES_CLOSED) && (DMS_DATA==0))){
 				// here should send CAN fram to atmega to stop the motor
 				ACC_ACTION=ACC_CAR_STOP;
 
-			}else if((LUNA_dis > Distance_SET) &&(LUNA_dis <MAX_Distance_SET)){
+			}else if((LUNA_dis > ACC_distance_stop) &&(LUNA_dis <ACC_distance_slowdown)){
 				ACC_ACTION=ACC_CAR_SLOW_DOWN;
 
 
@@ -350,7 +353,10 @@ void ACC_Handller_TASK(){
 		// if the Signal strength indicator not strong dequeue its disance value
 		else{
 			if(LUNA_dis ==0x00){
-				ACC_ACTION=ACC_CAR_GO;
+				if(GR_DMS_FLAG_send != DMS_EYES_CLOSED_FORCE_STOP)
+					ACC_ACTION=ACC_CAR_GO;
+				else
+					ACC_ACTION=ACC_CAR_STOP;
 
 			}
 		}
@@ -421,7 +427,7 @@ void ACC_throttel_Handller_TASK(){
 void ACC_STATE_READ_TASK(){
 	while(1){
 
-//		LUNA_dist();
+		//		LUNA_dist();
 		if(MCAL_Read_PIN(ACC_BOTTON_PORT, ACC_BOTTON_PIN)){
 			_TIM1_delay_ms(30);
 			if(MCAL_Read_PIN(ACC_BOTTON_PORT, ACC_BOTTON_PIN)){
@@ -446,6 +452,18 @@ void ACC_STATE_READ_TASK(){
 			//		uint32_t step3=(step1/step2);
 			//		ACC_DICIMAL_VAL=step3+ACC_DAC_MIN_DECIMAL;
 			ACC_DICIMAL_VAL=((((ACC_THROTTEL_DATA-ACC_TROTTEL_MIN_ADC_VAL)*(ACC_DAC_MAX_DECIMAL-ACC_DAC_MIN_DECIMAL))/(ACC_TROTTEL_Max_ADC_VAL-ACC_TROTTEL_MIN_ADC_VAL))+ACC_DAC_MIN_DECIMAL);
+		}
+
+
+		if(HALL_EFFECT_KM_H <=10){
+			ACC_distance_stop=Distance_SET;
+			ACC_distance_slowdown=MAX_Distance_SET;
+		}else if(HALL_EFFECT_KM_H >10 && HALL_EFFECT_KM_H<=30){
+			ACC_distance_stop=500;
+			ACC_distance_slowdown=700;
+		}else if(HALL_EFFECT_KM_H > 30){
+			ACC_distance_stop=850;
+			ACC_distance_slowdown=900;
 		}
 	}
 }
@@ -683,13 +701,13 @@ void CAR_ON_Handler(){
 				DMS__one_COUNTER=0;
 				//UART SEND
 				TFT_SET_BACKGROUND(0,159,0,127,0xff,0xff,0xff);
-//
+				//
 				ACC_FROM_ADC_TO_DAC(ACC_DAC_MIN_DECIMAL);
 				MCAL_USART_SendData(TSR_UART_INSTANT,CAR_OFF_FLAG);
 				_TIM1_delay_ms(30);
 
 				vTaskResume(FACE_ID_TASK_Handle);
-//				vTaskPrioritySet(FACE_ID_TASK_Handle,5);
+				//				vTaskPrioritySet(FACE_ID_TASK_Handle,5);
 
 			}
 		}
@@ -722,7 +740,7 @@ void CAR_ON_init(){
  */
 void FACE_ID_TASK(){
 	while(1){
-//		_TIM1_delay_ms(500);
+		//		_TIM1_delay_ms(500);
 		if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==1) ){
 			_TIM1_delay_ms(30); //depouncing delay
 			if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==1) ){
@@ -741,7 +759,7 @@ void FACE_ID_TASK(){
 					TFT_SPEED_ICON_Print();
 					TFT_KM_H_ICON_Print();
 					vTaskSuspend(FACE_ID_TASK_Handle);
-//					vTaskPrioritySet(FACE_ID_TASK_Handle,1);
+					//					vTaskPrioritySet(FACE_ID_TASK_Handle,1);
 
 
 				}
@@ -813,7 +831,7 @@ void HW_init(){
 }
 int main(void)
 {
-//	_TIM1_delay_s(2);
+	//	_TIM1_delay_s(2);
 	HW_init();
 
 	///////////////////////////
@@ -848,7 +866,7 @@ int main(void)
 	}
 
 
-//    MCAL_USART_SendData(TSR_UART_INSTANT, 'D');
+	//    MCAL_USART_SendData(TSR_UART_INSTANT, 'D');
 
 	vTaskStartScheduler();
 

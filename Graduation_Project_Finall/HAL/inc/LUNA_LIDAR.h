@@ -11,8 +11,8 @@
 #include <stdint.h>
 #include "Timer1_8.h"
 #define LUNA_UART_INSTANT USART3
-#define Distance_SET 300
-#define MAX_Distance_SET 500
+#define Distance_SET 200
+#define MAX_Distance_SET 300
 
 typedef enum
 {

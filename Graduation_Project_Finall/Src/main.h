@@ -109,8 +109,7 @@ ACC_ACOTION ACC_ACTION=ACC_CAR_STOP;
 
 uint16_t ACC_THROTTEL_DATA=0x00;
 uint8_t  ACC_DICIMAL_VAL=0;
-uint16_t ACC_dis=0;
-uint16_t ACC_AMP=0;
+uint16_t ACC_distance_stop=Distance_SET,ACC_distance_slowdown=MAX_Distance_SET;
 ////////////////////////////
 uint8_t CAR_ON_counter=0;
 uint8_t CAR_login_counter=0;
