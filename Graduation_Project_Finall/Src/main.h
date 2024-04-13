@@ -51,9 +51,9 @@
 ///////////////////////////////
 #define DMS_TAKE_ACTION 0x66
 #define DMS_Release_ACTION 0x55
-#define DMS_EYES_CLOSED 0x77
-#define DMS_EYES_OPEN 0x88
-#define DMS_EYES_CLOSED_FORCE_STOP 0x89
+#define DMS_EYES_CLOSED 'u'
+#define DMS_EYES_OPEN 'v'
+#define DMS_EYES_CLOSED_FORCE_STOP 'w'
 /////////////////////////////
 ////////////////////HALL EFFECT EDIT //////////////////////
 #define HALL_EFFECT_TIMx_instant TIM3

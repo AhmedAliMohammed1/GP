@@ -335,8 +335,8 @@ void ACC_Handller_TASK(){
 				else
 					ACC_ACTION=ACC_CAR_STOP;
 
-			}else if((LUNA_dis <= ACC_distance_stop) ||(GR_DMS_FLAG_send == DMS_EYES_CLOSED_FORCE_STOP) ||((GR_DMS_FLAG_send ==DMS_EYES_CLOSED) && (DMS_DATA==0))){
-				// here should send CAN fram to atmega to stop the motor
+			}else if((LUNA_dis <= ACC_distance_stop) ||((GR_DMS_FLAG_send ==DMS_EYES_CLOSED_FORCE_STOP) && (DMS_DATA==0))){
+
 				ACC_ACTION=ACC_CAR_STOP;
 
 			}else if((LUNA_dis > ACC_distance_stop) &&(LUNA_dis <ACC_distance_slowdown)){
