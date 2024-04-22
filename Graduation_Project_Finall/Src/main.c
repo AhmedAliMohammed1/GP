@@ -105,7 +105,7 @@ void HALL_EFFECT_HANDLLER(){
 			HALL_EFFECT_RPS=((HALL_EFFECT_N_PULSES*HALL_EFFECT_TIME_CONVERSION)/HALL_EFFECT_REV_PER_PULSES);
 			HALL_EFFECT_RPM=HALL_EFFECT_RPS *60;
 			//		_TIM1_delay_ms(1);
-			HALL_EFFECT_KM_H=((HALL_EFFECT_RPM*3*PI*MOTOR_SHAFT_RADIUS)/(2500000));
+			HALL_EFFECT_KM_H=((HALL_EFFECT_RPM*PI*MOTOR_SHAFT_RADIUS)/(2500000));
 			_TIM1_delay_ms(1);
 			HALL_EFFECT_COUNTER=0;
 		}
@@ -335,7 +335,7 @@ void ACC_Handller_TASK(){
 				else
 					ACC_ACTION=ACC_CAR_STOP;
 
-			}else if((LUNA_dis <= ACC_distance_stop) ||((GR_DMS_FLAG_send ==DMS_EYES_CLOSED_FORCE_STOP) && (DMS_DATA==0))){
+			}else if((LUNA_dis <= ACC_distance_stop)){
 
 				ACC_ACTION=ACC_CAR_STOP;
 
@@ -442,6 +442,10 @@ void ACC_STATE_READ_TASK(){
 		ADC_read(ADC1,ACC_THROTTEL_CHx,&ACC_THROTTEL_DATA);
 		if(ACC_THROTTEL_DATA<ACC_TROTTEL_MIN_ADC_VAL){
 			ACC_DICIMAL_VAL=64;
+			HALL_EFFECT_KM_H=0;
+			HALL_EFFECT_N_PULSES=0;
+			HALL_EFFECT_RPS=0;
+			HALL_EFFECT_RPM=0;
 		}else if(ACC_THROTTEL_DATA>ACC_TROTTEL_Max_ADC_VAL){
 			ACC_DICIMAL_VAL=255;
 		}
@@ -458,10 +462,10 @@ void ACC_STATE_READ_TASK(){
 		if(HALL_EFFECT_KM_H <=10){
 			ACC_distance_stop=Distance_SET;
 			ACC_distance_slowdown=MAX_Distance_SET;
-		}else if(HALL_EFFECT_KM_H >10 && HALL_EFFECT_KM_H<=30){
+		}else if(HALL_EFFECT_KM_H >10 && HALL_EFFECT_KM_H<=40){
 			ACC_distance_stop=500;
 			ACC_distance_slowdown=700;
-		}else if(HALL_EFFECT_KM_H > 30){
+		}else if(HALL_EFFECT_KM_H > 60){
 			ACC_distance_stop=850;
 			ACC_distance_slowdown=900;
 		}
@@ -511,7 +515,7 @@ void TFT_Handller_TASK(){
 		TFT_send_ACC_image(HALL_EFFECT_KM_H);
 		TFT_send_TSR_image(GR_TSR_FLAG_OLED_send);
 		TFT_cruise_control_ICON_Print(ACC_ST);
-		TFT_HOD_ICON_Print(DMS_DATA);
+		TFT_HOD_ICON_Print(!DMS_DATA);
 		vTaskPrioritySet(TSR_Handller_TASK_Handle,2);
 
 
@@ -700,12 +704,13 @@ void CAR_ON_Handler(){
 				DMS__zero_COUNTER=0;
 				DMS__one_COUNTER=0;
 				//UART SEND
-				TFT_SET_BACKGROUND(0,159,0,127,0xff,0xff,0xff);
 				//
+				_TIM1_delay_ms(1);
+
 				ACC_FROM_ADC_TO_DAC(ACC_DAC_MIN_DECIMAL);
 				MCAL_USART_SendData(TSR_UART_INSTANT,CAR_OFF_FLAG);
 				_TIM1_delay_ms(30);
-
+				TFT_SET_BACKGROUND(0,159,0,127,0xff,0xff,0xff);
 				vTaskResume(FACE_ID_TASK_Handle);
 				//				vTaskPrioritySet(FACE_ID_TASK_Handle,5);
 
@@ -756,8 +761,14 @@ void FACE_ID_TASK(){
 					CAR_login_counter=0;
 
 					TFT_Welcome_ICON_Print();
+					_TIM1_delay_ms(1);
+
 					TFT_SPEED_ICON_Print();
+					_TIM1_delay_ms(1);
+
 					TFT_KM_H_ICON_Print();
+					_TIM1_delay_ms(1);
+
 					vTaskSuspend(FACE_ID_TASK_Handle);
 					//					vTaskPrioritySet(FACE_ID_TASK_Handle,1);
 

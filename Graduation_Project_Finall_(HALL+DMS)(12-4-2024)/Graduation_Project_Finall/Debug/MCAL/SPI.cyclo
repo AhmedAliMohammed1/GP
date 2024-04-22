@@ -1,0 +1,7 @@
+../MCAL/SPI.c:11:6:MCAL_SPI_init	9
+../MCAL/SPI.c:51:6:MCAL_SPI_Deinit	3
+../MCAL/SPI.c:57:9:MCAL_SPI_SendData	5
+../MCAL/SPI.c:73:6:MCAL_SPI_ReciveData	5
+../MCAL/SPI.c:90:6:MCAL_SET_GPIO	21
+../MCAL/SPI.c:143:6:SPI1_IRQHandler	1
+../MCAL/SPI.c:148:6:get_flag_source	3
