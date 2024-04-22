@@ -1,0 +1,14 @@
+../HAL/TFT.c:19:6:TFT_init	1
+../HAL/TFT.c:73:6:TFT_SET_LOCATION	1
+../HAL/TFT.c:92:6:TFT_SEND_Image	2
+../HAL/TFT.c:116:6:TFT_SET_BACKGROUND	2
+../HAL/TFT.c:129:6:TFT_MAKE_option	3
+../HAL/TFT.c:150:6:TFT_send_command	1
+../HAL/TFT.c:165:6:TFT_send_data	1
+../HAL/TFT.c:180:6:TFT_SPEED_ICON_Print	1
+../HAL/TFT.c:185:6:TFT_Welcome_ICON_Print	1
+../HAL/TFT.c:192:6:TFT_KM_H_ICON_Print	1
+../HAL/TFT.c:196:6:TFT_cruise_control_ICON_Print	2
+../HAL/TFT.c:205:6:TFT_HOD_ICON_Print	2
+../HAL/TFT.c:214:9:TFT_send_TSR_image	5
+../HAL/TFT.c:261:6:TFT_send_ACC_image	3
