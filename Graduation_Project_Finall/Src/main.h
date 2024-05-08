@@ -51,9 +51,10 @@
 ///////////////////////////////
 #define DMS_TAKE_ACTION 0x66
 #define DMS_Release_ACTION 0x55
+#define DMS_WAIT 0x21
 #define DMS_EYES_CLOSED 'u'
 #define DMS_EYES_OPEN 'v'
-#define DMS_EYES_CLOSED_FORCE_STOP 'w'
+#define DMS_EYES_CLOSED_FORCE_STOP 0x7
 /////////////////////////////
 ////////////////////HALL EFFECT EDIT //////////////////////
 #define HALL_EFFECT_TIMx_instant TIM3
@@ -110,12 +111,14 @@ ACC_ACOTION ACC_ACTION=ACC_CAR_STOP;
 uint16_t ACC_THROTTEL_DATA=0x00;
 uint8_t  ACC_DICIMAL_VAL=0;
 uint16_t ACC_distance_stop=Distance_SET,ACC_distance_slowdown=MAX_Distance_SET;
+uint8_t ACC_counter=0;
+uint16_t ADC_SAVED=0;
 ////////////////////////////
 uint8_t CAR_ON_counter=0;
 uint8_t CAR_login_counter=0;
 ////////////////////////////
 
-uint8_t DMS__zero_COUNTER=0,DMS__one_COUNTER=0,DMS_DATA=0;
+uint8_t DMS__zero_COUNTER=0,DMS__one_COUNTER=0,DMS_DATA=0,DMS_WAIT_COUNTER=0;
 uint8_t DMS_START_OF_FRAME=0; //'#'
 uint8_t DMS_END_OF_FRAME=0; //'*'
 uint16_t GR_DMS_FLAG_=0;

@@ -156,7 +156,14 @@ void DMS_Handller_TASK(){
 
 	while(1){
 		DMS_DATA=DMS_read();
-		if(DMS_DATA==0){
+		if(DMS_WAIT_COUNTER ==1){
+			MCAL_USART_SendData(TSR_UART_INSTANT, DMS_WAIT);
+//			DMS_WAIT_COUNTER=0;
+			DMS__one_COUNTER=0;
+			DMS__zero_COUNTER=0;
+
+		}else if(DMS_DATA==0){
+//			DMS_WAIT_COUNTER=0;
 			DMS__one_COUNTER=0;
 			if(  DMS__zero_COUNTER==0){
 				MCAL_USART_SendData(TSR_UART_INSTANT, DMS_TAKE_ACTION);
@@ -164,6 +171,7 @@ void DMS_Handller_TASK(){
 			}
 
 		}else{
+//			DMS_WAIT_COUNTER=0;
 			DMS__zero_COUNTER=0;
 			if(DMS__one_COUNTER==0){
 				MCAL_USART_SendData(TSR_UART_INSTANT, DMS_Release_ACTION);
@@ -222,7 +230,7 @@ void DMS_Handller_TASK(){
  */
 
 
-uint8_t ACC_CONVERT_ADC_TODICMAL(uint8_t ACC_THROTTEL_){
+uint8_t ACC_CONVERT_ADC_TODICMAL(uint16_t ACC_THROTTEL_){
 	uint8_t ACC_DICIMAL_VAL=((((ACC_THROTTEL_-ACC_TROTTEL_MIN_ADC_VAL)*(ACC_DAC_MAX_DECIMAL-ACC_DAC_MIN_DECIMAL))/(ACC_TROTTEL_Max_ADC_VAL-ACC_TROTTEL_MIN_ADC_VAL))+ACC_DAC_MIN_DECIMAL);
 
 	return ACC_DICIMAL_VAL;
@@ -330,12 +338,13 @@ void ACC_Handller_TASK(){
 		//      ACC_AMP=500;
 		if((LUNA_AMP>=100) && (LUNA_AMP<=65535) ){
 			if(LUNA_dis ==0x00){
-				if(GR_DMS_FLAG_send != DMS_EYES_CLOSED_FORCE_STOP)
-					ACC_ACTION=ACC_CAR_GO;
-				else
+				if(GR_DMS_FLAG_send == DMS_EYES_CLOSED_FORCE_STOP)
 					ACC_ACTION=ACC_CAR_STOP;
+				else{
+					ACC_ACTION=ACC_CAR_GO;
+				}
 
-			}else if((LUNA_dis <= ACC_distance_stop)){
+			}else if(((GR_DMS_FLAG_send == DMS_EYES_CLOSED_FORCE_STOP) ||(LUNA_dis <= ACC_distance_stop) )){
 
 				ACC_ACTION=ACC_CAR_STOP;
 
@@ -353,10 +362,10 @@ void ACC_Handller_TASK(){
 		// if the Signal strength indicator not strong dequeue its disance value
 		else{
 			if(LUNA_dis ==0x00){
-				if(GR_DMS_FLAG_send != DMS_EYES_CLOSED_FORCE_STOP)
-					ACC_ACTION=ACC_CAR_GO;
-				else
+				if(GR_DMS_FLAG_send == DMS_EYES_CLOSED_FORCE_STOP)
 					ACC_ACTION=ACC_CAR_STOP;
+				else
+					ACC_ACTION=ACC_CAR_GO;
 
 			}
 		}
@@ -376,8 +385,7 @@ void ACC_Handller_TASK(){
  */
 
 void ACC_throttel_Handller_TASK(){
-	uint8_t ACC_counter=0;
-	uint16_t ADC_SAVED=0;
+
 	while(1){
 
 		if(ACC_ST==ACC_ON){
@@ -385,7 +393,7 @@ void ACC_throttel_Handller_TASK(){
 				ADC_SAVED=ACC_CONVERT_ADC_TODICMAL(ACC_THROTTEL_DATA);
 				ACC_counter++;
 			}
-			if(ADC_SAVED<ACC_DICIMAL_VAL){
+			if(ADC_SAVED<=ACC_DICIMAL_VAL){
 				ACC_FROM_ADC_TO_DAC(ACC_DICIMAL_VAL);
 			}else{
 
@@ -403,6 +411,7 @@ void ACC_throttel_Handller_TASK(){
 
 		}else if(ACC_ST==ACC_OFF){
 			ACC_counter=0;
+			ADC_SAVED=0;
 			if(ACC_ACTION ==ACC_CAR_STOP){
 				ACC_FROM_ADC_TO_DAC(ACC_DAC_MIN_DECIMAL);
 			}else if(ACC_ACTION ==ACC_CAR_SLOW_DOWN){
@@ -440,13 +449,18 @@ void ACC_STATE_READ_TASK(){
 
 		}
 		ADC_read(ADC1,ACC_THROTTEL_CHx,&ACC_THROTTEL_DATA);
-		if(ACC_THROTTEL_DATA<ACC_TROTTEL_MIN_ADC_VAL){
+		if((ACC_THROTTEL_DATA<ACC_TROTTEL_MIN_ADC_VAL) || (GR_DMS_FLAG_send == DMS_EYES_CLOSED_FORCE_STOP)){
 			ACC_DICIMAL_VAL=64;
+			if(ADC_SAVED ==0){
 			HALL_EFFECT_KM_H=0;
 			HALL_EFFECT_N_PULSES=0;
 			HALL_EFFECT_RPS=0;
 			HALL_EFFECT_RPM=0;
+			DMS_WAIT_COUNTER=1;
+
+			}
 		}else if(ACC_THROTTEL_DATA>ACC_TROTTEL_Max_ADC_VAL){
+			DMS_WAIT_COUNTER=0;
 			ACC_DICIMAL_VAL=255;
 		}
 
@@ -456,6 +470,8 @@ void ACC_STATE_READ_TASK(){
 			//		uint32_t step3=(step1/step2);
 			//		ACC_DICIMAL_VAL=step3+ACC_DAC_MIN_DECIMAL;
 			ACC_DICIMAL_VAL=((((ACC_THROTTEL_DATA-ACC_TROTTEL_MIN_ADC_VAL)*(ACC_DAC_MAX_DECIMAL-ACC_DAC_MIN_DECIMAL))/(ACC_TROTTEL_Max_ADC_VAL-ACC_TROTTEL_MIN_ADC_VAL))+ACC_DAC_MIN_DECIMAL);
+			DMS_WAIT_COUNTER=0;
+
 		}
 
 
@@ -513,9 +529,18 @@ void TFT_Handller_TASK(){
 		//	  if(GR_TSR_FLAG_OLED_send !=0x99){
 		vTaskPrioritySet(TSR_Handller_TASK_Handle,4);
 		TFT_send_ACC_image(HALL_EFFECT_KM_H);
+		vTaskPrioritySet(TSR_Handller_TASK_Handle,2);
+
+		vTaskPrioritySet(TSR_Handller_TASK_Handle,4);
 		TFT_send_TSR_image(GR_TSR_FLAG_OLED_send);
+		vTaskPrioritySet(TSR_Handller_TASK_Handle,2);
+
+		vTaskPrioritySet(TSR_Handller_TASK_Handle,4);
 		TFT_cruise_control_ICON_Print(ACC_ST);
-		TFT_HOD_ICON_Print(!DMS_DATA);
+		vTaskPrioritySet(TSR_Handller_TASK_Handle,2);
+
+		vTaskPrioritySet(TSR_Handller_TASK_Handle,4);
+		TFT_HOD_ICON_Print(!(DMS_DATA));
 		vTaskPrioritySet(TSR_Handller_TASK_Handle,2);
 
 
@@ -630,6 +655,7 @@ void TSR_call_Back(void){
 			GR_DMS_FLAG_ &=0x0F0F;
 			GR_DMS_FLAG_send = ((GR_DMS_FLAG_ &0x0F00)>>4) |((GR_DMS_FLAG_&0x000F));
 			GR_DMS_FLAG_=0;
+			MCAL_USART_SendData(TSR_UART_INSTANT, GR_DMS_FLAG_send);
 			///////////////
 			DMS_START_OF_FRAME=0;
 			DMS_END_OF_FRAME=0;
@@ -703,6 +729,7 @@ void CAR_ON_Handler(){
 				CAR_login_counter=0;
 				DMS__zero_COUNTER=0;
 				DMS__one_COUNTER=0;
+				DMS_WAIT_COUNTER=0;
 				//UART SEND
 				//
 				_TIM1_delay_ms(1);
@@ -712,6 +739,9 @@ void CAR_ON_Handler(){
 				_TIM1_delay_ms(30);
 				TFT_SET_BACKGROUND(0,159,0,127,0xff,0xff,0xff);
 				vTaskResume(FACE_ID_TASK_Handle);
+//				_TIM1_delay_ms(30);
+//				TFT_SET_BACKGROUND(0,159,0,127,0xff,0xff,0xff);
+
 				//				vTaskPrioritySet(FACE_ID_TASK_Handle,5);
 
 			}
@@ -756,6 +786,7 @@ void FACE_ID_TASK(){
 					CAR_login_counter++;
 				}
 
+//				GR_FACE_FLAG_send =0x98;
 				if(GR_FACE_FLAG_send !=0x99 && GR_FACE_FLAG_send !=0x00){
 					CAR_ON_counter=1;
 					CAR_login_counter=0;
