@@ -10,5 +10,5 @@
 ../HAL/TFT.c:192:6:TFT_KM_H_ICON_Print	1
 ../HAL/TFT.c:196:6:TFT_cruise_control_ICON_Print	2
 ../HAL/TFT.c:205:6:TFT_HOD_ICON_Print	2
-../HAL/TFT.c:214:9:TFT_send_TSR_image	5
-../HAL/TFT.c:261:6:TFT_send_ACC_image	3
+../HAL/TFT.c:214:9:TFT_send_TSR_image	7
+../HAL/TFT.c:271:6:TFT_send_ACC_image	3
