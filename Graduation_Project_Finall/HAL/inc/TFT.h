@@ -33,7 +33,7 @@
 
 #define TFT_width 320
 #define TFT_height 480
-
+#define _PARKING_SIGN_FLAG	0x00
 #define NO_PARKING_SIGN_FLAG	0x7
 #define NO_WAITING_SIGN_FLAG	0x8
 #define _100_KM_SIGN_FLAG		0x9
