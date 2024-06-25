@@ -56,6 +56,14 @@
 #define DMS_EYES_OPEN 'v'
 #define DMS_EYES_CLOSED_FORCE_STOP 0x7
 /////////////////////////////
+#define GESTURE_START_OF_FRAME         0x24
+#define GESTURE_END_OF_FRAME            0x25
+#define GESTURE_CAR_ON_FLAG             0x26
+#define GESTURE_CAR_OFF_FLAG            0x27
+uint8_t vGESTURE_START_OF_FRAME=0; //'#'
+uint8_t vGESTURE_END_OF_FRAME=0; //'*'
+uint16_t GR_GESTURE_FLAG_=0;
+uint8_t GR_GESTURE_FLAG_send=0;
 ////////////////////HALL EFFECT EDIT //////////////////////
 #define HALL_EFFECT_TIMx_instant TIM3
 #define HALL_EFFECT_EXTI_PIN PIN_12
@@ -92,7 +100,7 @@ extern uint8_t LUNA_CheckSum;
 //QueueHandle_t ACC__STATE_Queue;
 //////////***********Var***********//////////
 uint16_t GR_TSR_FLAG_OLED=0;
-uint8_t GR_TSR_FLAG_OLED_send=0;
+uint8_t GR_TSR_FLAG_OLED_send=0x73;
 uint8_t GR_TSR_FLAG_OLED_FINAL=0;
 uint8_t PC_Counter=0;
 uint8_t PC_Uart_Flag=0;
@@ -129,6 +137,8 @@ uint8_t GR_DMS_FLAG_send=0;
 TaskHandle_t FACE_ID_TASK_Handle;
 TaskHandle_t TSR_Handller_TASK_Handle;
 TaskHandle_t ACC_STATE_READ_TASK_Handle;
+TaskHandle_t GESTURE_check_TASK_Handle;
+
 
 
 

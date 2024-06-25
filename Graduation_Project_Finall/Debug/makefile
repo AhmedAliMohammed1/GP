@@ -1,6 +1,5 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (11.3.rel1)
 ################################################################################
 
 -include ../makefile.init
@@ -16,6 +15,7 @@ RM := rm -rf
 -include FreeRTOS/portable/MemMang/subdir.mk
 -include FreeRTOS/portable/ARM_CM3/subdir.mk
 -include FreeRTOS/subdir.mk
+-include subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -32,23 +32,9 @@ endif
 
 -include ../makefile.defs
 
-OPTIONAL_TOOL_DEPS := \
-$(wildcard ../makefile.defs) \
-$(wildcard ../makefile.init) \
-$(wildcard ../makefile.targets) \
-
-
-BUILD_ARTIFACT_NAME := Graduation_Project_Finall
-BUILD_ARTIFACT_EXTENSION := axf
-BUILD_ARTIFACT_PREFIX :=
-BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
-
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
 Graduation_Project_Finall.axf \
-
-MAP_FILES += \
-Graduation_Project_Finall.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
@@ -59,48 +45,47 @@ Graduation_Project_Finall.list \
 OBJCOPY_HEX += \
 Graduation_Project_Finall.hex \
 
+OBJCOPY_BIN += \
+Graduation_Project_Finall.bin \
+
 
 # All Target
-all: main-build
-
-# Main-build Target
-main-build: Graduation_Project_Finall.axf secondary-outputs
+all: Graduation_Project_Finall.axf secondary-outputs
 
 # Tool invocations
-Graduation_Project_Finall.axf Graduation_Project_Finall.map: $(OBJS) $(USER_OBJS) C:\Users\medoo\Desktop\GP\Graduation_Project_Finall\STM32F103CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -gdwarf-2 -o "Graduation_Project_Finall.axf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\medoo\Desktop\GP\Graduation_Project_Finall\STM32F103CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Graduation_Project_Finall.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Graduation_Project_Finall.axf: $(OBJS) $(USER_OBJS) C:\Users\Ahmed\Desktop\GP\Graduation_Project_Finall\STM32F103CBTX_FLASH.ld
+	arm-none-eabi-gcc -gdwarf-2 -o "Graduation_Project_Finall.axf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Ahmed\Desktop\GP\Graduation_Project_Finall\STM32F103CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Graduation_Project_Finall.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+default.size.stdout: $(EXECUTABLES)
 	arm-none-eabi-size  $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Graduation_Project_Finall.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+Graduation_Project_Finall.list: $(EXECUTABLES)
 	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Graduation_Project_Finall.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Graduation_Project_Finall.hex: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+Graduation_Project_Finall.hex: $(EXECUTABLES)
 	arm-none-eabi-objcopy  -O ihex $(EXECUTABLES) "Graduation_Project_Finall.hex"
+	@echo 'Finished building: $@'
+	@echo ' '
+
+Graduation_Project_Finall.bin: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "Graduation_Project_Finall.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) Graduation_Project_Finall.axf Graduation_Project_Finall.hex Graduation_Project_Finall.list Graduation_Project_Finall.map default.size.stdout
+	-$(RM) *
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_HEX)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_HEX) $(OBJCOPY_BIN)
 
-fail-specified-linker-script-missing:
-	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'
-	@exit 2
-
-warn-no-linker-script-specified:
-	@echo 'Warning: No linker script specified. Check the linker settings in the build configuration.'
-
-.PHONY: all clean dependents main-build fail-specified-linker-script-missing warn-no-linker-script-specified
+.PHONY: all clean dependents
+.SECONDARY:
 
 -include ../makefile.targets

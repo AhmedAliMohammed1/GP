@@ -527,19 +527,19 @@ void ACC_STATE_READ_TASK(){
 void TFT_Handller_TASK(){
 	while(1){
 		//	  if(GR_TSR_FLAG_OLED_send !=0x99){
-		vTaskPrioritySet(TSR_Handller_TASK_Handle,4);
+		vTaskPrioritySet(TSR_Handller_TASK_Handle,3);
 		TFT_send_ACC_image(HALL_EFFECT_KM_H);
 		vTaskPrioritySet(TSR_Handller_TASK_Handle,2);
 
-		vTaskPrioritySet(TSR_Handller_TASK_Handle,4);
+		vTaskPrioritySet(TSR_Handller_TASK_Handle,3);
 		TFT_send_TSR_image(GR_TSR_FLAG_OLED_send);
 		vTaskPrioritySet(TSR_Handller_TASK_Handle,2);
 
-		vTaskPrioritySet(TSR_Handller_TASK_Handle,4);
+		vTaskPrioritySet(TSR_Handller_TASK_Handle,3);
 		TFT_cruise_control_ICON_Print(ACC_ST);
 		vTaskPrioritySet(TSR_Handller_TASK_Handle,2);
 
-		vTaskPrioritySet(TSR_Handller_TASK_Handle,4);
+		vTaskPrioritySet(TSR_Handller_TASK_Handle,3);
 		TFT_HOD_ICON_Print(!(DMS_DATA));
 		vTaskPrioritySet(TSR_Handller_TASK_Handle,2);
 
@@ -585,7 +585,14 @@ void TSR_call_Back(void){
 	case '&':
 		DMS_END_OF_FRAME=1;
 		break;
+	case GESTURE_START_OF_FRAME:
 
+		vGESTURE_START_OF_FRAME=1;
+		vGESTURE_END_OF_FRAME=0;
+		break;
+	case GESTURE_END_OF_FRAME:
+		vGESTURE_END_OF_FRAME=1;
+			break;
 	}
 
 	////////////////////////////////////////////////////////////////////
@@ -655,7 +662,7 @@ void TSR_call_Back(void){
 			GR_DMS_FLAG_ &=0x0F0F;
 			GR_DMS_FLAG_send = ((GR_DMS_FLAG_ &0x0F00)>>4) |((GR_DMS_FLAG_&0x000F));
 			GR_DMS_FLAG_=0;
-			MCAL_USART_SendData(TSR_UART_INSTANT, GR_DMS_FLAG_send);
+//			MCAL_USART_SendData(TSR_UART_INSTANT, GR_DMS_FLAG_send);
 			///////////////
 			DMS_START_OF_FRAME=0;
 			DMS_END_OF_FRAME=0;
@@ -664,6 +671,37 @@ void TSR_call_Back(void){
 
 		}
 	}
+	////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////
+
+	if(vGESTURE_START_OF_FRAME){
+		if(PC_Counter ==0)
+			PC_Uart_Flag=0;
+
+		if(vGESTURE_END_OF_FRAME ==0){
+			GR_GESTURE_FLAG_ = (GR_GESTURE_FLAG_<<8)| PC_Uart_Flag;
+			PC_Counter++;
+
+
+		}else{
+			GR_GESTURE_FLAG_ &=0x0F0F;
+			GR_GESTURE_FLAG_send = ((GR_GESTURE_FLAG_ &0x0F00)>>4) |((GR_GESTURE_FLAG_&0x000F));
+//			GR_GESTURE_FLAG_send=GR_GESTURE_FLAG_;
+			GR_GESTURE_FLAG_=0;
+//			MCAL_USART_SendData(TSR_UART_INSTANT, GR_DMS_FLAG_send);
+			///////////////
+			vGESTURE_START_OF_FRAME=0;
+			vGESTURE_END_OF_FRAME=0;
+			PC_Counter=0;
+
+
+		}
+	}
+
+
+
+
 
 
 
@@ -718,9 +756,9 @@ void TSR_init(void){
  */
 void CAR_ON_Handler(){
 	CAR_login_counter=0;
-	if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==0) ){
+	if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==0)  && (GR_GESTURE_FLAG_send !=GESTURE_CAR_ON_FLAG)){
 		_TIM1_delay_ms(30); //depouncing delay
-		if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==0) ){
+		if((MCAL_Read_PIN(CONTACT_BOTTON_PORT, CONTACT_BOTTON_PIN)==0)  && (GR_GESTURE_FLAG_send !=GESTURE_CAR_ON_FLAG)){
 
 			if(CAR_ON_counter ==1 &&GR_FACE_FLAG_send !=0x99&&GR_FACE_FLAG_send !=0x00){
 
@@ -730,6 +768,7 @@ void CAR_ON_Handler(){
 				DMS__zero_COUNTER=0;
 				DMS__one_COUNTER=0;
 				DMS_WAIT_COUNTER=0;
+				GR_GESTURE_FLAG_send=0;
 				//UART SEND
 				//
 				_TIM1_delay_ms(1);
@@ -790,7 +829,7 @@ void FACE_ID_TASK(){
 				if(GR_FACE_FLAG_send !=0x99 && GR_FACE_FLAG_send !=0x00){
 					CAR_ON_counter=1;
 					CAR_login_counter=0;
-
+					GR_GESTURE_FLAG_send=0;
 					TFT_Welcome_ICON_Print();
 					_TIM1_delay_ms(1);
 
@@ -806,8 +845,30 @@ void FACE_ID_TASK(){
 
 				}
 			}
-		}else{
-			//			this will happen in CAR_ON_Handler because of falling edge
+		}else if(GR_GESTURE_FLAG_send ==GESTURE_CAR_ON_FLAG){
+
+			//				GR_FACE_FLAG_send =0x98;
+							if(GR_FACE_FLAG_send !=0x99 && GR_FACE_FLAG_send !=0x00){
+
+								CAR_ON_counter=1;
+
+								TFT_Welcome_ICON_Print();
+								_TIM1_delay_ms(1);
+
+								TFT_SPEED_ICON_Print();
+								_TIM1_delay_ms(1);
+
+								TFT_KM_H_ICON_Print();
+								_TIM1_delay_ms(1);
+//								GR_GESTURE_FLAG_send=0;
+								vTaskSuspend(FACE_ID_TASK_Handle);
+								//					vTaskPrioritySet(FACE_ID_TASK_Handle,1);
+
+
+							}
+		}
+		else{
+
 		}
 
 	}
@@ -824,7 +885,39 @@ void FACE_ID_TASK(){
 
 
 
+void GESTURE_check(){
+	while(1){
+	if(GR_GESTURE_FLAG_send ==GESTURE_CAR_OFF_FLAG){
 
+		if(CAR_ON_counter ==1 &&GR_FACE_FLAG_send !=0x99&&GR_FACE_FLAG_send !=0x00){
+			vTaskPrioritySet(GESTURE_check_TASK_Handle,4);
+			CAR_ON_counter=0;
+			GR_FACE_FLAG_send=0;
+			CAR_login_counter=0;
+			DMS__zero_COUNTER=0;
+			DMS__one_COUNTER=0;
+			DMS_WAIT_COUNTER=0;
+			GR_GESTURE_FLAG_send=0;
+			//UART SEND
+			//
+			_TIM1_delay_ms(1);
+
+			ACC_FROM_ADC_TO_DAC(ACC_DAC_MIN_DECIMAL);
+			MCAL_USART_SendData(TSR_UART_INSTANT,CAR_OFF_FLAG);
+			_TIM1_delay_ms(30);
+			TFT_SET_BACKGROUND(0,159,0,127,0xff,0xff,0xff);
+			vTaskResume(FACE_ID_TASK_Handle);
+			vTaskPrioritySet(GESTURE_check_TASK_Handle,2);
+
+//				_TIM1_delay_ms(30);
+//				TFT_SET_BACKGROUND(0,159,0,127,0xff,0xff,0xff);
+
+			//				vTaskPrioritySet(FACE_ID_TASK_Handle,5);
+
+		}
+	}
+	}
+}
 
 /**================================================================
  * @Fn- HW_init
@@ -901,11 +994,15 @@ int main(void)
 		Error_Handller();
 	}
 
-
+	if(xTaskCreate(GESTURE_check,"GESTURE_check_TASK",256,NULL,2,GESTURE_check_TASK_Handle)!=pdPASS ){
+		Error_Handller();
+	}
 	///////////////////////
 	if(xTaskCreate(FACE_ID_TASK,"FACE_ID_TASK",256,NULL,5,&FACE_ID_TASK_Handle)!=pdPASS ){
 		Error_Handller();
 	}
+
+
 
 
 	//    MCAL_USART_SendData(TSR_UART_INSTANT, 'D');
