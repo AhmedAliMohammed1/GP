@@ -238,17 +238,17 @@ uint8_t TFT_send_TSR_image(uint8_t image_flag){
 		return 0;
 		break;
 	case _PARKING_SIGN_FLAG:
-		TFT_SEND_Image(0, 75, 26, 101, _Parking_SIGN);
+		TFT_SEND_Image(0, 70, 26, 101, _Parking_SIGN);
 
 		return 0;
 		break;
 	case STOP_SIGN_FLAG:
-		TFT_SEND_Image(0, 75, 26, 101, _STOP_SIGN);
+		TFT_SEND_Image(0, 73, 26, 101, _STOP_SIGN);
 
 		return 0;
 		break;
 	case NO_PARKING_SIGN_FLAG:
-		TFT_SEND_Image(0, 75, 26, 101, NO_Parking_SIGN);
+		TFT_SEND_Image(0, 73, 26, 101, NO_Parking_SIGN);
 
 		return 0;
 		break;
