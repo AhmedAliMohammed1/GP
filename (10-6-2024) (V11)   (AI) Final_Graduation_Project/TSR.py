@@ -112,8 +112,8 @@ def TSR_ON():
 
     cap = cv2.VideoCapture(capture_index)
     # assert cap.isOpened()
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 3000)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 3000)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
     counter = 0
     number_of_frames = 15
